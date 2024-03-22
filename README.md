@@ -1,7 +1,7 @@
 # Flight_Ticket_Management
 
 # SE104.O23 - Nhập môn công nghệ phần mềm
-Thành viên nhóm 13
+Thành viên nhóm 21
 |  MSSV  |          HOTEN           |          GMAIL         |
 |:------:|:------------------------:|:----------------------:|
 |21520086|Huỳnh Lê Phong            |21520086@gm.uit.edu.vn  |
