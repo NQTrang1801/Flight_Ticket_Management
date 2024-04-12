@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.active {
+    @apply bg-primary text-white;
+}
+
+.tippy-box {
+    @apply border !bg-background !text-xs border-primary p-1 !rounded-lg font-montserrat;
+}
+
+.tippy-box[data-placement^="top"] > .tippy-arrow:before {
+    @apply !border-t-primary !bottom-[-8px];
+}
+
+.Toastify__toast {
+    @apply !p-4 border border-primary !rounded-lg !shadow-sm !font-montserrat !text-center;
+}
+
+.Toastify__toast-theme--dark {
+    @apply !bg-background;
+}
+
+body {
+    @apply font-montserrat text-white text-sm scroll-smooth;
+}
+
+@layer base {
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        color: #fff;
+        opacity: 1;
+        display: block;
+        width: 16px;
+        height: 16px;
+    }
+
+    input {
+        color-scheme: dark;
+    }
+
+    input[type="checkbox"] {
+        @apply accent-primary;
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .no-scrollbar {
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+    }
+
+    iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+}
