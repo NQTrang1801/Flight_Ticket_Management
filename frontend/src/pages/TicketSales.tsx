@@ -22,7 +22,7 @@ const schema = yup.object().shape({
     nationality: yup.string().required("Nationality is required.")
 });
 
-function Actors() {
+function TicketSales() {
     const [data, setData] = useState<Array<IActors>>();
     const [loading, setLoading] = useState(false);
     const [deletingMode, setDeletingMode] = useState(false);
@@ -376,4 +376,4 @@ function Actors() {
     );
 }
 
-export default Actors;
+export default TicketSales;

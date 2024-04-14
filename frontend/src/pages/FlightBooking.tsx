@@ -11,7 +11,7 @@ import convertTimeStamp from "~/utils/convertTimeStamp";
 import getNumsOfCol from "~/utils/getNumsOfCol";
 import getFormattedDateTime from "~/utils/getFormattedDateTime";
 
-function Bookings() {
+function FlightBooking() {
     const [data, setData] = useState<Array<IBookings>>([]);
     const [showsData, setShowsData] = useState<Array<IShows>>([]);
     const [theatersData, setTheatersData] = useState<Array<ITheaters>>([]);
@@ -444,4 +444,4 @@ function Bookings() {
     );
 }
 
-export default Bookings;
+export default FlightBooking;

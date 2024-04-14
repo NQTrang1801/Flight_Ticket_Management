@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .active {
-    @apply bg-primary text-white;
+    @apply bg-primary text-white shadow-xl;
 }
 
 .tippy-box {
@@ -20,6 +20,16 @@
 
 .Toastify__toast-theme--dark {
     @apply !bg-background;
+}
+
+td,
+th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+table {
+    border-radius: 12px;
 }
 
 body {

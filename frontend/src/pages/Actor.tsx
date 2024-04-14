@@ -13,7 +13,7 @@ import IsRequired from "~/icons/IsRequired";
 import Tippy from "@tippyjs/react/headless";
 import { convertToBase64 } from "~/utils/convertToBase64";
 import { convertNormalDate } from "~/utils/convertNormalDate";
-import MovieItem from "~/components/MovieItem";
+import MovieItem from "~/components/ScheduleItem";
 
 const schema = yup.object().shape({
     fullName: yup.string().required("Full name is required."),

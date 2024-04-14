@@ -5,153 +5,11 @@ function Sidebar() {
     return (
         <div className="w-[240px] bg-background z-20 fixed top-0 bottom-0 flex flex-col pb-10 pt-6 border-r-[1px] border-r-solid border-r-border px-5">
             <div className="flex items-center justify-center">
-                <img src={logo} className="w-40 mb-8" alt="logo" />
+                <img src={logo} className="w-32 mb-8" alt="logo" />
             </div>
             <p className="pl-4 pb-3 text-blue">Admin tools</p>
             <div className="flex flex-col pb-[32px] gap-2">
-                <NavLink
-                    to="/movies"
-                    className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
-                >
-                    {({ isActive }) => (
-                        <>
-                            <i className="flex flex-start mr-2 w-[26px] items-center h-[26px] justify-center">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    data-name="Layer 1"
-                                    viewBox="0 0 32 32"
-                                    width={22}
-                                    height={22}
-                                    id="film"
-                                >
-                                    <path
-                                        className={`${
-                                            isActive ? "fill-white" : "fill-disabled"
-                                        } group-hover:fill-white`}
-                                        d="M9 12a4 4 0 1 0 4 4 4 4 0 0 0-4-4zm0 6a2 2 0 1 1 2-2 2 2 0 0 1-2 2zm14 2a4 4 0 1 0-4-4 4 4 0 0 0 4 4zm0-6a2 2 0 1 1-2 2 2 2 0 0 1 2-2zm-3 9a4 4 0 1 0-4 4 4 4 0 0 0 4-4zm-6 0a2 2 0 1 1 2 2 2 2 0 0 1-2-2zm2-10a4 4 0 1 0-4-4 4 4 0 0 0 4 4zm0-6a2 2 0 1 1-2 2 2 2 0 0 1 2-2z"
-                                    ></path>
-                                    <path
-                                        className={`${
-                                            isActive ? "fill-white" : "fill-disabled"
-                                        } group-hover:fill-white`}
-                                        d="M31 30h-7.272A15.986 15.986 0 1 0 16 32h15a1 1 0 0 0 0-2ZM2 16a14 14 0 1 1 14 14A14.015 14.015 0 0 1 2 16Z"
-                                    ></path>
-                                </svg>
-                            </i>
-                            Movies
-                        </>
-                    )}
-                </NavLink>
-                <NavLink
-                    to="/actors"
-                    className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
-                >
-                    {({ isActive }) => (
-                        <>
-                            <i className="flex flex-start mr-2 w-[26px] items-center h-[26px]">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 256 256"
-                                    width={26}
-                                    height={26}
-                                    id="actors"
-                                >
-                                    <rect width="24" height="24" fill="none"></rect>
-                                    <circle
-                                        cx="88"
-                                        cy="108"
-                                        r="52"
-                                        fill="none"
-                                        className={`${
-                                            isActive ? "stroke-white" : "stroke-disabled"
-                                        } group-hover:stroke-white`}
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="12"
-                                    ></circle>
-                                    <path
-                                        fill="none"
-                                        className={`${
-                                            isActive ? "stroke-white" : "stroke-disabled"
-                                        } group-hover:stroke-white`}
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="12"
-                                        d="M155.41251 57.937A52.00595 52.00595 0 1 1 169.52209 160M15.99613 197.39669a88.01736 88.01736 0 0 1 144.00452-.00549M169.52209 160a87.89491 87.89491 0 0 1 72.00032 37.3912"
-                                    ></path>
-                                </svg>
-                            </i>
-                            Actors
-                        </>
-                    )}
-                </NavLink>
-                <NavLink
-                    to="/news"
-                    className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
-                >
-                    {({ isActive }) => (
-                        <>
-                            <i className="flex flex-start mr-2 w-[26px] items-center h-[26px]">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="26"
-                                    height="26"
-                                    viewBox="0 0 24 24"
-                                    id="document"
-                                >
-                                    <g
-                                        fill="none"
-                                        fillRule="evenodd"
-                                        className={`${
-                                            isActive ? "stroke-white" : "stroke-disabled"
-                                        } group-hover:stroke-white`}
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="1.5"
-                                        transform="translate(3 2)"
-                                    >
-                                        <line x1="12.716" x2="5.496" y1="14.223" y2="14.223"></line>
-                                        <line x1="12.716" x2="5.496" y1="10.037" y2="10.037"></line>
-                                        <line x1="8.251" x2="5.496" y1="5.86" y2="5.86"></line>
-                                        <path d="M12.9086,0.7498 C12.9086,0.7498 5.2316,0.7538 5.2196,0.7538 C2.4596,0.7708 0.7506,2.5868 0.7506,5.3568 L0.7506,14.5528 C0.7506,17.3368 2.4726,19.1598 5.2566,19.1598 C5.2566,19.1598 12.9326,19.1568 12.9456,19.1568 C15.7056,19.1398 17.4156,17.3228 17.4156,14.5528 L17.4156,5.3568 C17.4156,2.5728 15.6926,0.7498 12.9086,0.7498 Z"></path>
-                                    </g>
-                                </svg>
-                            </i>
-                            News
-                        </>
-                    )}
-                </NavLink>
-                <NavLink
-                    to="/theaters"
-                    className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
-                >
-                    {({ isActive }) => (
-                        <>
-                            <i className="flex flex-start mr-2 w-[26px] items-center h-[26px]">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    data-name="Layer 1"
-                                    viewBox="0 0 64 64"
-                                    width={26}
-                                    height={26}
-                                    id="popcorn"
-                                >
-                                    <path
-                                        className={`${
-                                            isActive ? "fill-white" : "fill-disabled"
-                                        } group-hover:fill-white`}
-                                        d="M53.8,22.27a3.08,3.08,0,0,0-1.63-2.71,5.33,5.33,0,0,0,.44-5.34,5.24,5.24,0,0,0-1.07-1.47A5.15,5.15,0,0,0,52,7.82,5.33,5.33,0,0,0,49.19,5a4.76,4.76,0,0,0-2.73-.26,5.44,5.44,0,0,0-.29-.86,5.25,5.25,0,0,0-2.83-2.82,4.63,4.63,0,0,0-3.58,0,4.68,4.68,0,0,0-.87.5A4.71,4.71,0,0,0,35.64.22h0a4.78,4.78,0,0,0-4.08,2.52A4.55,4.55,0,0,0,30,.83,4.65,4.65,0,0,0,26.3.11a5.23,5.23,0,0,0-3.18,2.14,4.68,4.68,0,0,0-.53,1,5.12,5.12,0,0,0-5.07,2.17,5.18,5.18,0,0,0-.8,4.23,7.4,7.4,0,0,0-.41.69,5.68,5.68,0,0,0-.39,1,5.05,5.05,0,0,0-4.7,2.87,5.25,5.25,0,0,0-.32,4,4.74,4.74,0,0,0,.81,1.48,3.06,3.06,0,0,0,.55,5.53l5.07,36.33A2.93,2.93,0,0,0,20.21,64H43.76a2.93,2.93,0,0,0,2.88-2.51l5.08-36.32A3.08,3.08,0,0,0,53.8,22.27Zm-9.45-3.09a5.35,5.35,0,0,0-.74-2.48,4.66,4.66,0,0,0,2.23-2.36,4.63,4.63,0,0,0,4.3-.25,3.15,3.15,0,0,1,.72,1,3.34,3.34,0,0,1-1,4.13Zm-14.29,0c0-.11,0-.22,0-.34a3.1,3.1,0,0,1,1.82-2.79,4.24,4.24,0,0,0,1.07.14l.29,0a4.66,4.66,0,0,0,3-1.34,4.7,4.7,0,0,0,2.5,1.35s.05,0,.07.05a1.21,1.21,0,0,0,.37.07,1,1,0,0,0,.17,0h.39a2.69,2.69,0,0,1,1.62.67,3.24,3.24,0,0,1,1.08,2.24Zm-1.93,0H26.25A5,5,0,0,0,25.72,17a4.89,4.89,0,0,0,.85.08,5,5,0,0,0,2.11-.48,5.32,5.32,0,0,0-.57,2.21C28.11,18.91,28.12,19,28.13,19.18ZM40.52,2.84a2.7,2.7,0,0,1,2.09,0,3.32,3.32,0,0,1,1.78,1.79A3.19,3.19,0,0,1,44.65,6a1,1,0,0,0,1.46.87,1.34,1.34,0,0,1,.24-.12,2.75,2.75,0,0,1,2.11,0,3.32,3.32,0,0,1,1.77,1.78,3.13,3.13,0,0,1-.73,3.59,2.43,2.43,0,0,1-.7.44,2.82,2.82,0,0,1-2.93-.51,1,1,0,0,0-1.59.64A2.78,2.78,0,0,1,42.78,15a5.28,5.28,0,0,0,.91-6.37h0A4.81,4.81,0,0,0,40.4,6.18a5.62,5.62,0,0,0,.07-.92A5.34,5.34,0,0,0,40,3.13,2.65,2.65,0,0,1,40.52,2.84ZM32.37,8a1,1,0,0,0,.7-1.35,3,3,0,0,1-.28-1.31,3,3,0,0,1,2.84-3.18A2.81,2.81,0,0,1,38,3.47h0a3.22,3.22,0,0,1,.54,1.79,3.58,3.58,0,0,1-.29,1.43,1,1,0,0,0,.1,1,1,1,0,0,0,.9.38l.28,0A2.81,2.81,0,0,1,42,9.53h0a3.27,3.27,0,0,1,.43,1.62,3,3,0,0,1-2.73,3.18h-.36l-.18,0a2.88,2.88,0,0,1-2.1-1.55,1,1,0,0,0-.85-.53,1,1,0,0,0-.86.51,2.8,2.8,0,0,1-2.29,1.5,2.32,2.32,0,0,1-1-.12,3.11,3.11,0,0,1-.72-.38,5.1,5.1,0,0,0,.18-3.38,4.72,4.72,0,0,0-.71-1.44A2.8,2.8,0,0,1,32.37,8ZM22.82,5.29a1,1,0,0,0,1.35-.7,3.06,3.06,0,0,1,.54-1.23A3.26,3.26,0,0,1,26.7,2a2.75,2.75,0,0,1,2.17.41A2.72,2.72,0,0,1,30,4.19a3.33,3.33,0,0,1-.56,2.45,3.39,3.39,0,0,1-1.05,1,1,1,0,0,0,0,1.68l.24.14.32.26a2.71,2.71,0,0,1,.74,1.21,3.21,3.21,0,0,1-.36,2.6.86.86,0,0,1-.07.1l0,.07a3.05,3.05,0,0,1-4.18,1s-.06-.07-.1-.09a5.4,5.4,0,0,0,.55-2.43A4.77,4.77,0,0,0,22.9,7.9,4.72,4.72,0,0,0,18.53,8a3.5,3.5,0,0,1,.58-1.53A3.06,3.06,0,0,1,22.82,5.29ZM13,15a3.08,3.08,0,0,1,3.51-1.71.93.93,0,0,0,.82-.14,1,1,0,0,0,.41-.74A3.28,3.28,0,0,1,18,11.16a2.94,2.94,0,0,1,.49-.72,2.92,2.92,0,0,1,3.5-.8,2.81,2.81,0,0,1,1.51,2.5,3.45,3.45,0,0,1-.37,1.6,3.19,3.19,0,0,1-.26.42,3,3,0,0,1-.63.69,1,1,0,0,0-.36.94,1,1,0,0,0,.66.75,1,1,0,0,1,.22.1,2.83,2.83,0,0,1,1.51,2.54H14.18l-.08,0a2.74,2.74,0,0,1-1.36-1.6A3.31,3.31,0,0,1,13,15Zm6.3,46.18-5-35.87H27.68v7.89a9.39,9.39,0,0,0,0,16.69V62.06H20.21A1,1,0,0,1,19.25,61.22ZM34.7,25.35v7.24a9.3,9.3,0,0,0-5.08-.09V25.35ZM32,51a9.7,9.7,0,0,0,2.71-.4V62.06H29.62V50.67A9.28,9.28,0,0,0,32,51Zm0-1.94a7.46,7.46,0,1,1,7.46-7.46A7.47,7.47,0,0,1,32,49.05ZM44.72,61.22a1,1,0,0,1-1,.84H36.63V49.75a9.37,9.37,0,0,0,0-16.32V25.35H49.74Zm6-37.81H13.29a1.15,1.15,0,1,1,0-2.29H50.71a1.15,1.15,0,1,1,0,2.29Z"
-                                    ></path>
-                                </svg>
-                            </i>
-                            Theaters
-                        </>
-                    )}
-                </NavLink>
-                <NavLink
-                    to="/shows"
-                    className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
-                >
+                <NavLink to="/" className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4">
                     {({ isActive }) => (
                         <>
                             <i className="flex flex-start mr-2 w-[26px] items-center h-[26px]">
@@ -179,12 +37,63 @@ function Sidebar() {
                                     ></path>
                                 </svg>
                             </i>
-                            Shows
+                            Dashboard
                         </>
                     )}
                 </NavLink>
                 <NavLink
-                    to="/bookings"
+                    to="/flight-schedule"
+                    className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
+                >
+                    {({ isActive }) => (
+                        <>
+                            <i className="flex flex-start mr-2 w-[26px] items-center h-[26px] justify-center">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    data-name="Layer 1"
+                                    viewBox="0 0 64 64"
+                                    width={26}
+                                    height={26}
+                                    id="schedule"
+                                >
+                                    <path
+                                        className={`${
+                                            isActive ? "fill-white" : "fill-disabled"
+                                        } group-hover:fill-white`}
+                                        d="M50 24H10a2 2 0 0 1-2-2V12a2 2 0 0 1 2-2h40a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2zm-38-4h36v-6H12z"
+                                    ></path>
+                                    <path
+                                        className={`${
+                                            isActive ? "fill-white" : "fill-disabled"
+                                        } group-hover:fill-white`}
+                                        d="M42 18a2 2 0 0 1-2-2V8a2 2 0 0 1 4 0v8a2 2 0 0 1-2 2zm-24 0a2 2 0 0 1-2-2V8a2 2 0 0 1 4 0v8a2 2 0 0 1-2 2z"
+                                    ></path>
+                                    <path
+                                        className={`${
+                                            isActive ? "fill-white" : "fill-disabled"
+                                        } group-hover:fill-white`}
+                                        d="M32 54H14a6 6 0 0 1-6-6V12a2 2 0 0 1 2-2h40a2 2 0 0 1 2 2v22a2 2 0 0 1-4 0V14H12v34a2 2 0 0 0 2 2h18a2 2 0 0 1 0 4z"
+                                    ></path>
+                                    <path
+                                        className={`${
+                                            isActive ? "fill-white" : "fill-disabled"
+                                        } group-hover:fill-white`}
+                                        d="M42 58a14 14 0 1 1 14-14 14 14 0 0 1-14 14zm0-24a10 10 0 1 0 10 10 10 10 0 0 0-10-10z"
+                                    ></path>
+                                    <path
+                                        className={`${
+                                            isActive ? "fill-white" : "fill-disabled"
+                                        } group-hover:fill-white`}
+                                        d="M48 46h-6a2 2 0 0 1-2-2v-8h4v6h4z"
+                                    ></path>
+                                </svg>
+                            </i>
+                            Flight schedule
+                        </>
+                    )}
+                </NavLink>
+                <NavLink
+                    to="/ticket-sales"
                     className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
                 >
                     {({ isActive }) => (
@@ -192,34 +101,117 @@ function Sidebar() {
                             <i className="flex flex-start mr-2 w-[26px] items-center h-[26px]">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    enableBackground="new 0 0 24 24"
-                                    width={26}
-                                    height={26}
-                                    viewBox="0 0 24 24"
-                                    id="online-booking"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 64 64"
+                                    id="ticket"
                                 >
-                                    <g>
-                                        <path
-                                            className={`${
-                                                isActive ? "fill-white" : "fill-disabled"
-                                            } group-hover:fill-white`}
-                                            d="M15.5,2h-7C6.6,2,5,3.6,5,5.5v13C5,20.4,6.6,22,8.5,22h7c1.9,0,3.5-1.6,3.5-3.5v-13C19,3.6,17.4,2,15.5,2z M17,18.5
-			c0,0.8-0.7,1.5-1.5,1.5h-7C7.7,20,7,19.3,7,18.5v-13C7,4.7,7.7,4,8.5,4h7C16.3,4,17,4.7,17,5.5V18.5z"
-                                        ></path>
-                                        <path
-                                            className={`${
-                                                isActive ? "fill-white" : "fill-disabled"
-                                            } group-hover:fill-white`}
-                                            d="M13,5h-2c-0.6,0-1,0.4-1,1s0.4,1,1,1h2c0.6,0,1-0.4,1-1S13.6,5,13,5z"
-                                        ></path>
-                                    </g>
+                                    <path
+                                        className={`${
+                                            isActive ? "fill-white" : "fill-disabled"
+                                        } group-hover:fill-white`}
+                                        d="m.586 41.414 5.344 5.343a2 2 0 0 0 2.828 0A5.959 5.959 0 0 1 13 45c3.309 0 6 2.691 6 6a5.964 5.964 0 0 1-1.758 4.243 2 2 0 0 0 0 2.828l5.344 5.343c.391.391.902.586 1.414.586s1.024-.195 1.414-.586l38-38a1.996 1.996 0 0 0 0-2.828l-5.344-5.343a2 2 0 0 0-2.828 0A5.959 5.959 0 0 1 51 19c-3.309 0-6-2.691-6-6 0-1.603.625-3.109 1.758-4.243a2 2 0 0 0 0-2.828L41.414.586a2 2 0 0 0-2.828 0l-38 38a1.996 1.996 0 0 0 0 2.828zM26 18.828l1.586 1.586c.39.391.902.586 1.414.586s1.024-.195 1.414-.586a2 2 0 0 0 0-2.828L28.828 16 40 4.828l2.656 2.655A9.935 9.935 0 0 0 41 13c0 5.514 4.486 10 10 10a9.928 9.928 0 0 0 5.516-1.655L59.171 24 48 35.172l-1.586-1.586a2 2 0 1 0-2.828 2.828L45.172 38 24 59.172l-2.656-2.655A9.935 9.935 0 0 0 23 51c0-5.514-4.486-10-10-10a9.928 9.928 0 0 0-5.516 1.655L4.829 40 26 18.828z"
+                                    ></path>
+                                    <path
+                                        className={`${
+                                            isActive ? "fill-white" : "fill-disabled"
+                                        } group-hover:fill-white`}
+                                        d="M33.586 26.414c.39.391.902.586 1.414.586s1.024-.195 1.414-.586a2 2 0 0 0 0-2.828l-2-2a2 2 0 1 0-2.828 2.828l2 2zM37.586 30.414l2 2c.39.391.902.586 1.414.586s1.024-.195 1.414-.586a2 2 0 0 0 0-2.828l-2-2a2 2 0 1 0-2.828 2.828z"
+                                    ></path>
                                 </svg>
                             </i>
-                            Bookings
+                            Ticket sales
                         </>
                     )}
                 </NavLink>
                 <NavLink
+                    to="/flight-booking"
+                    className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
+                >
+                    {({ isActive }) => (
+                        <>
+                            <i className="flex flex-start mr-2 w-[26px] items-center h-[26px]">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    enableBackground="new 0 0 64 64"
+                                    viewBox="0 0 64 64"
+                                    id="booking-app"
+                                >
+                                    <path
+                                        className={`${
+                                            isActive ? "fill-white" : "fill-disabled"
+                                        } group-hover:fill-white`}
+                                        d="M38 50H26c-1.104 0-2 .896-2 2s.896 2 2 2h12c1.104 0 2-.896 2-2S39.104 50 38 50zM37.586 23.586l-2.32 2.32-8.045-.894c-1.092-.124-2.086.669-2.208 1.767s.669 2.086 1.767 2.208l4.864.54L28.172 33H25c-1.104 0-2 .896-2 2s.896 2 2 2h2v2c0 1.104.896 2 2 2s2-.896 2-2v-3.172l3.472-3.472.541 4.864C35.126 38.244 35.992 39 36.997 39c.074 0 .148-.004.224-.012 1.098-.122 1.889-1.111 1.767-2.208l-.894-8.045 2.321-2.321c.781-.781.781-2.047 0-2.828C39.633 22.805 38.367 22.805 37.586 23.586z"
+                                    ></path>
+                                    <path
+                                        className={`${
+                                            isActive ? "fill-white" : "fill-disabled"
+                                        } group-hover:fill-white`}
+                                        d="M43,2H21c-4.962,0-9,4.038-9,9v42c0,4.962,4.038,9,9,9h22c4.963,0,9-4.038,9-9V11C52,6.038,47.963,2,43,2z M38.616,6
+			c-0.506,1.351-1.094,2.921-1.499,4H26.886l-1.5-4H38.616z M48,53c0,2.757-2.243,5-5,5H21c-2.757,0-5-2.243-5-5V11
+			c0-2.757,2.243-5,5-5h0.114l2.27,6.052C23.82,13.217,24.949,14,26.193,14H37.81c1.242,0,2.37-0.78,2.807-1.94
+			c0.495-1.315,1.621-4.324,2.271-6.06H43c2.757,0,5,2.243,5,5V53z"
+                                    ></path>
+                                </svg>
+                            </i>
+                            Flight booking
+                        </>
+                    )}
+                </NavLink>
+                <NavLink
+                    to="/flight-lookup"
+                    className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
+                >
+                    {({ isActive }) => (
+                        <>
+                            <i className="flex flex-start mr-2 w-[26px] items-center h-[26px]">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 512 512"
+                                    width={24}
+                                    height={24}
+                                    id="plane"
+                                >
+                                    <path
+                                        className={`${
+                                            isActive ? "fill-white" : "fill-disabled"
+                                        } group-hover:fill-white`}
+                                        d="M490.718 20.654C477.406 7.336 459.614 0 440.624 0c-18.984 0-36.776 7.336-50.088 20.654L290.347 120.836 76.863 90.603a19.287 19.287 0 0 0-16.387 5.473L5.683 150.87a19.336 19.336 0 0 0 6.504 31.632l157.477 62.884-78.652 92.769-59.505 10.405a19.35 19.35 0 0 0-15.11 13.221 19.317 19.317 0 0 0 4.764 19.5l109.588 109.588c5.099 5.105 12.622 6.93 19.5 4.764a19.317 19.317 0 0 0 13.221-15.11l10.398-59.506 92.711-78.6 62.278 157.355a19.333 19.333 0 0 0 14.059 11.823c1.302.271 2.617.406 3.919.406a19.333 19.333 0 0 0 13.666-5.666l54.794-54.794c4.3-4.3 6.33-10.366 5.479-16.387l-30.227-213.445 100.776-100.182c.084-.084.168-.168.251-.258 27.534-28.41 27.16-72.612-.856-100.615zm-26.804 73.591L356.415 201.113a19.365 19.365 0 0 0-5.512 16.425l30.227 213.483-27.145 27.145-61.369-155.047a19.319 19.319 0 0 0-13.286-11.648 19.194 19.194 0 0 0-4.699-.58 19.266 19.266 0 0 0-12.5 4.596L143.525 396.05a19.324 19.324 0 0 0-6.543 11.416l-5.202 29.737-56.954-56.953 29.737-5.202a19.36 19.36 0 0 0 11.416-6.543l100.563-118.613a19.334 19.334 0 0 0 4.016-17.173 19.344 19.344 0 0 0-11.597-13.292L53.786 157.465l27.216-27.216 213.477 30.233a19.327 19.327 0 0 0 16.387-5.473l107.015-107.01c6.008-6.008 14.085-9.321 22.743-9.321 8.664 0 16.741 3.313 22.756 9.328 12.872 12.873 13.098 33.153.534 46.239z"
+                                    ></path>
+                                </svg>
+                            </i>
+                            Flight lookup
+                        </>
+                    )}
+                </NavLink>
+
+                <NavLink
+                    to="/regulations"
+                    className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
+                >
+                    {({ isActive }) => (
+                        <>
+                            <i className="flex flex-start mr-2 w-[26px] items-center h-[26px]">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                    width={26}
+                                    height={26}
+                                    id="policy"
+                                >
+                                    <path
+                                        className={`${
+                                            isActive ? "fill-white" : "fill-disabled"
+                                        } group-hover:fill-white`}
+                                        d="M15.0112,4.731A22.0639,22.0639,0,0,1,10.7861,3.01a1.4989,1.4989,0,0,0-1.5722,0A22.0731,22.0731,0,0,1,4.9893,4.731,1.4992,1.4992,0,0,0,3.9424,6.209l.165,4.98c.3677,2.5019,2.9917,4.5884,4.5235,5.6089a2.4634,2.4634,0,0,0,2.7382,0c1.5318-1.0205,4.1558-3.107,4.5284-5.6656l.16-4.9228A1.4994,1.4994,0,0,0,15.0112,4.731Zm-.1079,6.312c-.3115,2.12-2.6953,3.9936-4.0888,4.9223a1.4636,1.4636,0,0,1-1.629,0C7.792,15.0366,5.4082,13.1626,5.1016,11.1l-.16-4.9228a.4988.4988,0,0,1,.3462-.4917A22.9391,22.9391,0,0,0,9.7363,3.8623a.49.49,0,0,1,.5274,0,22.93,22.93,0,0,0,4.4492,1.8228.4989.4989,0,0,1,.3457.4917Zm-4.019-1.8872a.8686.8686,0,0,1-.3843.7094v1.3614a.5.5,0,0,1-1,0V9.8652a.8686.8686,0,0,1-.3843-.7094.8843.8843,0,0,1,1.7686,0Z"
+                                    ></path>
+                                </svg>
+                            </i>
+                            Regulations
+                        </>
+                    )}
+                </NavLink>
+                {/* <NavLink
                     to="/users"
                     className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
                 >
@@ -261,7 +253,7 @@ function Sidebar() {
                             Users
                         </>
                     )}
-                </NavLink>
+                </NavLink> */}
             </div>
         </div>
     );

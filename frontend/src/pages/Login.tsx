@@ -35,20 +35,22 @@ const LoginForm: React.FC = () => {
     } = useForm<LoginFormValues>();
 
     const onSubmit: SubmitHandler<LoginFormValues> = () => {
-        dispatch(login(email, password))
-            .then(() => {
-                toast("Login successfully!");
-                const timer = setTimeout(() => {
-                    navigate("/movies");
-                    window.location.reload();
-                }, 2000);
-                return () => clearTimeout(timer);
-            })
-            .catch(() => {
-                toast("Email or password is incorrect", {
-                    autoClose: 5000
-                });
-            });
+        // dispatch(login(email, password))
+        //     .then(() => {
+        //         toast("Login successfully!");
+        //         const timer = setTimeout(() => {
+        //             navigate("/movies");
+        //             window.location.reload();
+        //         }, 2000);
+        //         return () => clearTimeout(timer);
+        //     })
+        //     .catch(() => {
+        //         toast("Email or password is incorrect", {
+        //             autoClose: 5000
+        //         });
+        //     });
+
+        navigate("/movies");
     };
 
     // if (isLoggedIn) {
@@ -57,14 +59,14 @@ const LoginForm: React.FC = () => {
 
     return (
         <div className="w-full min-h-screen flex justify-center items-center bg-[url('~/assets/background.jpg')] bg-cover">
-            <div className="bg-transparent border border-blue shadow-md p-8 w-[480px] rounded-3xl flex justify-center flex-col items-center">
+            <div className=" bg-[rgba(255,255,255,0.9)] shadow-md p-6 w-[480px] rounded-3xl flex justify-center flex-col items-center">
                 <div className="flex flex-col justify-center items-center gap-8 mb-8">
-                    <img src={logo} width={200} height={200} alt="logo" />
-                    <div className="text-blue text-4xl font-semibold">Sign in</div>
+                    <img src={logo} width={164} height={164} alt="logo" />
+                    <div className="text-blue text-3xl font-semibold">Welcome back</div>
                 </div>
                 <form onSubmit={handleSubmit(onSubmit)} className="flex justify-center items-center flex-col gap-6">
                     <div className="flex flex-col gap-2">
-                        <label htmlFor="email" className="flex items-center gap-1 mb-1">
+                        <label htmlFor="email" className="flex text-black items-center gap-1 mb-1">
                             Email address
                             <i className="">
                                 <svg
@@ -92,14 +94,14 @@ const LoginForm: React.FC = () => {
                                     message: "Invalid email address."
                                 }
                             })}
-                            className="bg-[rgba(141,124,221,0.1)] focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg w-[360px] placeholder:text-disabled"
+                            className="bg-placeholder focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-black px-4 py-3 rounded-lg w-[360px] placeholder:text-disabled"
                             value={email}
                             onChange={onChangeEmail}
                         />
                         {errors.email && <span className="text-[#ff0000]">{errors.email.message}</span>}
                     </div>
                     <div className="flex flex-col gap-2">
-                        <label htmlFor="password" className="flex items-center gap-1 mb-1">
+                        <label htmlFor="password" className="flex text-black items-center gap-1 mb-1">
                             Password
                             <i className="">
                                 <svg
@@ -127,17 +129,17 @@ const LoginForm: React.FC = () => {
                                     message: "Password must be at least 6 characters."
                                 }
                             })}
-                            className="bg-[rgba(141,124,221,0.1)] focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg w-[360px] placeholder:text-disabled"
+                            className="bg-placeholder focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-black px-4 py-3 rounded-lg w-[360px] placeholder:text-disabled"
                             value={password}
                             onChange={onChangePassword}
                         />
                         {errors.password && <span className="text-[#ff0000]">{errors.password.message}</span>}
                     </div>
                     <button
-                        className="py-3 px-8 mt-4 font-semibold rounded-lg border-blue border hover:border-primary hover:bg-primary"
+                        className="py-3 px-8 mt-4 font-semibold rounded-lg bg-blue border-blue border hover:border-primary hover:bg-primary"
                         type="submit"
                     >
-                        Sign in
+                        Login
                     </button>
                 </form>
             </div>

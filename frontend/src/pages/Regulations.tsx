@@ -17,7 +17,7 @@ const schema = yup.object().shape({
     startTime: yup.date().required("Start time is required.").typeError("Start time must be a date.")
 });
 
-function Shows() {
+function Regulations() {
     const [data, setData] = useState<Array<IShows>>();
     const [isAvailable, setAvailable] = useState(true);
     const [deletingMode, setDeletingMode] = useState(false);
@@ -714,4 +714,4 @@ function Shows() {
     );
 }
 
-export default Shows;
+export default Regulations;

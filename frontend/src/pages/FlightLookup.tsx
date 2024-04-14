@@ -16,7 +16,7 @@ const schema = yup.object().shape({
     address: yup.string().required("Address is required.")
 });
 
-function Theaters() {
+function FlightLookup() {
     const [data, setData] = useState<Array<ITheaters>>();
     const [deletingMode, setDeletingMode] = useState(false);
     const { Portal, show, hide } = usePortal({
@@ -250,4 +250,4 @@ function Theaters() {
     );
 }
 
-export default Theaters;
+export default FlightLookup;

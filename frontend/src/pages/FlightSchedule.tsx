@@ -1,4 +1,3 @@
-import MoviesList from "~/components/MoviesList";
 import Tippy from "@tippyjs/react/headless";
 import "tippy.js/dist/tippy.css";
 import { useState, useEffect } from "react";
@@ -13,6 +12,7 @@ import { convertToBase64 } from "~/utils/convertToBase64";
 import { useAppDispatch } from "~/hook";
 import { startLoading, stopLoading } from "~/actions/loading";
 import { sendMessage } from "~/actions/message";
+import ScheduleList from "~/components/ScheduleList";
 
 const schema = yup.object().shape({
     name: yup.string().required("Name is required."),
@@ -33,7 +33,7 @@ const schema = yup.object().shape({
         .required()
 });
 
-function Movies() {
+function FlightSchedule() {
     const dispatch = useAppDispatch();
     const [visible, setVisible] = useState(false);
     const [activeVisible, setActiveVisible] = useState(false);
@@ -411,28 +411,6 @@ function Movies() {
                         </i>
                         Create
                     </button>
-                    <button
-                        onClick={() => setDeletingMode(!deletingMode)}
-                        className={`rounded-xl border-blue border hover:border-primary ${
-                            deletingMode ? "border-mdRed bg-mdRed" : ""
-                        } hover:bg-primary bg-block flex items-center justify-center p-3 w-[112px]`}
-                    >
-                        <i className="mr-1">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 32 32"
-                                width={20}
-                                height={20}
-                                id="delete"
-                            >
-                                <path
-                                    className="fill-white"
-                                    d="M24.2,12.193,23.8,24.3a3.988,3.988,0,0,1-4,3.857H12.2a3.988,3.988,0,0,1-4-3.853L7.8,12.193a1,1,0,0,1,2-.066l.4,12.11a2,2,0,0,0,2,1.923h7.6a2,2,0,0,0,2-1.927l.4-12.106a1,1,0,0,1,2,.066Zm1.323-4.029a1,1,0,0,1-1,1H7.478a1,1,0,0,1,0-2h3.1a1.276,1.276,0,0,0,1.273-1.148,2.991,2.991,0,0,1,2.984-2.694h2.33a2.991,2.991,0,0,1,2.984,2.694,1.276,1.276,0,0,0,1.273,1.148h3.1A1,1,0,0,1,25.522,8.164Zm-11.936-1h4.828a3.3,3.3,0,0,1-.255-.944,1,1,0,0,0-.994-.9h-2.33a1,1,0,0,0-.994.9A3.3,3.3,0,0,1,13.586,7.164Zm1.007,15.151V13.8a1,1,0,0,0-2,0v8.519a1,1,0,0,0,2,0Zm4.814,0V13.8a1,1,0,0,0-2,0v8.519a1,1,0,0,0,2,0Z"
-                                ></path>
-                            </svg>
-                        </i>
-                        Delete
-                    </button>
                 </div>
             </div>
             {deletingMode && (
@@ -441,7 +419,7 @@ function Movies() {
                     <div className="p-6 text-[15px]">Select a movie below to delete.</div>
                 </div>
             )}
-            <MoviesList
+            <ScheduleList
                 type={type}
                 deletingMode={deletingMode}
                 reloadFlag={reloadFlag}
@@ -902,4 +880,4 @@ function Movies() {
     );
 }
 
-export default Movies;
+export default FlightSchedule;
