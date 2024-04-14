@@ -6,16 +6,13 @@ import { toast } from "react-toastify";
 import { useAppDispatch } from "~/hook";
 import { startLoading, stopLoading } from "~/actions/loading";
 
-const ScheduleItem: React.FC<FlightDataProps> = ({
-    flightCode,
-    ticketPrice,
-    departureAirport,
-    arrivalAirport,
-    dateTime,
-    flightDuration,
-    seatQuantityClass1,
-    seatQuantityClass2,
-    layover
+const Ticket: React.FC<TicketProps> = ({
+    flightNumber,
+    passengerName,
+    idNumber,
+    phoneNumber,
+    ticketClass,
+    ticketPrice
 }) => {
     const [selectedId, setSelectedId] = useState(String);
     const overlayRef = useRef<HTMLDivElement>(null);
@@ -28,7 +25,7 @@ const ScheduleItem: React.FC<FlightDataProps> = ({
         hide();
         dispatch(startLoading());
         await axios
-            .delete(`/movies/${selectedId}`, {
+            .delete(`/people/${selectedId}`, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).data.accessToken}`
@@ -36,8 +33,10 @@ const ScheduleItem: React.FC<FlightDataProps> = ({
             })
             .then(() => {
                 dispatch(stopLoading());
-                window.location.reload();
                 toast("Deleted successfully!");
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
             })
             .catch((error) => {
                 console.error(error);
@@ -49,10 +48,10 @@ const ScheduleItem: React.FC<FlightDataProps> = ({
     return (
         <>
             <li className="p-6 rounded-xl overflow-hidden shadow-xl border border-primary bg-background relative">
-                <div className="bg-primary absolute top-0 left-0 right-0 p-3 text-center font-semibold text-base">
-                    Flight Schedule
+                <div className="bg-primary absolute top-0 left-0 right-0 p-2 text-center font-semibold text-base">
+                    Ticket
                 </div>
-                <div className="absolute top-16 right-6 flex gap-2">
+                <div className="absolute top-14 right-6 flex flex-col gap-2">
                     <button
                         onClick={() => {}}
                         className="hover:bg-primary hover:border-primary rounded-lg border border-blue flex items-center justify-center p-1"
@@ -94,49 +93,28 @@ const ScheduleItem: React.FC<FlightDataProps> = ({
                 </div>
                 <div className="mt-12">
                     <div className="grid md:grid-cols-2 gap-4">
+                        {/* <div>
+                            <span className="font-semibold">Booking Code</span>: {bookingCode}
+                        </div> */}
                         <div>
-                            <span className="font-semibold">Flight code</span>: {flightCode}
+                            <span className="font-semibold">Flight number</span>: {flightNumber} USD
+                        </div>
+                        <div>
+                            <span className="font-semibold">Passenger</span>: {passengerName}
+                        </div>
+                        <div>
+                            <span className="font-semibold">ID</span>: {idNumber}
+                        </div>
+                        <div>
+                            <span className="font-semibold">Phone number</span>: {phoneNumber}
+                        </div>
+                        <div>
+                            <span className="font-semibold">Ticket class</span>: {ticketClass}
                         </div>
                         <div>
                             <span className="font-semibold">Price</span>: {ticketPrice} USD
                         </div>
-                        <div>
-                            <span className="font-semibold">Departure airport</span>: {departureAirport}
-                        </div>
-                        <div>
-                            <span className="font-semibold">Arrival airport</span>: {arrivalAirport}
-                        </div>
-                        <div>
-                            <span className="font-semibold">Date</span>: {dateTime}
-                        </div>
-                        <div>
-                            <span className="font-semibold">Duration</span>: {flightDuration}
-                        </div>
-                        <div>
-                            <span className="font-semibold">First class</span>: {seatQuantityClass1} seats
-                        </div>
-                        <div>
-                            <span className="font-semibold">Second class</span>: {seatQuantityClass2} seats
-                        </div>
                     </div>
-                    {layover.length > 0 && (
-                        <table className="w-full mt-6 bg-block">
-                            <tr className="text-center">
-                                <th className="w-32">Index</th>
-                                <th className="w-72">Intermediate airport</th>
-                                <th className="w-48">Stop time</th>
-                                <th>Note</th>
-                            </tr>
-                            {layover.map((item) => (
-                                <tr key={item.stt} className="text-center">
-                                    <td>{item.stt}</td>
-                                    <td>{item.airport}</td>
-                                    <td>{item.stopTime}</td>
-                                    <td>{item.note}</td>
-                                </tr>
-                            ))}
-                        </table>
-                    )}
                 </div>
             </li>
 
@@ -167,7 +145,7 @@ const ScheduleItem: React.FC<FlightDataProps> = ({
                                 </i>
                             </button>
                             <p className="mb-4 mt-4 text-[15px]">
-                                Delete movie <span className="text-blue">"{name}"</span>?
+                                Delete actor <span className="text-blue">"{}"</span>?
                             </p>
                             <div className="flex gap-6">
                                 <button
@@ -194,4 +172,4 @@ const ScheduleItem: React.FC<FlightDataProps> = ({
     );
 };
 
-export default ScheduleItem;
+export default Ticket;

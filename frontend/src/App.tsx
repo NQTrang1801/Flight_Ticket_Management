@@ -23,6 +23,7 @@ import Dashboard from "./pages/Dashboard";
 import FlightBooking from "./pages/FlightBooking";
 import FlightLookup from "./pages/FlightLookup";
 import Regulations from "./pages/Regulations";
+import FlightList from "./pages/FlightList";
 
 function App() {
     const root = document.querySelector("#root");
@@ -58,8 +59,8 @@ function App() {
                     <Route path="/flight-lookup" element={<FlightLookup />} />
                     {/* <Route path="/theaters/:id" element={<Theater />} /> */}
                     <Route path="/regulations" element={<Regulations />} />
+                    <Route path="/flight-list" element={<FlightList />} />
                     {/* <Route path="/shows/:id" element={<Show />} />
-                    <Route path="/bookings" element={<Bookings />} />
                     <Route path="bookings/:id" element={<Booking />} />
                     <Route path="/users" element={<Users />} /> */}
                 </Route>

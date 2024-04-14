@@ -449,10 +449,10 @@ function FlightSchedule() {
                                 </i>
                             </button>
                             <div className="flex justify-center mb-8">
-                                <div className="text-white font-semibold text-xl">Create a new movie</div>
+                                <div className="text-white font-semibold text-xl">Create new schedule</div>
                             </div>
                             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
-                                <div className="text-blue text-[15px]">Movie Information</div>
+                                <div className="text-blue text-[15px]">Flight Information</div>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="flex gap-2 flex-col">
                                         <label htmlFor="name" className="flex gap-1 mb-1 items-center">
@@ -526,9 +526,34 @@ function FlightSchedule() {
                                         />
                                         {<span className="text-deepRed">{errors.nation?.message}</span>}
                                     </div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="flex gap-2 flex-col">
+                                        <label htmlFor="releaseDate" className="flex gap-1 mb-1 items-center">
+                                            Date & Time
+                                            <IsRequired />
+                                        </label>
+                                        <div className="grid grid-cols-3 gap-4">
+                                            <input
+                                                type="date"
+                                                pattern="\d{4}-\d{2}-\d{2}"
+                                                id="releaseDate"
+                                                {...register("startTime")}
+                                                className="bg-[rgba(141,124,221,0.1)] col-span-2 text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
+                                            />
+                                            <input
+                                                type="time"
+                                                id="releaseDate"
+                                                // value={time}
+                                                onChange={(e) => setTime(e.target.value)}
+                                                className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
+                                            />
+                                        </div>
+                                        {<span className="text-deepRed">{errors.startTime?.message}</span>}
+                                    </div>
                                     <div className="flex gap-2 flex-col flex-1">
                                         <label htmlFor="duration" className="flex gap-1 mb-1 items-center">
-                                            Duration
+                                            Duration (minutes)
                                             <IsRequired />
                                         </label>
                                         <input
@@ -539,91 +564,6 @@ function FlightSchedule() {
                                             className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                         />
                                         {<span className="text-deepRed">{errors.duration?.message}</span>}
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="flex gap-2 flex-col">
-                                        <label htmlFor="releaseDate" className="flex gap-1 mb-1 items-center">
-                                            Release date
-                                            <IsRequired />
-                                        </label>
-                                        <input
-                                            type="date"
-                                            pattern="\d{4}-\d{2}-\d{2}"
-                                            id="releaseDate"
-                                            {...register("releaseDate")}
-                                            className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
-                                        />
-                                        {<span className="text-deepRed">{errors.releaseDate?.message}</span>}
-                                    </div>
-                                    <div className="flex gap-2 flex-col">
-                                        <label htmlFor="active" className="flex gap-1 mb-1 items-center">
-                                            Active
-                                        </label>
-                                        <Tippy
-                                            interactive
-                                            onClickOutside={() => setActiveVisible(!activeVisible)}
-                                            visible={activeVisible}
-                                            offset={[0, 0]}
-                                            placement="bottom"
-                                            render={(attrs) => (
-                                                <div
-                                                    {...attrs}
-                                                    className={`flex w-[290px] text-white p-2 rounded-bl-lg rounded-br-lg flex-col bg-background outline-1 outline-border outline justify-center ${
-                                                        activeVisible ? "outline-primary" : ""
-                                                    }`}
-                                                >
-                                                    <div
-                                                        onClick={() => {
-                                                            setActive(true);
-                                                            setActiveVisible(false);
-                                                        }}
-                                                        className={`cursor-pointer py-3 px-4 hover:bg-primary text-left rounded-lg ${
-                                                            isActive === true ? "text-blue pointer-events-none" : ""
-                                                        }`}
-                                                    >
-                                                        True
-                                                    </div>
-                                                    <div
-                                                        onClick={() => {
-                                                            setActive(false);
-                                                            setActiveVisible(false);
-                                                        }}
-                                                        className={`cursor-pointer py-3 px-4 hover:bg-primary text-left rounded-lg ${
-                                                            isActive === false ? "text-blue pointer-events-none" : ""
-                                                        }`}
-                                                    >
-                                                        False
-                                                    </div>
-                                                </div>
-                                            )}
-                                        >
-                                            <div
-                                                tabIndex={-1}
-                                                onClick={() => setActiveVisible(!activeVisible)}
-                                                className={`hover:outline-primary py-3 px-4 outline-blue outline-1 outline bg-[rgba(141,124,221,0.1)] cursor-pointer ${
-                                                    activeVisible
-                                                        ? "rounded-tl-lg rounded-tr-lg outline-primary"
-                                                        : "rounded-lg"
-                                                }   flex justify-between items-center`}
-                                            >
-                                                {isActive === false ? "False" : "True"}
-                                                <i className={`${activeVisible ? "rotate-180" : ""}`}>
-                                                    <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        width="20"
-                                                        height="20"
-                                                        viewBox="0 0 16 16"
-                                                        id="chevron-down"
-                                                    >
-                                                        <path
-                                                            fill="#fff"
-                                                            d="M4.14645,5.64645 C4.34171,5.45118 4.65829,5.45118 4.85355,5.64645 L7.9999975,8.79289 L11.1464,5.64645 C11.3417,5.45118 11.6583,5.45118 11.8536,5.64645 C12.0488,5.84171 12.0488,6.15829 11.8536,6.35355 L8.35355,9.85355 C8.15829,10.0488 7.84171,10.0488 7.64645,9.85355 L4.14645,6.35355 C3.95118,6.15829 3.95118,5.84171 4.14645,5.64645 Z"
-                                                        ></path>
-                                                    </svg>
-                                                </i>
-                                            </div>
-                                        </Tippy>
                                     </div>
                                 </div>
                                 <div className="flex gap-2 flex-col">
@@ -812,7 +752,7 @@ function FlightSchedule() {
                                     </Tippy>
                                 </div>
                                 <div className="outline outline-1 outline-border my-2"></div>
-                                <div className="text-blue text-[15px]">Movie Posters</div>
+                                <div className="text-blue text-[15px]">Intermediate Airport</div>
                                 {fields.map((field, index) => (
                                     <div key={field.id} className="grid grid-cols-2 gap-4 justify-center items-center">
                                         <div className="flex flex-col gap-2">
@@ -861,7 +801,7 @@ function FlightSchedule() {
                                         className="outline outline-1 outline-blue px-5 py-3 rounded-lg hover:outline-primary hover:bg-primary"
                                         onClick={() => append({ isThumb: false })}
                                     >
-                                        Add new poster
+                                        Add new airport
                                     </button>
                                 </div>
                                 <div className="outline outline-1 outline-border my-2"></div>
@@ -869,7 +809,7 @@ function FlightSchedule() {
                                     className="py-3 px-8 mt-3 text-base font-semibold rounded-lg border-blue border hover:border-primary hover:bg-primary"
                                     type="submit"
                                 >
-                                    Create movie
+                                    Create schedule
                                 </button>
                             </form>
                         </div>

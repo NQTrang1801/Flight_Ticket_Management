@@ -14,3 +14,23 @@ interface FlightDataProps {
         note: string;
     }>;
 }
+
+interface TicketProps {
+    bookingCode: string;
+    flightNumber: string;
+    passengerName: string;
+    idNumber: string;
+    phoneNumber: string;
+    ticketClass: string;
+    ticketPrice: number;
+}
+
+interface FlightProps {
+    bookingCode: string;
+    departureAirport: string;
+    arrivalAirport: string;
+    departureTime: string;
+    duration: string;
+    availableSeats: number;
+    bookedSeats: number;
+}

@@ -93,6 +93,32 @@ function Sidebar() {
                     )}
                 </NavLink>
                 <NavLink
+                    to="/flight-list"
+                    className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
+                >
+                    {({ isActive }) => (
+                        <>
+                            <i className="flex flex-start mr-2 w-[26px] items-center h-[26px] justify-center">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="22"
+                                    height="22"
+                                    viewBox="0 0 32 32"
+                                    id="list"
+                                >
+                                    <path
+                                        className={`${
+                                            isActive ? "fill-white" : "fill-disabled"
+                                        } group-hover:fill-white`}
+                                        d="M30 2H4a2 2 0 0 0-2 2v26a2 2 0 0 0 2 2h26a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm0 28H4V4h26v26zM9 18h16a1 1 0 0 0 0-2H9a1 1 0 0 0 0 2zm0-6h16a1 1 0 0 0 0-2H9a1 1 0 0 0 0 2zm0 12h16a1 1 0 0 0 0-2H9a1 1 0 0 0 0 2z"
+                                    ></path>
+                                </svg>
+                            </i>
+                            Flight list
+                        </>
+                    )}
+                </NavLink>
+                <NavLink
                     to="/ticket-sales"
                     className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
                 >

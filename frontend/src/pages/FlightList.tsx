@@ -13,7 +13,7 @@ import Tippy from "@tippyjs/react/headless";
 import convertReleaseDate from "~/utils/convertReleaseDate";
 import SkeletonActors from "~/components/SkeletonActors";
 import { useAppSelector } from "~/hook";
-import Ticket from "~/components/Ticket";
+import Flight from "~/components/Flight";
 
 const schema = yup.object().shape({
     fullName: yup.string().required("Full name is required."),
@@ -24,53 +24,53 @@ const schema = yup.object().shape({
 
 const flightTickets = [
     {
-        bookingCode: "BM201",
-        flightNumber: "VN123",
-        passengerName: "John Doe",
-        idNumber: "123456789",
-        phoneNumber: "0123456789",
-        ticketClass: "Economy",
-        ticketPrice: 100
+        bookingCode: "BM401",
+        departureAirport: "HAN",
+        arrivalAirport: "SGN",
+        departureTime: "2024-04-13 08:00",
+        duration: "2 hours",
+        availableSeats: 100,
+        bookedSeats: 0
     },
     {
-        bookingCode: "BM202",
-        flightNumber: "VN456",
-        passengerName: "Jane Smith",
-        idNumber: "987654321",
-        phoneNumber: "0987654321",
-        ticketClass: "Business",
-        ticketPrice: 150
+        bookingCode: "BM402",
+        departureAirport: "SGN",
+        arrivalAirport: "DAD",
+        departureTime: "2024-04-13 10:00",
+        duration: "1.5 hours",
+        availableSeats: 80,
+        bookedSeats: 20
     },
     {
-        bookingCode: "BM203",
-        flightNumber: "VN789",
-        passengerName: "Alice Johnson",
-        idNumber: "456789123",
-        phoneNumber: "0456789123",
-        ticketClass: "Economy",
-        ticketPrice: 120
+        bookingCode: "BM403",
+        departureAirport: "DAD",
+        arrivalAirport: "HAN",
+        departureTime: "2024-04-13 12:00",
+        duration: "1 hour",
+        availableSeats: 50,
+        bookedSeats: 10
     },
     {
-        bookingCode: "BM204",
-        flightNumber: "VN246",
-        passengerName: "Bob Brown",
-        idNumber: "789123456",
-        phoneNumber: "0789123456",
-        ticketClass: "Economy",
-        ticketPrice: 110
+        bookingCode: "BM404",
+        departureAirport: "HAN",
+        arrivalAirport: "DAD",
+        departureTime: "2024-04-13 14:00",
+        duration: "1.5 hours",
+        availableSeats: 90,
+        bookedSeats: 5
     },
     {
-        bookingCode: "BM205",
-        flightNumber: "VN135",
-        passengerName: "Emily Davis",
-        idNumber: "321654987",
-        phoneNumber: "0321654987",
-        ticketClass: "Business",
-        ticketPrice: 180
+        bookingCode: "BM405",
+        departureAirport: "DAD",
+        arrivalAirport: "SGN",
+        departureTime: "2024-04-13 16:00",
+        duration: "2 hours",
+        availableSeats: 70,
+        bookedSeats: 30
     }
 ];
 
-function TicketSales() {
+function FlightList() {
     const [data, setData] = useState(flightTickets);
     const [loading, setLoading] = useState(false);
     const [deletingMode, setDeletingMode] = useState(false);
@@ -203,15 +203,15 @@ function TicketSales() {
                     {/* {loading && <SkeletonActors />} */}
                     {data
                         // ?.filter((actor) => actor.fullName.toLowerCase().includes(query.toLowerCase()))
-                        .map((ticket) => (
-                            <Ticket
-                                key={ticket.bookingCode}
-                                flightNumber={ticket.flightNumber}
-                                idNumber={ticket.idNumber}
-                                passengerName={ticket.passengerName}
-                                phoneNumber={ticket.phoneNumber}
-                                ticketClass={ticket.ticketClass}
-                                ticketPrice={ticket.ticketPrice}
+                        .map((flight) => (
+                            <Flight
+                                key={flight.bookingCode}
+                                departureAirport={flight.departureAirport}
+                                arrivalAirport={flight.arrivalAirport}
+                                departureTime={flight.departureTime}
+                                duration={flight.duration}
+                                bookedSeats={flight.bookedSeats}
+                                availableSeats={flight.availableSeats}
                             />
                         ))}
                 </ul>
@@ -403,4 +403,4 @@ function TicketSales() {
     );
 }
 
-export default TicketSales;
+export default FlightList;
