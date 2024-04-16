@@ -26,6 +26,7 @@ interface TicketProps {
 }
 
 interface FlightProps {
+    index: number;
     bookingCode: string;
     departureAirport: string;
     arrivalAirport: string;
@@ -33,4 +34,26 @@ interface FlightProps {
     duration: string;
     availableSeats: number;
     bookedSeats: number;
+}
+
+interface MonthlyRevenueProps {
+    month: string;
+    ticketSales: {
+        stt: number;
+        flightNumber: string;
+        ticketCount: number;
+        revenue: number;
+        rate: string;
+    }[];
+}
+
+interface YearlyRevenueProps {
+    year: number;
+    monthlyRevenue: {
+        stt: number;
+        month: string;
+        flightCount: number;
+        revenue: number;
+        rate: string;
+    }[];
 }

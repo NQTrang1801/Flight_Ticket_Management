@@ -24,6 +24,7 @@ const schema = yup.object().shape({
 
 const flightTickets = [
     {
+        index: 1,
         bookingCode: "BM401",
         departureAirport: "HAN",
         arrivalAirport: "SGN",
@@ -33,6 +34,7 @@ const flightTickets = [
         bookedSeats: 0
     },
     {
+        index: 2,
         bookingCode: "BM402",
         departureAirport: "SGN",
         arrivalAirport: "DAD",
@@ -42,6 +44,7 @@ const flightTickets = [
         bookedSeats: 20
     },
     {
+        index: 3,
         bookingCode: "BM403",
         departureAirport: "DAD",
         arrivalAirport: "HAN",
@@ -51,6 +54,7 @@ const flightTickets = [
         bookedSeats: 10
     },
     {
+        index: 4,
         bookingCode: "BM404",
         departureAirport: "HAN",
         arrivalAirport: "DAD",
@@ -60,6 +64,7 @@ const flightTickets = [
         bookedSeats: 5
     },
     {
+        index: 5,
         bookingCode: "BM405",
         departureAirport: "DAD",
         arrivalAirport: "SGN",
@@ -199,22 +204,35 @@ function FlightList() {
                 </div>
             )}
             <div className="bg-block p-6 rounded-3xl shadow-xl">
-                <ul className="grid grid-cols-2 gap-6 w-full">
-                    {/* {loading && <SkeletonActors />} */}
-                    {data
-                        // ?.filter((actor) => actor.fullName.toLowerCase().includes(query.toLowerCase()))
-                        .map((flight) => (
-                            <Flight
-                                key={flight.bookingCode}
-                                departureAirport={flight.departureAirport}
-                                arrivalAirport={flight.arrivalAirport}
-                                departureTime={flight.departureTime}
-                                duration={flight.duration}
-                                bookedSeats={flight.bookedSeats}
-                                availableSeats={flight.availableSeats}
-                            />
-                        ))}
-                </ul>
+                <table className="w-full bg-block">
+                    <thead>
+                        <tr className="text-center">
+                            <th className="w-32">Index</th>
+                            <th className="">Departure airport</th>
+                            <th className="">Arrival airport</th>
+                            <th className="">Departure time</th>
+                            <th className="">Duration</th>
+                            <th className="">Available seats</th>
+                            <th className="">Booked seats</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {data
+                            // ?.filter((actor) => actor.fullName.toLowerCase().includes(query.toLowerCase()))
+                            .map((flight) => (
+                                <Flight
+                                    index={flight.index}
+                                    key={flight.bookingCode}
+                                    departureAirport={flight.departureAirport}
+                                    arrivalAirport={flight.arrivalAirport}
+                                    departureTime={flight.departureTime}
+                                    duration={flight.duration}
+                                    bookedSeats={flight.bookedSeats}
+                                    availableSeats={flight.availableSeats}
+                                />
+                            ))}
+                    </tbody>
+                </table>
             </div>
             <Portal>
                 <div className="fixed top-0 right-0 left-0 bottom-0 bg-[rgba(0,0,0,0.4)] z-50 flex items-center justify-center">

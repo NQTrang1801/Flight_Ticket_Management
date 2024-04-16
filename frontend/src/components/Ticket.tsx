@@ -91,13 +91,13 @@ const Ticket: React.FC<TicketProps> = ({
                         </i>
                     </button>
                 </div>
-                <div className="mt-12">
+                <div className="mt-10">
                     <div className="grid md:grid-cols-2 gap-4">
                         {/* <div>
                             <span className="font-semibold">Booking Code</span>: {bookingCode}
                         </div> */}
                         <div>
-                            <span className="font-semibold">Flight number</span>: {flightNumber} USD
+                            <span className="font-semibold">Flight number</span>: {flightNumber}
                         </div>
                         <div>
                             <span className="font-semibold">Passenger</span>: {passengerName}

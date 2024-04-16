@@ -6,15 +6,7 @@ import { toast } from "react-toastify";
 import { useAppDispatch } from "~/hook";
 import { startLoading, stopLoading } from "~/actions/loading";
 
-const Flight: React.FC<FlightProps> = ({
-    index,
-    departureAirport,
-    arrivalAirport,
-    departureTime,
-    duration,
-    availableSeats,
-    bookedSeats
-}) => {
+const MonthRevenue: React.FC<MonthRevenueProps> = ({ month, ticketSales }) => {
     const [selectedId, setSelectedId] = useState(String);
     const overlayRef = useRef<HTMLDivElement>(null);
     const { Portal, hide, show } = usePortal({
@@ -48,15 +40,31 @@ const Flight: React.FC<FlightProps> = ({
 
     return (
         <>
-            <tr className="text-center">
-                <td>{index}</td>
-                <td>{departureAirport}</td>
-                <td>{arrivalAirport}</td>
-                <td>{departureTime}</td>
-                <td>{duration}</td>
-                <td>{availableSeats}</td>
-                <td>{bookedSeats}</td>
-            </tr>
+            <div>
+                <div className="font-semibold text-base capitalize">Month: {month}</div>
+                <table className="w-full bg-block mt-4">
+                    <thead>
+                        <tr className="text-center bg-primary">
+                            <th className="w-32">Index</th>
+                            <th className="">Flight number</th>
+                            <th className="">Ticket count</th>
+                            <th className="">Revenue</th>
+                            <th className="">Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {ticketSales.map((flight) => (
+                            <tr key={flight.stt} className="text-center">
+                                <td>{flight.stt}</td>
+                                <td>{flight.flightNumber}</td>
+                                <td>{flight.ticketCount}</td>
+                                <td>{flight.revenue}</td>
+                                <td>{flight.rate}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
             {/* <li className="p-6 rounded-xl overflow-hidden shadow-xl border border-primary bg-background relative">
                 <div className="bg-primary absolute top-0 left-0 right-0 p-2 text-center font-semibold text-base">
                     Ticket
@@ -178,4 +186,4 @@ const Flight: React.FC<FlightProps> = ({
     );
 };
 
-export default Flight;
+export default MonthRevenue;
