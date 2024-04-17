@@ -6,8 +6,10 @@ const dotenv = require('dotenv').config()
 const PORT = process.env.PORT || 4000;
 const authRoute = require("./router/authRoute");
 const bodyParser = require('body-parser');
-dbConnect();
+const cookieParser = require("cookie-parser");
 
+dbConnect();
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/api/user", authRoute)

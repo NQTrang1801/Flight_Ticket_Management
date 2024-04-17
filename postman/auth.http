@@ -19,3 +19,10 @@ Content-Type: application/json
     "mobile": "0328676629",
     "password": "apipassword123"
 }
+
+### refresh
+GET {{url_dev}}/refresh
+
+### logout
+GET {{url_dev}}/logout
+
