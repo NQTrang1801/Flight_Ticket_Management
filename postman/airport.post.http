@@ -1,0 +1,51 @@
+@url_dev=http://localhost:5000/api/airport
+
+### ADMIN ###
+### Create airport
+POST {{url_dev}}/admin/create
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM1MzgyMSwiZXhwIjoxNzEzNDQwMjIxfQ.Wj-benP-bbrUNoWxN-SXW0ihREkTX0yYOPLxDcd26JE
+{
+    "code": "HAN",
+    "name": "Noi Bai Airport",
+    "country": "Vietnam",
+    "address": "Hà Nội",
+    "timezone": "GMT+7",
+    "terminals": 2,
+    "capacity": 2000,
+    "isInternational": true,
+    "coordinates": {
+        "type": "Point",
+        "coordinates": [105.8075, 21.2212]
+    }
+}
+
+### Update
+PUT {{url_dev}}/admin/661fc2e69eaafc1d4446ff61
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM1MzgyMSwiZXhwIjoxNzEzNDQwMjIxfQ.Wj-benP-bbrUNoWxN-SXW0ihREkTX0yYOPLxDcd26JE
+{
+    "name": "Noi Bai International Airport",
+    "address": "Hanoi",
+    "capacity": 2500
+}
+
+### UPDATE status
+PATCH {{url_dev}}/admin/661fc2e69eaafc1d4446ff61/status
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM1MzgyMSwiZXhwIjoxNzEzNDQwMjIxfQ.Wj-benP-bbrUNoWxN-SXW0ihREkTX0yYOPLxDcd26JE
+{
+    "status": true
+}
+
+### DELETE
+DELETE {{url_dev}}/admin/661fc2e69eaafc1d4446ff61
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM1MzgyMSwiZXhwIjoxNzEzNDQwMjIxfQ.Wj-benP-bbrUNoWxN-SXW0ihREkTX0yYOPLxDcd26JE
+
+### ALL AUTH ###
+### GET ALL
+GET {{url_dev}}/all
+
+### GET BY ID
+GET {{url_dev}}/661fc2e69eaafc1d4446ff61
