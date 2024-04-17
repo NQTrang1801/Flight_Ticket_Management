@@ -1,0 +1,17 @@
+@url_dev=http://localhost:5000/api/user
+
+### get user
+GET {{url_dev}}/info/661f5125a720bac14cefdab8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM0MTI4NCwiZXhwIjoxNzEzNDI3Njg0fQ._PFGLPGr6pdh4pC-3SnApyAJRwv8RZKr61_E64t2ozU
+
+### get all user
+GET {{url_dev}}/admin/all-users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM0MTI4NCwiZXhwIjoxNzEzNDI3Njg0fQ._PFGLPGr6pdh4pC-3SnApyAJRwv8RZKr61_E64t2ozU
+
+### put block user
+PUT http://localhost:5000/api/user/block-user/661f70766003a9a2b5f7920c
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM0MTI4NCwiZXhwIjoxNzEzNDI3Njg0fQ._PFGLPGr6pdh4pC-3SnApyAJRwv8RZKr61_E64t2ozU
+
+### unblock user
+PUT http://localhost:5000/api/user/unblock-user/661f70766003a9a2b5f7920c
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM0MTI4NCwiZXhwIjoxNzEzNDI3Njg0fQ._PFGLPGr6pdh4pC-3SnApyAJRwv8RZKr61_E64t2ozU
