@@ -121,20 +121,24 @@ const ScheduleItem: React.FC<FlightDataProps> = ({
                     </div>
                     {layover.length > 0 && (
                         <table className="w-full mt-6 bg-block">
-                            <tr className="text-center">
-                                <th className="w-32">Index</th>
-                                <th className="w-72">Intermediate airport</th>
-                                <th className="w-48">Stop time</th>
-                                <th>Note</th>
-                            </tr>
-                            {layover.map((item) => (
-                                <tr key={item.stt} className="text-center">
-                                    <td>{item.stt}</td>
-                                    <td>{item.airport}</td>
-                                    <td>{item.stopTime}</td>
-                                    <td>{item.note}</td>
+                            <thead>
+                                <tr className="text-center bg-primary">
+                                    <th className="w-32">Index</th>
+                                    <th className="w-72">Intermediate airport</th>
+                                    <th className="w-48">Stop time</th>
+                                    <th>Note</th>
                                 </tr>
-                            ))}
+                            </thead>
+                            <tbody>
+                                {layover.map((item) => (
+                                    <tr key={item.stt} className="text-center">
+                                        <td>{item.stt}</td>
+                                        <td>{item.airport}</td>
+                                        <td>{item.stopTime}</td>
+                                        <td>{item.note}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
                         </table>
                     )}
                 </div>

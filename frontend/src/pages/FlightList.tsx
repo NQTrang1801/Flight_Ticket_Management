@@ -206,7 +206,7 @@ function FlightList() {
             <div className="bg-block p-6 rounded-3xl shadow-xl">
                 <table className="w-full bg-block">
                     <thead>
-                        <tr className="text-center">
+                        <tr className="text-center bg-primary">
                             <th className="w-32">Index</th>
                             <th className="">Departure airport</th>
                             <th className="">Arrival airport</th>
