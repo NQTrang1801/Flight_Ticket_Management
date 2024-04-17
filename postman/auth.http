@@ -1,0 +1,21 @@
+@url_dev=http://localhost:5000/api/user
+
+### register
+POST {{url_dev}}/register
+Content-Type: application/json
+{
+    "fullname": "Nguyen Quoc Trang",
+    "email": "trangnguyen180103@gmail.com",
+    "mobile": "0328676629",
+    "password": "apipassword123"
+}
+
+### login
+POST {{url_dev}}/login
+Content-Type: application/json
+{
+    "fullname": "Nguyen Quoc Trang",
+    "email": "trangnguyen180103@gmail.com",
+    "mobile": "0328676629",
+    "password": "apipassword123"
+}
