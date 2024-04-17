@@ -1,0 +1,11 @@
+@url_dev=http://localhost:5000/api/rule
+
+### add rule
+POST {{url_dev}}/add-update-rule
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM2MjI5OCwiZXhwIjoxNzEzNDQ4Njk4fQ.ctM42P5c1b6mI95SDzoFWjwXuUx5TmQUl2wIGYROurU
+Content-Type: application/json
+{
+    "ruleName": "MaxAirportLimit",
+    "ruleDetails": "Rule to limit the maximum number of airports",
+    "value": 10
+}

@@ -16,7 +16,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjO
     "isInternational": true,
     "coordinates": {
         "type": "Point",
-        "coordinates": [105.8075, 21.2212]
+        "coordinates": [10.807, 1.2212]
     }
 }
 

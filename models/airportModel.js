@@ -9,11 +9,15 @@ const airportSchema = new mongoose.Schema({
     terminals: { type: Number, required: true }, // Số lượng terminal của sân bay, bắt buộc
     capacity: { type: Number, required: true }, // Sức chứa của sân bay, bắt buộc
     isInternational: { type: Boolean, default: false }, // Sân bay có phải là quốc tế hay không, mặc định là false
-    coordinates: { 
-        type: { type: String, default: 'Point', unique: true },
-        coordinates: { type: [Number], required: true } // Tọa độ địa lý của sân bay, bắt buộc
+    coordinates: {
+        type: { type: String, default: 'Point'},
+        coordinates: { type: [Number], required: false } // Tọa độ địa lý của sân bay, bắt buộc
     },
-    status: { type: Boolean, default: true }
+    status: { type: Boolean, default: true },
+    rules: {
+        type: Array,
+        default: [],
+    }
 });
 
 // Tạo index cho trường coordinates để hỗ trợ truy vấn vị trí địa lý

@@ -1,13 +1,16 @@
 const Airport = require('../models/airportModel');
+const Rule = require('../models/ruleModel');
 const asyncHandler = require('express-async-handler');
 
 // Kiểm tra số lượng sân bay đã tạo
 const checkAirportCount = asyncHandler(async (req, res, next) => {
     try {
         const airportCount = await Airport.countDocuments();
-        if (airportCount >= 10) {
-            return res.status(400).json({ message: "Số lượng sân bay đã đạt tối đa" });
+        const ruleMaxAirport = await Rule.findOne({ ruleName: "MaxAirportLimit" });
+        if (airportCount >= ruleMaxAirport.value) {
+            return res.status(400).json({ message: "The maximum number of airports has reached" });
         }
+        console.log("false: " + ruleMaxAirport);
         next();
     } catch (error) {
         res.status(500).json({ message: "Failed to check airport count", error: error.message });

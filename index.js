@@ -5,6 +5,7 @@ const app = express()
 const dotenv = require('dotenv').config()
 const PORT = process.env.PORT || 4000;
 const authRoute = require("./router/authRoute");
+const ruleRoute = require("./router/ruleRoute");
 const airportRoute = require("./router/airportRoute")
 const bodyParser = require('body-parser');
 const cookieParser = require("cookie-parser");
@@ -14,6 +15,7 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/api/user", authRoute)
+app.use("/api/rule", ruleRoute)
 app.use("/api/airport", airportRoute)
 
 app.use(notFound);
