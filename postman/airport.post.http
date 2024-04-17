@@ -20,6 +20,63 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjO
     }
 }
 
+POST {{url_dev}}/admin/create
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM1MzgyMSwiZXhwIjoxNzEzNDQwMjIxfQ.Wj-benP-bbrUNoWxN-SXW0ihREkTX0yYOPLxDcd26JE
+{
+    "code": "SGN",
+    "name": "Tân Sơn Nhất International Airport",
+    "country": "Vietnam",
+    "address": "Ho Chi Minh City",
+    "timezone": "GMT+7",
+    "terminals": 2,
+    "capacity": 2000,
+    "isInternational": true,
+    "coordinates": {
+        "type": "Point",
+        "coordinates": [106.6586, 10.8188]
+    }
+}
+
+POST {{url_dev}}/admin/create
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM1MzgyMSwiZXhwIjoxNzEzNDQwMjIxfQ.Wj-benP-bbrUNoWxN-SXW0ihREkTX0yYOPLxDcd26JE
+
+{
+    "code": "DAD",
+    "name": "Da Nang International Airport",
+    "country": "Vietnam",
+    "address": "Da Nang",
+    "timezone": "GMT+7",
+    "terminals": 2,
+    "capacity": 2000,
+    "isInternational": true,
+    "coordinates": {
+        "type": "Point",
+        "coordinates": [108.1985, 16.0439]
+    }
+}
+
+POST {{url_dev}}/admin/create
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM1MzgyMSwiZXhwIjoxNzEzNDQwMjIxfQ.Wj-benP-bbrUNoWxN-SXW0ihREkTX0yYOPLxDcd26JE
+
+{
+    "code": "PXU",
+    "name": "Pleiku Airport",
+    "country": "Vietnam",
+    "address": "Pleiku",
+    "timezone": "GMT+7",
+    "terminals": 1,
+    "capacity": 1000,
+    "isInternational": false,
+    "coordinates": {
+        "type": "Point",
+        "coordinates": [108.0222, 13.9542]
+    }
+}
+
+
 ### Update
 PUT {{url_dev}}/admin/661fc2e69eaafc1d4446ff61
 Content-Type: application/json

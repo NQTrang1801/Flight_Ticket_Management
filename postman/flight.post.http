@@ -1,41 +1,45 @@
 @url_dev=http://localhost:5000/api/flight
 
 ### Tạo một chuyến bay mới
-POST {{url_dev}}
+POST {{url_dev}}/create
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM1MzgyMSwiZXhwIjoxNzEzNDQwMjIxfQ.Wj-benP-bbrUNoWxN-SXW0ihREkTX0yYOPLxDcd26JE
-
 {
     "flight_code": "ABC123",
-    "departure_airport": "Hanoi",
-    "destination_airport": "Ho Chi Minh City",
+    "departure_airport": "661ff844673a68780ad00e9c",
+    "destination_airport": "661ff8808f4b4c177b6a70b9",
     "departure_datetime": "2024-04-20T08:00:00.000Z",
     "duration": 120,
     "ticket_price": 1000,
     "seats": 150,
     "transit_airports": [
-        {"name": "Danang", "stop_duration": 15},
-        {"name": "Nha Trang", "stop_duration": 10}
+        {"airport_id": "6620020b3b74f1bf677edb0f", "stop_duration": 15, "rule_id": "662000b0733c072ad08dc5e0"},
+        {"airport_id": "662002523b74f1bf677edb1d", "stop_duration": 10, "rule_id": "662000b0733c072ad08dc5e0"}
+    ],
+    "rules": [
+        {"rule_id": "662004173b74f1bf677edb29"}
     ]
 }
 
 
 ### Lấy tất cả các chuyến bay
-GET {{url_dev}}
+GET {{url_dev}}/all
 
 ### Lấy thông tin của một chuyến bay dựa trên ID
 GET {{url_dev}}/{{flight_id_here}}
 
 ### Cập nhật thông tin của một chuyến bay dựa trên ID
-PUT {{url_dev}}/{{flight_id_here}}
+PUT {{url_dev}}/6620126f269aaa629bfd19fc
 Content-Type: application/json
-Authorization: Bearer your_access_token_here
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM1MzgyMSwiZXhwIjoxNzEzNDQwMjIxfQ.Wj-benP-bbrUNoWxN-SXW0ihREkTX0yYOPLxDcd26JE
 {
-    "departureTime": "2024-04-21T08:00:00.000Z",
-    "duration": 150
+    "departureTime": "2024-04-21T08:00:00.000Y",
+    "transit_airports": [
+        {"airport_id": "6620020b3b74f1bf677edb0f", "stop_duration": 25, "rule_id": "662016cac5c298bf41797795"},
+        {"airport_id": "662002523b74f1bf677edb1d", "stop_duration": 20, "rule_id": "662000b0733c072ad08dc5e0"}
+    ]
 }
 
 ### Xóa một chuyến bay dựa trên ID
-DELETE {{url_dev}}/{{flight_id_here}}
-Authorization: Bearer your_access_token_here
+DELETE {{url_dev}}/6620126f269aaa629bfd19fc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM1MzgyMSwiZXhwIjoxNzEzNDQwMjIxfQ.Wj-benP-bbrUNoWxN-SXW0ihREkTX0yYOPLxDcd26JE

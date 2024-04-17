@@ -10,7 +10,6 @@ const checkAirportCount = asyncHandler(async (req, res, next) => {
         if (airportCount >= ruleMaxAirport.value) {
             return res.status(400).json({ message: "The maximum number of airports has reached" });
         }
-        console.log("false: " + ruleMaxAirport);
         next();
     } catch (error) {
         res.status(500).json({ message: "Failed to check airport count", error: error.message });

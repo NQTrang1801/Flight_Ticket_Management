@@ -4,17 +4,14 @@
 const Rule = require('../models/ruleModel');
 const asyncHandler = require('express-async-handler');
 
-// Tạo mới hoặc cập nhật qui định
 const addOrUpdateRule = asyncHandler(async (req, res) => {
     const { ruleName, ruleDetails, value } = req.body;
     try {
         let rule = await Rule.findOne({ ruleName });
 
         if (!rule) {
-            // Nếu qui định không tồn tại, tạo mới qui định
             rule = new Rule({ ruleName, ruleDetails, value });
         } else {
-            // Nếu qui định đã tồn tại, cập nhật giá trị
             rule.ruleDetails = ruleDetails;
             rule.value = value;
         }
