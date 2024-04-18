@@ -6,6 +6,10 @@ const ruleSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    code: {
+        type: String,
+        required: true
+    },
     ruleDetails: {
         type: String,
         required: true

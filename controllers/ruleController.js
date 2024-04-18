@@ -5,13 +5,14 @@ const Rule = require('../models/ruleModel');
 const asyncHandler = require('express-async-handler');
 
 const addOrUpdateRule = asyncHandler(async (req, res) => {
-    const { ruleName, ruleDetails, value } = req.body;
+    const { ruleName, code, ruleDetails, value } = req.body;
     try {
         let rule = await Rule.findOne({ ruleName });
 
         if (!rule) {
-            rule = new Rule({ ruleName, ruleDetails, value });
+            rule = new Rule({ ruleName, code, ruleDetails, value });
         } else {
+            rule.code = code;
             rule.ruleDetails = ruleDetails;
             rule.value = value;
         }

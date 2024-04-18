@@ -78,7 +78,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjO
 
 
 ### Update
-PUT {{url_dev}}/admin/661fc2e69eaafc1d4446ff61
+PUT {{url_dev}}/admin/66209c084fd0c1e8b4adf6ab
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM1MzgyMSwiZXhwIjoxNzEzNDQwMjIxfQ.Wj-benP-bbrUNoWxN-SXW0ihREkTX0yYOPLxDcd26JE
 {
@@ -88,7 +88,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjO
 }
 
 ### UPDATE status
-PATCH {{url_dev}}/admin/661fc2e69eaafc1d4446ff61/status
+PATCH {{url_dev}}/admin/66209c084fd0c1e8b4adf6ab/status
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM1MzgyMSwiZXhwIjoxNzEzNDQwMjIxfQ.Wj-benP-bbrUNoWxN-SXW0ihREkTX0yYOPLxDcd26JE
 {
@@ -96,7 +96,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjO
 }
 
 ### DELETE
-DELETE {{url_dev}}/admin/661fc2e69eaafc1d4446ff61
+DELETE {{url_dev}}/admin/66209c084fd0c1e8b4adf6ab
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM1MzgyMSwiZXhwIjoxNzEzNDQwMjIxfQ.Wj-benP-bbrUNoWxN-SXW0ihREkTX0yYOPLxDcd26JE
 
@@ -105,4 +105,4 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjO
 GET {{url_dev}}/all
 
 ### GET BY ID
-GET {{url_dev}}/661fc2e69eaafc1d4446ff61
+GET {{url_dev}}/66209c084fd0c1e8b4adf6ab

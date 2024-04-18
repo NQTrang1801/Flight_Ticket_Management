@@ -105,6 +105,31 @@ const updateFlight = asyncHandler(async (req, res) => {
     }
 });
 
+const updateSeatCountById = asyncHandler(async (req, res) => {
+    const { flight_id, seat_id } = req.params;
+    const { count } = req.body;
+    try {
+        const flight = await Flight.findOne({ "_id": flight_id, "seats._id": seat_id });
+        if (!flight) {
+            return res.status(404).json({ message: "Flight or seat not found" });
+        }
+        const seat = flight.seats.find(s => s._id == seat_id);
+        if (!seat) {
+            return res.status(404).json({ message: "Seat not found in flight" });
+        }
+        if (count < 0 || count < seat.booked_seats) {
+            return res.status(400).json({ message: "Invalid seat count" });
+        }
+        seat.count = count;
+        await flight.save();
+        res.status(200).json(flight);
+    } catch (error) {
+        res.status(500).json({ message: "Failed to update seat count", error: error.message });
+    }
+});
+
+
+
 const deleteFlight = asyncHandler(async (req, res) => {
     const { id } = req.params;
     try {
@@ -123,5 +148,6 @@ module.exports = {
     getAllFlights,
     getFlightById,
     updateFlight,
+    updateSeatCountById,
     deleteFlight
 };

@@ -1,11 +1,15 @@
 @url_dev=http://localhost:5000/api/rule
 
+### get all
+GET {{url_dev}}/all-rules
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM2MjI5OCwiZXhwIjoxNzEzNDQ4Njk4fQ.ctM42P5c1b6mI95SDzoFWjwXuUx5TmQUl2wIGYROurU
 ### add rule MaxAirport
 POST {{url_dev}}/add-update-rule
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM2MjI5OCwiZXhwIjoxNzEzNDQ4Njk4fQ.ctM42P5c1b6mI95SDzoFWjwXuUx5TmQUl2wIGYROurU
 Content-Type: application/json
 {
-    "ruleName": "MaxAirportLimit",
+    "ruleName": "Maximum number of airports",
+    "code": "QD1-1",
     "ruleDetails": "Rule to limit the maximum number of airports",
     "value": 10
 }
@@ -15,11 +19,26 @@ POST {{url_dev}}/add-update-rule
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM2MjI5OCwiZXhwIjoxNzEzNDQ4Njk4fQ.ctM42P5c1b6mI95SDzoFWjwXuUx5TmQUl2wIGYROurU
 Content-Type: application/json
 {
-    "ruleName": "rule flight",
-    "ruleDetails": "Rule to a flight ABC123",
+    "ruleName": "HAN - SGN",
+    "code": "QD1-2.3",
+    "ruleDetails": "Minimum flight time and the number of intermediaries",
     "value": {
         "min_duration": 30,
         "max_transit_airport": 2
+    }
+}
+
+### add rule a flight
+POST {{url_dev}}/add-update-rule
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM2MjI5OCwiZXhwIjoxNzEzNDQ4Njk4fQ.ctM42P5c1b6mI95SDzoFWjwXuUx5TmQUl2wIGYROurU
+Content-Type: application/json
+{
+    "ruleName": "SGN - HAN",
+    "code": "QD1-2.3",
+    "ruleDetails": "Minimum flight time and the number of intermediaries",
+    "value": {
+        "min_duration": 35,
+        "max_transit_airport": 1
     }
 }
 
@@ -28,8 +47,9 @@ POST {{url_dev}}/add-update-rule
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM2MjI5OCwiZXhwIjoxNzEzNDQ4Njk4fQ.ctM42P5c1b6mI95SDzoFWjwXuUx5TmQUl2wIGYROurU
 Content-Type: application/json
 {
-    "ruleName": "stop duration 10 - 20 minute",
-    "ruleDetails": "rule to stop duration 10 - 20 minute in transit airport",
+    "ruleName": "stop duration: 10 - 20 minute",
+    "code": "QD1-4",
+    "ruleDetails": "rule to stop duration time in transit airport",
     "value": { "min": "10", "max": "20"}
 }
 
@@ -38,7 +58,9 @@ POST {{url_dev}}/add-update-rule
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM2MjI5OCwiZXhwIjoxNzEzNDQ4Njk4fQ.ctM42P5c1b6mI95SDzoFWjwXuUx5TmQUl2wIGYROurU
 Content-Type: application/json
 {
-    "ruleName": "stop duration 50 - 20 minute",
-    "ruleDetails": "rule to stop duration 20 - 50 minute in transit airport",
+    "ruleName": "stop duration: 20 - 50 minute",
+    "code": "QD1-4",
+    "ruleDetails": "rule to stop duration time in transit airport",
     "value": { "min": "20", "max": "50"}
 }
+

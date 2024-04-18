@@ -5,19 +5,23 @@ POST {{url_dev}}/create
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM1MzgyMSwiZXhwIjoxNzEzNDQwMjIxfQ.Wj-benP-bbrUNoWxN-SXW0ihREkTX0yYOPLxDcd26JE
 {
-    "flight_code": "ABC123",
-    "departure_airport": "661ff844673a68780ad00e9c",
-    "destination_airport": "661ff8808f4b4c177b6a70b9",
+    "flight_number": "MH370-BOEING777",
+    "flight_code": "HAN-SGN",
+    "departure_airport": "66209c084fd0c1e8b4adf6ab",
+    "destination_airport": "66209c374fd0c1e8b4adf6bc",
     "departure_datetime": "2024-04-20T08:00:00.000Z",
-    "duration": 120,
+    "duration": 60,
     "ticket_price": 1000,
-    "seats": 150,
+    "seats": [
+        {"class": "1", "count": 20, "booked_seats": 0, "status": true},
+        {"class": "2", "count": 80, "booked_seats": 0, "status": true}
+    ],
     "transit_airports": [
-        {"airport_id": "6620020b3b74f1bf677edb0f", "stop_duration": 15, "rule_id": "662000b0733c072ad08dc5e0"},
-        {"airport_id": "662002523b74f1bf677edb1d", "stop_duration": 10, "rule_id": "662000b0733c072ad08dc5e0"}
+        {"airport_id": "66209c4e4fd0c1e8b4adf6ca", "stop_duration": 15, "rule_id": "66209b26eb9c360513f64115"},
+        {"airport_id": "66209c564fd0c1e8b4adf6d0", "stop_duration": 40, "rule_id": "66209b2aeb9c360513f6411a"}
     ],
     "rules": [
-        {"rule_id": "662004173b74f1bf677edb29"}
+        {"rule_id": "66209b1aeb9c360513f6410b"}
     ]
 }
 
@@ -40,6 +44,15 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjO
     ]
 }
 
+### Cập nhật thông tin ghế ngồi của một chuyến bay dựa trên ID
+PUT {{url_dev}}/6620a7b3e748fe1445e18bee/seats/6620a7b3e748fe1445e18bef
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM1MzgyMSwiZXhwIjoxNzEzNDQwMjIxfQ.Wj-benP-bbrUNoWxN-SXW0ihREkTX0yYOPLxDcd26JE
+{
+    "count": 10
+}
+
+
 ### Xóa một chuyến bay dựa trên ID
-DELETE {{url_dev}}/6620126f269aaa629bfd19fc
+DELETE {{url_dev}}/6620a46c47a97d2cb55b7aee
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM1MzgyMSwiZXhwIjoxNzEzNDQwMjIxfQ.Wj-benP-bbrUNoWxN-SXW0ihREkTX0yYOPLxDcd26JE
