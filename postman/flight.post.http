@@ -45,11 +45,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjO
 }
 
 ### Cập nhật thông tin ghế ngồi của một chuyến bay dựa trên ID
-PUT {{url_dev}}/6620a7b3e748fe1445e18bee/seats/6620a7b3e748fe1445e18bef
+PUT {{url_dev}}/6620ccb4023330867421b87d/seats/6620ccb4023330867421b87e
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM1MzgyMSwiZXhwIjoxNzEzNDQwMjIxfQ.Wj-benP-bbrUNoWxN-SXW0ihREkTX0yYOPLxDcd26JE
 {
-    "count": 10
+    "count": 15
 }
 
 

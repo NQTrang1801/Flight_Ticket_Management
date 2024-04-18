@@ -15,7 +15,7 @@ const flightSchema = new mongoose.Schema({
     duration: { type: Number, required: true },
     seats: [
         {
-            class: { type: String, required: true, unique: true }, 
+            class: { type: String, required: true}, 
             count: { type: Number, required: true, default: 0 },
             booked_seats: { type: Number, default: 0 },
             status: { type: Boolean, default: false },
