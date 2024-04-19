@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const transitAirportSchema = new mongoose.Schema({
     airport_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Airport' },
     stop_duration: { type: Number },
-    note: { type: String }
+    rule_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Rule' }
 });
 
 const flightSchema = new mongoose.Schema({
