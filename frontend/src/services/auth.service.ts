@@ -2,12 +2,12 @@ import axios from "~/utils/axios";
 
 const login = (email: string, password: string) => {
     return axios
-        .post("/auth/login", {
+        .post("/user/login", {
             email,
             password
         })
         .then((response) => {
-            if (response.data.accessToken) {
+            if (response.data.token) {
                 localStorage.setItem("user", JSON.stringify(response));
             }
 

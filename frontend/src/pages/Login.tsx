@@ -1,9 +1,9 @@
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { login } from "~/actions/auth";
-import { useAppDispatch, useAppSelector } from "~/hook";
+import { useAppDispatch } from "~/hook";
 import logo from "~/assets/logo_removebg.png";
 import { toast } from "react-toastify";
 
@@ -12,12 +12,11 @@ interface LoginFormValues {
     password: string;
 }
 
-const LoginForm: React.FC = () => {
+const Login: React.FC = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const dispatch = useAppDispatch();
-    const { isLoggedIn } = useAppSelector((state) => state.auth!);
 
     const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -35,22 +34,22 @@ const LoginForm: React.FC = () => {
     } = useForm<LoginFormValues>();
 
     const onSubmit: SubmitHandler<LoginFormValues> = () => {
-        // dispatch(login(email, password))
-        //     .then(() => {
-        //         toast("Login successfully!");
-        //         const timer = setTimeout(() => {
-        //             navigate("/movies");
-        //             window.location.reload();
-        //         }, 2000);
-        //         return () => clearTimeout(timer);
-        //     })
-        //     .catch(() => {
-        //         toast("Email or password is incorrect", {
-        //             autoClose: 5000
-        //         });
-        //     });
+        dispatch(login(email, password))
+            .then(() => {
+                toast("Login successfully!");
+                const timer = setTimeout(() => {
+                    navigate("/");
+                    window.location.reload();
+                }, 2000);
+                return () => clearTimeout(timer);
+            })
+            .catch(() => {
+                toast("Email or password is incorrect", {
+                    autoClose: 5000
+                });
+            });
 
-        navigate("/movies");
+        navigate("/");
     };
 
     // if (isLoggedIn) {
@@ -125,7 +124,7 @@ const LoginForm: React.FC = () => {
                             {...register("password", {
                                 required: "Password is required.",
                                 minLength: {
-                                    value: 6,
+                                    value: 5,
                                     message: "Password must be at least 6 characters."
                                 }
                             })}
@@ -147,4 +146,4 @@ const LoginForm: React.FC = () => {
     );
 };
 
-export default LoginForm;
+export default Login;

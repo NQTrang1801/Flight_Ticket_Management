@@ -57,3 +57,18 @@ interface YearlyRevenueProps {
         rate: string;
     }[];
 }
+
+interface AirportProps {
+    code: string;
+    name: string;
+    country: string;
+    address: string;
+    timezone: string;
+    terminals: number;
+    capacity: number;
+    isInternational: boolean;
+    coordinates: {
+        type: string;
+        coordinates: number[];
+    };
+}

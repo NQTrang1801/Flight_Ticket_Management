@@ -22,6 +22,10 @@
     @apply !bg-background;
 }
 
+.Toastify__progress-bar-theme--dark {
+    @apply !bg-primary;
+}
+
 td,
 th {
     border: 1px solid #ddd;

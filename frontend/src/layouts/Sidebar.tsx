@@ -127,8 +127,8 @@ function Sidebar() {
                             <i className="flex flex-start mr-2 w-[26px] items-center h-[26px]">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
+                                    width="26"
+                                    height="26"
                                     viewBox="0 0 64 64"
                                     id="ticket"
                                 >
@@ -193,6 +193,42 @@ function Sidebar() {
                             <i className="flex flex-start mr-2 w-[26px] items-center h-[26px]">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
+                                    fillRule="evenodd"
+                                    strokeLinejoin="round"
+                                    strokeMiterlimit="2"
+                                    clipRule="evenodd"
+                                    viewBox="0 0 32 32"
+                                    id="search"
+                                    width={24}
+                                    height={24}
+                                >
+                                    <path
+                                        className={`${
+                                            isActive ? "fill-white" : "fill-disabled"
+                                        } group-hover:fill-white`}
+                                        d="M14 0C6.275 0 0 6.272 0 14c0 7.726 6.274 14 14 14 7.727 0 14.001-6.274 14.001-14 0-7.727-6.274-14-14-14Zm0 2c6.624 0 12 5.376 12 12 0 6.623-5.376 12-12 12-6.623 0-11.999-5.377-11.999-12 0-6.624 5.376-12 12-12Z"
+                                    ></path>
+                                    <path
+                                        className={`${
+                                            isActive ? "fill-white" : "fill-disabled"
+                                        } group-hover:fill-white`}
+                                        d="m22.792 24.208 7.5 7.5a1 1 0 0 0 1.414-1.414l-7.5-7.5a1 1 0 0 0-1.414 1.414ZM9 11h5a1 1 0 0 0 0-2H9a1 1 0 0 0 0 2ZM19 17h-5a1 1 0 0 0 0 2h5a1 1 0 0 0 0-2ZM19 13H9a1 1 0 1 0 0 2h10a1 1 0 1 0 0-2ZM18 11h1a1 1 0 0 0 0-2h-1a1 1 0 0 0 0 2ZM10 17H9a1 1 0 0 0 0 2h1a1 1 0 0 0 0-2Z"
+                                    ></path>
+                                </svg>
+                            </i>
+                            Flight lookup
+                        </>
+                    )}
+                </NavLink>
+                <NavLink
+                    to="/airport"
+                    className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
+                >
+                    {({ isActive }) => (
+                        <>
+                            <i className="flex flex-start mr-2 w-[26px] items-center h-[26px]">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 512 512"
                                     width={24}
                                     height={24}
@@ -206,11 +242,10 @@ function Sidebar() {
                                     ></path>
                                 </svg>
                             </i>
-                            Flight lookup
+                            Airport
                         </>
                     )}
                 </NavLink>
-
                 <NavLink
                     to="/regulations"
                     className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
