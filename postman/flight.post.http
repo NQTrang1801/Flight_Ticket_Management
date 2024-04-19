@@ -3,7 +3,7 @@
 ### Tạo một chuyến bay mới
 POST {{url_dev}}/create
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM1MzgyMSwiZXhwIjoxNzEzNDQwMjIxfQ.Wj-benP-bbrUNoWxN-SXW0ihREkTX0yYOPLxDcd26JE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzQ5NTIxNiwiZXhwIjoxNzEzNTgxNjE2fQ.VbJeqISlEBqABYHLw5Q2DCM49kG4UaQ1Sv5R1cLjmOs
 {
     "flight_number": "MH370-BOEING777",
     "flight_code": "HAN-SGN",
