@@ -4,42 +4,15 @@ const crypto = require("crypto");
 // Declare the Schema of the Mongo model
 var userSchema = new mongoose.Schema(
   {
-    fullname: {
-      type: String,
-      required: true,
-    },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    mobile: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    password: {
-      type: String,
-      required: true,
-    },
-    role: {
-      type: String,
-      default: "user",
-    },
-    isBlocked: {
-      type: Boolean,
-      default: false,
-    },
-    tickets: {
-      type: Array,
-      default: [],
-    },
-    address: {
-      type: String,
-    },
-    refreshToken: {
-      type: String,
-    },
+    fullname: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    mobile: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    group_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Group', required: true },
+    isBlocked: { type: Boolean, default: false },
+    tickets: { type: Array, default: [] },
+    address: { type: String },
+    refreshToken: { type: String },
     passwordChangedAt: Date,
     passwordResetToken: String,
     passwordResetExpires: Date,

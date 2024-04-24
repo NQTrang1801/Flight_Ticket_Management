@@ -1,4 +1,7 @@
 const User = require("../models/userModel");
+const Group = require("../models/groupModel");
+const Permission = require("../models/permissionModel");
+const Functionality = require("../models/functionalityModel");
 const jwt = require("jsonwebtoken");
 const asyncHandler = require("express-async-handler")
 
@@ -13,7 +16,7 @@ const authMiddleware = asyncHandler(async (req, res, next) => {
                 req.user = user;
                 next();
             }
-        } catch (err)  {
+        } catch (err) {
             throw new Error("Not Authorized token expired, please login again");
         }
     } else {
@@ -21,14 +24,24 @@ const authMiddleware = asyncHandler(async (req, res, next) => {
     }
 });
 
-const isAdmin = asyncHandler(async (req, res, next) => {
-    const { email } = req.user;
-    const adminUser = await User.findOne({ email });
-    if (adminUser.role !== "admin") {
-        throw new Error("You are not an admin");
+const hasPermission = asyncHandler(async (req, res, next) => {
+    const url = req.originalUrl;
+    const parts = url.split("/");
+    const functionalityCode = parts[parts.indexOf("api") + 2];
+
+    const func = await Functionality.findOne({ functionalityCode });
+    if (!func) {
+        throw new Error("permission not found!");
+    }
+
+    const f_id = func._id;
+    
+    const permission = await Permission.findOne({ group_id: req.user.group_id, functionality_id: f_id });
+    if (!permission) {
+        throw new Error("Permission denied!");
     } else {
         next();
     }
 });
 
-module.exports = { authMiddleware, isAdmin };
+module.exports = { authMiddleware, hasPermission};

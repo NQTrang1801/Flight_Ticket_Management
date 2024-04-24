@@ -1,0 +1,33 @@
+@url_dev=http://localhost:5000/api/permission
+# router.post("/511454990/create", authMiddleware, hasPermission, createPermission);
+# router.get("/511320990/all", authMiddleware, hasPermission, getAllPermissions);
+# router.get("/511320990/:id", authMiddleware, hasPermission, getPermission);
+# router.put("/511246990/update/:id", authMiddleware, hasPermission, updatePermission);
+# router.delete("/511627990/delete/:id", authMiddleware, hasPermission, deletePermission);
+### Create a permission
+POST {{url_dev}}/511454990/create
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhhMDY0MGYwM2E1NjQwZmQ2ZjZkZSIsImlhdCI6MTcxMzkzOTg3MCwiZXhwIjoxNzE0MDI2MjcwfQ.0lfIxsFIUF8U3b6S3oLgvyFFdfzwkY8cXJ_Xb4Np00w
+Content-Type: application/json
+{
+    "group_id": "6628a7d5068a4e014f78ad7a", 
+    "functionality_id": "6628a0640f03a5640fd6f625"
+}
+### Get all permissions
+GET {{url_dev}}/511320990/all
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhhMDY0MGYwM2E1NjQwZmQ2ZjZkZSIsImlhdCI6MTcxMzkzOTg3MCwiZXhwIjoxNzE0MDI2MjcwfQ.0lfIxsFIUF8U3b6S3oLgvyFFdfzwkY8cXJ_Xb4Np00w
+### Get a single permission
+GET {{url_dev}}/511320990/6628a0640f03a5640fd6f68d
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhhMDY0MGYwM2E1NjQwZmQ2ZjZkZSIsImlhdCI6MTcxMzkzOTg3MCwiZXhwIjoxNzE0MDI2MjcwfQ.0lfIxsFIUF8U3b6S3oLgvyFFdfzwkY8cXJ_Xb4Np00w
+
+### Update a permission
+PUT {{url_dev}}/511246990/update/6628a0640f03a5640fd6f68d
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhhMDY0MGYwM2E1NjQwZmQ2ZjZkZSIsImlhdCI6MTcxMzkzOTg3MCwiZXhwIjoxNzE0MDI2MjcwfQ.0lfIxsFIUF8U3b6S3oLgvyFFdfzwkY8cXJ_Xb4Np00w
+Content-Type: application/json
+{
+    "group_id": "6628a7d5068a4e014f78ad7a",
+    "functionality_id": "6628a0640f03a5640fd6f628"
+}
+
+### Delete a permission
+DELETE {{url_dev}}/511627990/delete/6628a0640f03a5640fd6f68d
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhhMDY0MGYwM2E1NjQwZmQ2ZjZkZSIsImlhdCI6MTcxMzkzOTg3MCwiZXhwIjoxNzE0MDI2MjcwfQ.0lfIxsFIUF8U3b6S3oLgvyFFdfzwkY8cXJ_Xb4Np00w

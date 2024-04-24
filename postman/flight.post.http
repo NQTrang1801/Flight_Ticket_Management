@@ -5,8 +5,8 @@ POST {{url_dev}}/create
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzQ5NTIxNiwiZXhwIjoxNzEzNTgxNjE2fQ.VbJeqISlEBqABYHLw5Q2DCM49kG4UaQ1Sv5R1cLjmOs
 {
-    "flight_number": "MH370-BOEING777",
-    "flight_code": "HAN-SGN",
+    "flight_number": "MH370-BOEING77777",
+    "flight_code": "HAN-SGNNN",
     "departure_airport": "66209c084fd0c1e8b4adf6ab",
     "destination_airport": "66209c374fd0c1e8b4adf6bc",
     "departure_datetime": "2024-04-20T08:00:00.000Z",
@@ -17,7 +17,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjO
         {"class": "2", "count": 80, "booked_seats": 0, "status": true}
     ],
     "transit_airports": [
-        {"airport_id": "66209c4e4fd0c1e8b4adf6ca", "stop_duration": 15, "rule_id": "66209b26eb9c360513f64115"},
+        {"airport_id": "66209c4e4fd0c1e8b4adf6ca", "stop_duration": 5, "rule_id": "66209b26eb9c360513f64115"},
+        {"airport_id": "66209c564fd0c1e8b4adf6d0", "stop_duration": 40, "rule_id": "66209b2aeb9c360513f6411a"},
         {"airport_id": "66209c564fd0c1e8b4adf6d0", "stop_duration": 40, "rule_id": "66209b2aeb9c360513f6411a"}
     ],
     "rules": [
@@ -39,17 +40,17 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjO
 {
     "departureTime": "2024-04-21T08:00:00.000Y",
     "transit_airports": [
-        {"airport_id": "6620020b3b74f1bf677edb0f", "stop_duration": 25, "rule_id": "662016cac5c298bf41797795"},
+        {"airport_id": "6620020b3b74f1bf677edb0f", "stop_duration": 5, "rule_id": "662016cac5c298bf41797795"},
         {"airport_id": "662002523b74f1bf677edb1d", "stop_duration": 20, "rule_id": "662000b0733c072ad08dc5e0"}
     ]
 }
 
 ### Cập nhật thông tin ghế ngồi của một chuyến bay dựa trên ID
-PUT {{url_dev}}/6620ccb4023330867421b87d/seats/6620ccb4023330867421b87e
+PUT {{url_dev}}/6621dfe08fbf71902dbed73d/seats/6621dfe08fbf71902dbed73e
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM1MzgyMSwiZXhwIjoxNzEzNDQwMjIxfQ.Wj-benP-bbrUNoWxN-SXW0ihREkTX0yYOPLxDcd26JE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzQ5NTIxNiwiZXhwIjoxNzEzNTgxNjE2fQ.VbJeqISlEBqABYHLw5Q2DCM49kG4UaQ1Sv5R1cLjmOs
 {
-    "count": 15
+    "count": 20
 }
 
 

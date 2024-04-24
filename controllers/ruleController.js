@@ -25,11 +25,10 @@ const addOrUpdateRule = asyncHandler(async (req, res) => {
     }
 });
 
-// Xóa qui định dựa trên ruleName
 const deleteRule = asyncHandler(async (req, res) => {
-    const { ruleName } = req.params;
+    const { id } = req.params;
     try {
-        const rule = await Rule.findOneAndDelete({ ruleName });
+        const rule = await Rule.findByIdAndDelete(id);
         if (!rule) {
             return res.status(404).json({ message: "Rule not found" });
         }
@@ -50,10 +49,10 @@ const getAllRules = asyncHandler(async (req, res) => {
 });
 
 // Lấy qui định dựa trên ruleName
-const getRuleByName = asyncHandler(async (req, res) => {
-    const { ruleName } = req.params;
+const getRuleById = asyncHandler(async (req, res) => {
+    const { id } = req.params;
     try {
-        const rule = await Rule.findOne({ ruleName });
+        const rule = await Rule.findById(id);
         if (!rule) {
             return res.status(404).json({ message: "Rule not found" });
         }
@@ -63,4 +62,4 @@ const getRuleByName = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = { addOrUpdateRule, deleteRule, getAllRules, getRuleByName };
+module.exports = { addOrUpdateRule, deleteRule, getAllRules, getRuleById };

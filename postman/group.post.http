@@ -1,0 +1,31 @@
+@url_dev=http://localhost:5000/api/group
+# router.post("/511454413/create", authMiddleware, hasPermission, createGroup);
+# router.get("/511320413/all", authMiddleware, hasPermission, getAllGroups);
+# router.get("/511320413/:id", authMiddleware, hasPermission, getGroup);
+# router.put("/511246413/update/:id", authMiddleware, hasPermission, updateGroup);
+# router.delete("/511627413/delete/:id", authMiddleware, hasPermission, deleteGroup);
+
+### get all
+GET {{url_dev}}/511320413/all
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhhMDY0MGYwM2E1NjQwZmQ2ZjZkZSIsImlhdCI6MTcxMzkzOTg3MCwiZXhwIjoxNzE0MDI2MjcwfQ.0lfIxsFIUF8U3b6S3oLgvyFFdfzwkY8cXJ_Xb4Np00w
+
+### get by id
+GET {{url_dev}}/511320413/6628a0640f03a5640fd6f682
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhhMDY0MGYwM2E1NjQwZmQ2ZjZkZSIsImlhdCI6MTcxMzkzOTg3MCwiZXhwIjoxNzE0MDI2MjcwfQ.0lfIxsFIUF8U3b6S3oLgvyFFdfzwkY8cXJ_Xb4Np00w
+
+### update by id
+PUT {{url_dev}}/511246413/update/6628a0640f03a5640fd6f682
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhhMDY0MGYwM2E1NjQwZmQ2ZjZkZSIsImlhdCI6MTcxMzkzOTg3MCwiZXhwIjoxNzE0MDI2MjcwfQ.0lfIxsFIUF8U3b6S3oLgvyFFdfzwkY8cXJ_Xb4Np00w
+Content-Type: application/json
+{
+    "groupCode": "000"
+}
+
+### create group
+POST {{url_dev}}/511454413/create
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhhMDY0MGYwM2E1NjQwZmQ2ZjZkZSIsImlhdCI6MTcxMzkzOTg3MCwiZXhwIjoxNzE0MDI2MjcwfQ.0lfIxsFIUF8U3b6S3oLgvyFFdfzwkY8cXJ_Xb4Np00w
+Content-Type: application/json
+{
+    "groupCode": "580",
+    "groupName": "EXAMPLE"
+}

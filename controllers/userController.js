@@ -6,6 +6,9 @@ const crypto = require("crypto");
 
 const asyncHandler = require("express-async-handler");
 const validateMongoDbId = require("../utils/validateMongoDbId");
+const Group = require("../models/groupModel");
+const Functionality = require("../models/functionalityModel");
+const Permission = require("../models/permissionModel");
 
 // register a user
 const createUser = asyncHandler(async (req, res) => {
@@ -21,13 +24,13 @@ const createUser = asyncHandler(async (req, res) => {
 });
 
 // Login a user
-const loginUser = asyncHandler(async (req, res) => {
+const loginUSER = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
-    const findUser = await User.findOne({ email });
-    if (findUser && (await findUser.isPasswordMatched(password))) {
-        const refreshToken = await generateRefreshToken(findUser?._id);
+    const account = await User.findOne({ email });
+    if (account && (await account.isPasswordMatched(password))) {
+        const refreshToken = await generateRefreshToken(account?._id);
         const updateuser = await User.findByIdAndUpdate(
-            findUser.id,
+            account.id,
             {
                 refreshToken: refreshToken,
             },
@@ -38,27 +41,33 @@ const loginUser = asyncHandler(async (req, res) => {
             maxAge: 72 * 60 * 60 * 1000,
         });
         res.json({
-            _id: findUser?._id,
-            fullname: findUser?.fullname,
-            email: findUser?.email,
-            mobile: findUser?.mobile,
-            token: generateToken(findUser?._id),
+            _id: account?._id,
+            fullname: account?.fullname,
+            email: account?.email,
+            mobile: account?.mobile,
+            token: generateToken(account?._id),
         });
     } else {
         throw new Error("Invalid Credentials");
     }
 });
 
-// admin login
-const loginAdmin = asyncHandler(async (req, res) => {
+const loginADMINISTRATOR = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
-    // check if user exists or not
-    const findAdmin = await User.findOne({ email });
-    if (findAdmin.role !== "admin") throw new Error("Not Authorised");
-    if (findAdmin && (await findAdmin.isPasswordMatched(password))) {
-        const refreshToken = await generateRefreshToken(findAdmin?._id);
+    const account = await User.findOne({ email });
+    const per = await Permission.findOne({
+        group_id: account.group_id,
+        functionality_id: (await Functionality.findOne({ functionalityCode: "999999999" }).select('_id'))
+    });
+    
+    if (!per) { 
+        throw new Error("Not Authorised"); 
+    }
+    
+    if (account && (await account.isPasswordMatched(password))) {
+        const refreshToken = await generateRefreshToken(account?._id);
         const updateuser = await User.findByIdAndUpdate(
-            findAdmin.id,
+            account.id,
             {
                 refreshToken: refreshToken,
             },
@@ -69,12 +78,50 @@ const loginAdmin = asyncHandler(async (req, res) => {
             maxAge: 72 * 60 * 60 * 1000,
         });
         res.json({
-            _id: findAdmin?._id,
-            fullname: findAdmin?.fullname,
-            email: findAdmin?.email,
-            mobile: findAdmin?.mobile,
-            adress: findAdmin?.address,
-            token: generateToken(findAdmin?._id),
+            _id: account?._id,
+            fullname: account?.fullname,
+            email: account?.email,
+            mobile: account?.mobile,
+            adress: account?.address,
+            token: generateToken(account?._id),
+        });
+    } else {
+        throw new Error("Invalid Credentials");
+    }
+});
+// admin login
+const loginADMIN = asyncHandler(async (req, res) => {
+    const { email, password } = req.body;
+    const account = await User.findOne({ email });
+    const per = await Permission.findOne({
+        group_id: account.group_id,
+        functionality_id: (await Functionality.findOne({ functionalityCode: "511000000" }).select('_id'))
+    });
+    
+    if (!per) { 
+        throw new Error("Not Authorised"); 
+    }
+    
+    if (account && (await account.isPasswordMatched(password))) {
+        const refreshToken = await generateRefreshToken(account?._id);
+        const updateuser = await User.findByIdAndUpdate(
+            account.id,
+            {
+                refreshToken: refreshToken,
+            },
+            { new: true }
+        );
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            maxAge: 72 * 60 * 60 * 1000,
+        });
+        res.json({
+            _id: account?._id,
+            fullname: account?.fullname,
+            email: account?.email,
+            mobile: account?.mobile,
+            adress: account?.address,
+            token: generateToken(account?._id),
         });
     } else {
         throw new Error("Invalid Credentials");
@@ -229,6 +276,7 @@ const unblockUser = asyncHandler(async (req, res) => {
     }
 });
 
+
 // update password
 const updatePassword = asyncHandler(async (req, res) => {
     const { _id } = req.user;
@@ -254,31 +302,32 @@ const getAllUsers = asyncHandler(async (req, res) => {
     }
 });
 
-// reset password
-const resetPassword = asyncHandler(async (req, res) => {
-    const { password } = req.body;
-    const { token } = req.params;
-    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
-    const user = await User.findOne({
-        passwordResetToken: hashedToken,
-        passwordResetExpires: { $gt: Date.now() },
-    });
-    if (!user) throw new Error(" Token Expired, Please try again later");
-    user.password = password;
-    user.passwordResetToken = undefined;
-    user.passwordResetExpires = undefined;
-    await user.save();
-    res.json(user);
+
+//
+const updateGroupUser = asyncHandler(async (req, res) => {
+    const { _id } = req.user;
+    const { group_id } = req.body;
+    validateMongoDbId(_id);
+    const user = await User.findById(_id);
+    const gr = await Group.findById(group_id);
+    if (gr) {
+        user.group_id = group_id;
+        const updated = await user.save();
+        res.json(updated);
+    } else {
+        res.json(user);
+    }
 });
 
 module.exports = {
     createUser,
-    loginUser,
-    loginAdmin,
+    loginUSER,
+    loginADMIN,
+    loginADMINISTRATOR,
     handleRefreshToken,
     logout,
     updatedUser,
-    resetPassword,
+    updateGroupUser,
     updatePassword,
     blockUser,
     unblockUser,

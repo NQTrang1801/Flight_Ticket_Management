@@ -1,4 +1,20 @@
 @url_dev=http://localhost:5000/api/user
+# router.post("/register", createUser);
+# router.post("/login", loginUSER);
+# router.post("/admin-login", loginADMIN);
+# router.post("/administrator-login", loginADMINISTRATOR);
+# router.put("/password", authMiddleware, updatePassword);
+# router.put("/edit-user", authMiddleware, updatedUser);
+# router.put("/reset-password/:token", resetPassword);
+# router.put("/511246447/block-user/:id", authMiddleware, hasPermission, blockUser); //admin-put-user
+# router.put("/511246447/unblock-user/:id", authMiddleware, hasPermission, unblockUser);
+# router.patch("/999457447/update-group/:id", authMiddleware, hasPermission, unblockUser);
+# router.get("/refresh", handleRefreshToken);
+# router.get("/logout", logout);
+# router.get("/all-users", getAllUsers);
+# router.get("/511320447/admin/all-users", authMiddleware, hasPermission, getAllUsersWithAdmin);
+# router.get("/511320447/info/:id", authMiddleware, hasPermission, getUserWithAdmin);
+
 
 ### register
 POST {{url_dev}}/register
@@ -8,6 +24,7 @@ Content-Type: application/json
     "email": "user@gmail.com",
     "mobile": "0123456789",
     "password": "apipassword123",
+    "group_id": "6628adb2bbb6a3ae3712e04b",
     "address": "TP HCM"
 }
 
@@ -28,6 +45,14 @@ Content-Type: application/json
     "password": "admin"
 }
 
+### ADMINISTRATOR login
+POST {{url_dev}}/administrator-login
+Content-Type: application/json
+{
+    "email": "ADMINISTRATOR@gmail.com",
+    "password": "ADMINISTRATOR999"
+}
+
 
 ### refresh
 GET {{url_dev}}/refresh
@@ -38,9 +63,10 @@ GET {{url_dev}}/logout
 ### get all user
 GET {{url_dev}}/all-users
 
-### put reset password
-PUT {{url_dev}}/reset-password/d4a68ec86a19ef9a597e861535923df84afd8c57f5d7ffe11c84950d8a290c8e
+### patch update password
+PATCH {{url_dev}}/password
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhiMDJkNWViNTg3NTQyZTMxNGZiNSIsImlhdCI6MTcxMzk0MzAwMSwiZXhwIjoxNzE0MDI5NDAxfQ.A06tDFuBF78zqKXXMpSXqblxHUiGkKcM1rOWuCiS_N0
 {
     "password": "helloword"
 }
@@ -58,9 +84,33 @@ Content-Type: application/json
 
 ### update password
 PUT {{url_dev}}/password
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM0MTc4OCwiZXhwIjoxNzEzNDI4MTg4fQ.LRbAeM6wivAZM9wEuAL1LwpnHA7KNIUR_QjiccrqAGw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhhZGIyYmJiNmEzYWUzNzEyZTBhOSIsImlhdCI6MTcxMzk0MTk1MSwiZXhwIjoxNzE0MDI4MzUxfQ.OVu9-4dq7iKIAp_5RFzgRGwk7FGroVIE6m-O7f5WI1A
 Content-Type: application/json
 {
     "password": "admin"
 }
 
+# ADMIN
+### get user
+GET {{url_dev}}/511320447/info/6628a0640f03a5640fd6f6de
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhhMDY0MGYwM2E1NjQwZmQ2ZjZkZSIsImlhdCI6MTcxMzk0MTY0NywiZXhwIjoxNzE0MDI4MDQ3fQ.U5gW6snUzF-RziPKLJ9V5ZCjjaOdOvUC7r9zeKdhmIk
+
+### get all user
+GET {{url_dev}}/511320447/admin/all-users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhhMDY0MGYwM2E1NjQwZmQ2ZjZkZSIsImlhdCI6MTcxMzk0MTY0NywiZXhwIjoxNzE0MDI4MDQ3fQ.U5gW6snUzF-RziPKLJ9V5ZCjjaOdOvUC7r9zeKdhmIk
+
+### put block user
+PUT {{url_dev}}/511246447/block-user/6628a0640f03a5640fd6f6de
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhhMDY0MGYwM2E1NjQwZmQ2ZjZkZSIsImlhdCI6MTcxMzk0MTY0NywiZXhwIjoxNzE0MDI4MDQ3fQ.U5gW6snUzF-RziPKLJ9V5ZCjjaOdOvUC7r9zeKdhmIk
+
+### unblock user
+PUT {{url_dev}}/511246447/unblock-user/6628a0640f03a5640fd6f6de
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhhMDY0MGYwM2E1NjQwZmQ2ZjZkZSIsImlhdCI6MTcxMzk0MTY0NywiZXhwIjoxNzE0MDI4MDQ3fQ.U5gW6snUzF-RziPKLJ9V5ZCjjaOdOvUC7r9zeKdhmIk
+
+### update group user
+PATCH {{url_dev}}/999457447/update-group/6628adb2bbb6a3ae3712e0a9
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhhZGIyYmJiNmEzYWUzNzEyZTBhOSIsImlhdCI6MTcxMzk0MTk1MSwiZXhwIjoxNzE0MDI4MzUxfQ.OVu9-4dq7iKIAp_5RFzgRGwk7FGroVIE6m-O7f5WI1A
+Content-Type: application/json
+{
+    "group_id": "6628adb2bbb6a3ae3712e04a"
+}

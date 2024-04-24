@@ -21,6 +21,8 @@ const flightSchema = new mongoose.Schema({
             status: { type: Boolean, default: false },
         }
     ],
+    booking_deadline: { type: Date },
+    cancellation_deadline: { type: Date },
     ticket_price: { type: Object, required: true },
     transit_airports: [transitAirportSchema],
     rules: {

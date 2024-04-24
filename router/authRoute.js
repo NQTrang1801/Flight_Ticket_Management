@@ -1,25 +1,26 @@
 const express = require("express");
-const { createUser, loginUser, loginAdmin, updatedUser, updatePassword, handleRefreshToken, logout, resetPassword, blockUser, unblockUser, getAllUsersWithAdmin, getUserWithAdmin, getAllUsers } = require("../controllers/userController");
-const { authMiddleware, isAdmin } = require("../middlewares/authMiddleware");
+const { createUser, loginUSER, loginADMIN, updatedUser, updateGroupUser, updatePassword, handleRefreshToken, logout, blockUser, unblockUser, getAllUsersWithAdmin, getUserWithAdmin, getAllUsers, loginADMINISTRATOR } = require("../controllers/userController");
+const { authMiddleware, hasPermission } = require("../middlewares/authMiddleware");
 
 const router = express.Router();
 
 router.post("/register", createUser);
-router.post("/login", loginUser);
-router.post("/admin-login", loginAdmin);
+router.post("/login", loginUSER);
+router.post("/admin-login", loginADMIN);
+router.post("/administrator-login", loginADMINISTRATOR);
 
-router.put("/password", authMiddleware, updatePassword);
+router.patch("/password", authMiddleware, updatePassword);
 router.put("/edit-user", authMiddleware, updatedUser);
-router.put("/reset-password/:token", resetPassword);
 
-router.put("/block-user/:id", authMiddleware, isAdmin, blockUser);
-router.put("/unblock-user/:id", authMiddleware, isAdmin, unblockUser);
+router.put("/511246447/block-user/:id", authMiddleware, hasPermission, blockUser); //admin-put-user
+router.put("/511246447/unblock-user/:id", authMiddleware, hasPermission, unblockUser);
+router.patch("/999457447/update-group/:id", authMiddleware, hasPermission, updateGroupUser);
 
 router.get("/refresh", handleRefreshToken);
 router.get("/logout", logout);
 router.get("/all-users", getAllUsers);
 
-router.get("/admin/all-users", authMiddleware, isAdmin, getAllUsersWithAdmin);
-router.get("/info/:id", authMiddleware, isAdmin, getUserWithAdmin);
+router.get("/511320447/admin/all-users", authMiddleware, hasPermission, getAllUsersWithAdmin);
+router.get("/511320447/info/:id", authMiddleware, hasPermission, getUserWithAdmin);
 
 module.exports = router;
