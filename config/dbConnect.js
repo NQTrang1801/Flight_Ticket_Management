@@ -12,7 +12,6 @@ const dbConnect = () => {
                 const countG = await Group.countDocuments();
                 const countP = await Permission.countDocuments();
                 if (countF === 0) {
-                    // Thêm các document mặc định nếu không có bản ghi nào
                     await Functionality.create([
                         { functionalityCode: '511320447', functionalityName: 'GET COLLECTION USER', screenNameToLoad: 'USER MANAGEMENT' },
                         { functionalityCode: '511246447', functionalityName: 'PUT COLLECTION USER', screenNameToLoad: 'USER MANAGEMENT' },
@@ -65,7 +64,7 @@ const dbConnect = () => {
                         { functionalityCode: '000000000', functionalityName: 'NORMAL', screenNameToLoad: 'WEB CLIENT' },
                         { functionalityCode: '511000000', functionalityName: 'ADMIN', screenNameToLoad: 'WEB ADMIN SERVER' },
                         { functionalityCode: '999999999', functionalityName: 'ADMINISTRATOR', screenNameToLoad: 'WEB ADMINITRATOR SERVER' }
-                        // Thêm các document mặc định khác ở đây nếu cần
+
                     ]);
                     console.log('Inserted FUNC default documents successfully.');
                 }
@@ -79,15 +78,27 @@ const dbConnect = () => {
                     console.log('Inserted GROUP default documents successfully.');
                 }
                 if (countP === 0) {
-                    const gr999 = await Group.findOne({groupCode: "999"});
+                    const gr999 = await Group.findOne({ groupCode: "999" });
                     const functionalities = await Functionality.find({}, '_id');
                     const functionalityIds = functionalities.map(func => func._id);
                     const permissions = functionalityIds.map(functionalityId => ({
                         group_id: gr999._id,
                         functionality_id: functionalityId
                     }));
-                    
+
                     await Permission.create(permissions);
+                    const grclient = await Group.findOne({ groupCode: "000" });
+                    const funcsclient = await Functionality.find({
+                        functionalityCode: { $regex: /^(580|000)/ }
+                    }).select('_id');
+                    
+                    const funcsclientIds = funcsclient.map(func => func._id);
+                    const permissionsClient = funcsclientIds.map(functionalityId => ({
+                        group_id: grclient._id,
+                        functionality_id: functionalityId
+                    }));
+
+                    await Permission.create(permissionsClient);
 
                     console.log('Inserted PERMISSION default documents successfully.');
                     const countU = await User.countDocuments();
@@ -104,8 +115,8 @@ const dbConnect = () => {
                         console.log('Inserted ADMINISTRATOR default documents successfully.');
                     }
                 }
-                
-                
+
+
             } catch (err) {
                 console.error('Error inserting default documents:', err);
             }

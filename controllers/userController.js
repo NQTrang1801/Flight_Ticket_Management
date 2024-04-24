@@ -14,10 +14,21 @@ const Permission = require("../models/permissionModel");
 const createUser = asyncHandler(async (req, res) => {
     const email = req.body.email;
     const findUser = await User.findOne({ email: email });
-
     if (!findUser) {
-        const newUser = await User.create(req.body);
-        res.json(newUser);
+        const grclient = await Group.findOne({ groupCode: "000" });
+        if (grclient) {
+            const newUser = await User.create({
+                fullname: req.body.fullname,
+                email: req.body.email,
+                mobile: req.body.mobile,
+                password: req.body.password,
+                group_id: grclient._id,
+                address: req.body.address
+            });
+            res.json(newUser);
+        } else {
+            throw new Error("Server denied!");
+        }
     } else {
         throw new Error("User Already Exists");
     }

@@ -24,7 +24,6 @@ Content-Type: application/json
     "email": "user@gmail.com",
     "mobile": "0123456789",
     "password": "apipassword123",
-    "group_id": "6628adb2bbb6a3ae3712e04b",
     "address": "TP HCM"
 }
 

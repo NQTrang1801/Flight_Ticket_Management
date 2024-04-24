@@ -37,16 +37,22 @@ const updateGroup = asyncHandler(async (req, res) => {
     validateMongoDbId(id);
 
     try {
-        const updatedGroup = await Group.findByIdAndUpdate(
-            id,
+        const group = await Group.findOneAndUpdate(
+            { _id: id, groupCode: { $nin: ["000", "999"] } },
             req.body,
             { new: true }
         );
-        res.json(updatedGroup);
+
+        if (!group) {
+            throw new Error("Group not found or not allowed to update");
+        }
+
+        res.json(group);
     } catch (error) {
         throw new Error(error);
     }
 });
+
 
 // Delete a group
 const deleteGroup = asyncHandler(async (req, res) => {
@@ -54,12 +60,20 @@ const deleteGroup = asyncHandler(async (req, res) => {
     validateMongoDbId(id);
 
     try {
-        const deletedGroup = await Group.findByIdAndDelete(id);
+        const deletedGroup = await Group.findOneAndDelete(
+            { _id: id, groupCode: { $nin: ["000", "999"] } }
+        );
+
+        if (!deletedGroup) {
+            throw new Error("Group not found or not allowed to delete");
+        }
+
         res.json(deletedGroup);
     } catch (error) {
         throw new Error(error);
     }
 });
+
 
 module.exports = {
     createGroup,

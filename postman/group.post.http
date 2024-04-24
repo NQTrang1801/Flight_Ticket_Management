@@ -7,18 +7,18 @@
 
 ### get all
 GET {{url_dev}}/511320413/all
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhhMDY0MGYwM2E1NjQwZmQ2ZjZkZSIsImlhdCI6MTcxMzkzOTg3MCwiZXhwIjoxNzE0MDI2MjcwfQ.0lfIxsFIUF8U3b6S3oLgvyFFdfzwkY8cXJ_Xb4Np00w
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhjZGFjOTgyMzIzMjcyZDVjMDFjZCIsImlhdCI6MTcxMzk1MDk2MiwiZXhwIjoxNzE0MDM3MzYyfQ.ph_5wLtIKbL40nBUYMjetW-Q5rBJqyF7EBbeLpi6Gd4
 
 ### get by id
-GET {{url_dev}}/511320413/6628a0640f03a5640fd6f682
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhhMDY0MGYwM2E1NjQwZmQ2ZjZkZSIsImlhdCI6MTcxMzkzOTg3MCwiZXhwIjoxNzE0MDI2MjcwfQ.0lfIxsFIUF8U3b6S3oLgvyFFdfzwkY8cXJ_Xb4Np00w
+GET {{url_dev}}/511320413/6628cdac982323272d5c0163
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhjZGFjOTgyMzIzMjcyZDVjMDFjZCIsImlhdCI6MTcxMzk1MDk2MiwiZXhwIjoxNzE0MDM3MzYyfQ.ph_5wLtIKbL40nBUYMjetW-Q5rBJqyF7EBbeLpi6Gd4
 
 ### update by id
-PUT {{url_dev}}/511246413/update/6628a0640f03a5640fd6f682
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhhMDY0MGYwM2E1NjQwZmQ2ZjZkZSIsImlhdCI6MTcxMzkzOTg3MCwiZXhwIjoxNzE0MDI2MjcwfQ.0lfIxsFIUF8U3b6S3oLgvyFFdfzwkY8cXJ_Xb4Np00w
+PUT {{url_dev}}/511246413/update/6628cdac982323272d5c0162
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhjZGFjOTgyMzIzMjcyZDVjMDFjZCIsImlhdCI6MTcxMzk1MDk2MiwiZXhwIjoxNzE0MDM3MzYyfQ.ph_5wLtIKbL40nBUYMjetW-Q5rBJqyF7EBbeLpi6Gd4
 Content-Type: application/json
 {
-    "groupCode": "000"
+    "groupCode": "511"
 }
 
 ### create group
