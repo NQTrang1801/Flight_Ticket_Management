@@ -72,3 +72,13 @@ interface AirportProps {
         coordinates: number[];
     };
 }
+
+interface RuleValidation {
+    ruleName: string;
+    code: string;
+    ruleDetails: string;
+    value: {
+        min_duration: number;
+        max_transit_airport: number;
+    };
+}

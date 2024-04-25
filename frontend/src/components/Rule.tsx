@@ -47,11 +47,12 @@ const Rule: React.FC<FlightProps> = ({ index, code, ruleName, ruleDetail, value 
                 <td>{ruleDetail}</td>
                 <td>
                     {typeof value === "object"
-                        ? Object.entries(value).map(([key, value]) => {
+                        ? // Sử dụng map() để tạo một mảng các phần tử JSX của cặp key-value
+                          Object.entries(value).map(([key, value]) => (
                               <div key={key}>
                                   {key}: {value}
-                              </div>;
-                          })
+                              </div>
+                          ))
                         : value}
                 </td>
             </tr>
