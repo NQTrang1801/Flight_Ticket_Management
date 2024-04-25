@@ -18,10 +18,7 @@ const schema = yup.object().shape({
     country: yup.string().required("Country is required."),
     code: yup.string().required("Code is required."),
     terminals: yup.number().default(1),
-    capacity: yup.number().default(2000),
-    dateOfBirth: yup.date().required("Birth date is required.").typeError("Birth date must be a date."),
-    biography: yup.string().required("Biography is required."),
-    nationality: yup.string().required("Nationality is required.")
+    capacity: yup.number().default(2000)
 });
 
 function Airports() {
@@ -121,7 +118,7 @@ function Airports() {
                     {
                         headers: {
                             "Content-Type": "application/json",
-                            Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).data.accessToken}`
+                            Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).data.token}`
                         }
                     }
                 );

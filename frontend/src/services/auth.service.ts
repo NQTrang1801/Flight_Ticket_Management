@@ -2,7 +2,7 @@ import axios from "~/utils/axios";
 
 const login = (email: string, password: string) => {
     return axios
-        .post("/user/login", {
+        .post("/user/administrator-login", {
             email,
             password
         })
