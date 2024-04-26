@@ -89,4 +89,5 @@ interface RuleData {
     code: string;
     ruleDetails: string;
     value: object;
+    _id: string;
 }

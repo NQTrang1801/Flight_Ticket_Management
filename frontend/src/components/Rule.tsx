@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState, useRef } from "react";
 import axios from "~/utils/axios";
 import usePortal from "react-cool-portal";
 import { toast } from "react-toastify";
 import { useAppDispatch } from "~/hook";
 import { startLoading, stopLoading } from "~/actions/loading";
+import RuleUpdating from "./RuleUpdating";
 
 interface RuleProps {
     index: number;
@@ -12,8 +13,12 @@ interface RuleProps {
     ruleName: string;
     ruleDetail: string;
     value: object | string;
+    deletingMode: boolean;
+    _id: string;
+    updatingMode: boolean;
 }
-const Rule: React.FC<RuleProps> = ({ index, code, ruleName, ruleDetail, value }) => {
+
+const Rule: React.FC<RuleProps> = ({ index, code, ruleName, ruleDetail, value, deletingMode, updatingMode, _id }) => {
     const [selectedId, setSelectedId] = useState(String);
     const overlayRef = useRef<HTMLDivElement>(null);
     const { Portal, hide, show } = usePortal({
@@ -25,10 +30,10 @@ const Rule: React.FC<RuleProps> = ({ index, code, ruleName, ruleDetail, value })
         hide();
         dispatch(startLoading());
         await axios
-            .delete(`/people/${selectedId}`, {
+            .delete(`/rule/511627340/delete/${selectedId}`, {
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).data.accessToken}`
+                    Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).data.token}`
                 }
             })
             .then(() => {
@@ -45,17 +50,21 @@ const Rule: React.FC<RuleProps> = ({ index, code, ruleName, ruleDetail, value })
             });
     };
 
-    return (
-        <>
-            <tr className="text-center capitalize">
+    useEffect(() => {
+        if (selectedId !== "") show();
+    }, [selectedId, show]);
+
+    let content;
+    if (deletingMode) {
+        content = (
+            <tr className="text-center capitalize hover:bg-hover cursor-pointer" onClick={() => setSelectedId(_id)}>
                 <td>{index}</td>
                 <td>{code}</td>
                 <td>{ruleName}</td>
                 <td>{ruleDetail}</td>
                 <td>
                     {typeof value === "object"
-                        ? // Sử dụng map() để tạo một mảng các phần tử JSX của cặp key-value
-                          Object.entries(value).map(([key, value]) => (
+                        ? Object.entries(value).map(([key, value]) => (
                               <div key={key}>
                                   {key}: {value}
                               </div>
@@ -63,7 +72,41 @@ const Rule: React.FC<RuleProps> = ({ index, code, ruleName, ruleDetail, value })
                         : value}
                 </td>
             </tr>
+        );
+    } else if (updatingMode) {
+        content = (
+            <RuleUpdating
+                index={index}
+                code={code}
+                ruleName={ruleName}
+                ruleDetail={ruleDetail}
+                value={value}
+                updatingMode={updatingMode}
+            />
+        );
+    } else {
+        content = (
+            <tr className="text-center capitalize">
+                <td>{index}</td>
+                <td>{code}</td>
+                <td>{ruleName}</td>
+                <td>{ruleDetail}</td>
+                <td>
+                    {typeof value === "object"
+                        ? Object.entries(value).map(([key, value]) => (
+                              <div key={key}>
+                                  {key}: {value}
+                              </div>
+                          ))
+                        : value}
+                </td>
+            </tr>
+        );
+    }
 
+    return (
+        <>
+            {content}
             <Portal>
                 <div className="fixed top-0 right-0 left-0 bottom-0 bg-[rgba(0,0,0,0.4)] z-50 flex items-center justify-center">
                     <div className="flex items-center justify-center">
@@ -91,7 +134,7 @@ const Rule: React.FC<RuleProps> = ({ index, code, ruleName, ruleDetail, value })
                                 </i>
                             </button>
                             <p className="mb-4 mt-4 text-[15px]">
-                                Delete actor <span className="text-blue">"{}"</span>?
+                                Delete rule <span className="text-blue">"{ruleName}"</span>?
                             </p>
                             <div className="flex gap-6">
                                 <button

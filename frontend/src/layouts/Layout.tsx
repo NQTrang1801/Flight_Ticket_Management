@@ -26,7 +26,7 @@ function Layout() {
                         aria-label="Loading Spinner"
                         data-testid="loader"
                         className="!fixed top-[50%] left-[50%] z-[60] mt-[-75px] ml-[-75px]"
-                        color="#8d7cdd"
+                        color="#1883ba"
                     />
                 )}
             </LoaderPortal>

@@ -22,6 +22,7 @@ export const theme = {
         placeholder: "#5674d01a",
         border: "#373845",
         block: "#262a38",
+        hover: "#8d7cdd",
         red: "#e69473",
         deepRed: "#ff0000",
         mdRed: "#ff5f56",
