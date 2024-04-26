@@ -75,8 +75,12 @@ function Airports() {
     };
 
     const dispatch = useAppDispatch();
-    const [international, setInternational] = useState("False");
+    const [international, setInternational] = useState(false);
     const [internationalVisible, setInternationalVisible] = useState(false);
+
+    const [status, setStatus] = useState(true);
+    const [statusVisible, setStatusVisible] = useState(false);
+
     const { query } = useAppSelector((state) => state.searching!);
 
     const {
@@ -100,7 +104,7 @@ function Airports() {
         (async () => {
             try {
                 await axios.post(
-                    "/airport/admin/create",
+                    "/airport/511454675/create",
                     {
                         name,
                         country,
@@ -109,11 +113,13 @@ function Airports() {
                         capacity,
                         address,
                         timezone,
-                        international,
+                        isInternational: international,
                         coordinates: {
                             type: "Point",
                             coordinates: [latitude, longitude]
-                        }
+                        },
+                        status,
+                        rule: []
                     },
                     {
                         headers: {
@@ -195,7 +201,7 @@ function Airports() {
                 <table className="w-full bg-block">
                     <thead>
                         <tr className="text-center bg-primary">
-                            <th className="">ID</th>
+                            <th className="">Index</th>
                             <th className="">Name</th>
                             <th className="">Country</th>
                             <th className="">Address</th>
@@ -203,6 +209,7 @@ function Airports() {
                             <th className="">Terminals</th>
                             <th className="">Capacity</th>
                             <th className="">Coordinates</th>
+                            <th className="">Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -221,6 +228,7 @@ function Airports() {
                                         capacity={airport.capacity}
                                         isInternational={airport.isInternational}
                                         coordinates={airport.coordinates}
+                                        status={airport.status}
                                     />
                                 ))}
                     </tbody>
@@ -229,7 +237,7 @@ function Airports() {
             <Portal>
                 <div className="fixed top-0 right-0 left-0 bottom-0 bg-[rgba(0,0,0,0.4)] z-50 flex items-center justify-center">
                     <div className="flex items-center justify-center">
-                        <div className="border border-blue p-8 bg-background relative rounded-xl max-h-[810px] w-[810px] max-w-[662px]  overflow-y-scroll no-scrollbar">
+                        <div className="border border-blue p-8 bg-background relative rounded-xl max-h-[810px] max-w-[662px]  overflow-y-scroll no-scrollbar">
                             <button
                                 onClick={hide}
                                 className="absolute right-4 top-4 border border-blue rounded-full p-1 hover:border-primary hover:bg-primary"
@@ -332,11 +340,11 @@ function Airports() {
                                                 >
                                                     <div
                                                         onClick={() => {
-                                                            setInternational("False");
+                                                            setInternational(false);
                                                             setInternationalVisible(false);
                                                         }}
                                                         className={`cursor-pointer py-3 px-4 hover:bg-primary text-left rounded-lg ${
-                                                            international === "False"
+                                                            international === false
                                                                 ? "text-blue pointer-events-none"
                                                                 : ""
                                                         }`}
@@ -345,11 +353,11 @@ function Airports() {
                                                     </div>
                                                     <div
                                                         onClick={() => {
-                                                            setInternational("True");
+                                                            setInternational(true);
                                                             setInternationalVisible(false);
                                                         }}
                                                         className={`cursor-pointer py-3 px-4 hover:bg-primary text-left rounded-lg ${
-                                                            international === "True"
+                                                            international === true
                                                                 ? "text-blue pointer-events-none"
                                                                 : ""
                                                         }`}
@@ -368,7 +376,7 @@ function Airports() {
                                                         : "rounded-lg"
                                                 }   flex justify-between items-center`}
                                             >
-                                                {international === "False" ? "False" : "True"}
+                                                {international === false ? "False" : "True"}
                                                 <i className={`${internationalVisible ? "rotate-180" : ""}`}>
                                                     <svg
                                                         xmlns="http://www.w3.org/2000/svg"
@@ -387,10 +395,11 @@ function Airports() {
                                         </Tippy>
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-3 gap-4">
                                     <div className="flex gap-2 flex-col">
                                         <label htmlFor="timezone" className="flex gap-1 mb-1 items-center">
                                             Time zone
+                                            <IsRequired />
                                         </label>
                                         <Tippy
                                             interactive
@@ -430,6 +439,75 @@ function Airports() {
                                             >
                                                 {timezone}
                                                 <i className={`${timezoneVisible ? "rotate-180" : ""}`}>
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        width="20"
+                                                        height="20"
+                                                        viewBox="0 0 16 16"
+                                                        id="chevron-down"
+                                                    >
+                                                        <path
+                                                            fill="#fff"
+                                                            d="M4.14645,5.64645 C4.34171,5.45118 4.65829,5.45118 4.85355,5.64645 L7.9999975,8.79289 L11.1464,5.64645 C11.3417,5.45118 11.6583,5.45118 11.8536,5.64645 C12.0488,5.84171 12.0488,6.15829 11.8536,6.35355 L8.35355,9.85355 C8.15829,10.0488 7.84171,10.0488 7.64645,9.85355 L4.14645,6.35355 C3.95118,6.15829 3.95118,5.84171 4.14645,5.64645 Z"
+                                                        ></path>
+                                                    </svg>
+                                                </i>
+                                            </div>
+                                        </Tippy>
+                                    </div>
+                                    <div className="flex gap-2 flex-col">
+                                        <label htmlFor="active" className="flex gap-1 mb-1 items-center">
+                                            Status
+                                        </label>
+                                        <Tippy
+                                            interactive
+                                            onClickOutside={() => setStatusVisible(!statusVisible)}
+                                            visible={statusVisible}
+                                            offset={[0, 0]}
+                                            placement="bottom"
+                                            render={(attrs) => (
+                                                <div
+                                                    {...attrs}
+                                                    className={`flex w-[188px] text-white p-2 rounded-bl-lg rounded-br-lg flex-col bg-background outline-1 outline-border outline justify-center ${
+                                                        statusVisible ? "outline-primary" : ""
+                                                    }`}
+                                                >
+                                                    <div
+                                                        onClick={() => {
+                                                            setStatus(false);
+                                                            setStatusVisible(false);
+                                                        }}
+                                                        className={`cursor-pointer py-3 px-4 hover:bg-primary text-left rounded-lg ${
+                                                            status === false ? "text-blue pointer-events-none" : ""
+                                                        }`}
+                                                    >
+                                                        False
+                                                    </div>
+                                                    <div
+                                                        onClick={() => {
+                                                            setStatus(true);
+                                                            setStatusVisible(false);
+                                                        }}
+                                                        className={`cursor-pointer py-3 px-4 hover:bg-primary text-left rounded-lg ${
+                                                            status === true ? "text-blue pointer-events-none" : ""
+                                                        }`}
+                                                    >
+                                                        True
+                                                    </div>
+                                                </div>
+                                            )}
+                                        >
+                                            <div
+                                                tabIndex={-1}
+                                                onClick={() => setStatusVisible(!statusVisible)}
+                                                className={`hover:outline-primary py-3 px-4 outline-blue outline-1 outline bg-[rgba(141,124,221,0.1)] cursor-pointer ${
+                                                    statusVisible
+                                                        ? "rounded-tl-lg rounded-tr-lg outline-primary"
+                                                        : "rounded-lg"
+                                                }   flex justify-between items-center`}
+                                            >
+                                                {status === false ? "False" : "True"}
+                                                <i className={`${statusVisible ? "rotate-180" : ""}`}>
                                                     <svg
                                                         xmlns="http://www.w3.org/2000/svg"
                                                         width="20"

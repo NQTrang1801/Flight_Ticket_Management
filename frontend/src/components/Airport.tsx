@@ -15,7 +15,8 @@ const Airport: React.FC<AirportProps> = ({
     terminals,
     capacity,
     isInternational,
-    coordinates
+    coordinates,
+    status
 }) => {
     const [selectedId, setSelectedId] = useState(String);
     const overlayRef = useRef<HTMLDivElement>(null);
@@ -58,7 +59,8 @@ const Airport: React.FC<AirportProps> = ({
                 <td>{timezone}</td>
                 <td>{terminals}</td>
                 <td>{capacity}</td>
-                <td>{coordinates.coordinates.join(" ")}</td>
+                <td>{coordinates.coordinates.join(", ")}</td>
+                <td>{status === false ? "False" : "True"}</td>
             </tr>
             {/* <li className="p-6 rounded-xl overflow-hidden shadow-xl border border-primary bg-background relative">
                 <div className="bg-primary absolute top-0 left-0 right-0 p-2 text-center font-semibold text-base">

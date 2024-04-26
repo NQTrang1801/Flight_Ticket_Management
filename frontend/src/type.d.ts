@@ -71,6 +71,7 @@ interface AirportProps {
         type: string;
         coordinates: number[];
     };
+    status: boolean;
 }
 
 interface RuleValidation {
