@@ -26,7 +26,7 @@ const schema = yup.object().shape({
 });
 
 function Regulations() {
-    const [data, setData] = useState();
+    const [data, setData] = useState<RuleData[]>();
     const [deletingMode, setDeletingMode] = useState(false);
     const { Portal, show, hide } = usePortal({
         defaultShow: false
@@ -55,7 +55,17 @@ function Regulations() {
         const ruleName = formData.ruleName;
         const ruleDetails = formData.ruleDetails;
         const code = formData.code;
-        const value = formData.value;
+        const arrValue = formData.value;
+        let value: ValueObject;
+
+        if (arrValue.length === 1) {
+            value = { [arrValue[0].key]: arrValue[0].value };
+        } else {
+            value = arrValue.reduce((obj: ValueObject, item) => {
+                obj[item.key] = item.value;
+                return obj;
+            }, {});
+        }
 
         (async () => {
             axios

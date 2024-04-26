@@ -77,8 +77,16 @@ interface RuleValidation {
     ruleName: string;
     code: string;
     ruleDetails: string;
-    value: {
-        min_duration: number;
-        max_transit_airport: number;
-    };
+    value: { key: string; value: number }[];
+}
+
+interface ValueObject {
+    [key: string]: number;
+}
+
+interface RuleData {
+    ruleName: string;
+    code: string;
+    ruleDetails: string;
+    value: object;
 }
