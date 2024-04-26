@@ -88,6 +88,6 @@ interface RuleData {
     ruleName: string;
     code: string;
     ruleDetails: string;
-    value: object;
+    value: ValueObject;
     _id: string;
 }

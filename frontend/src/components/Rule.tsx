@@ -12,7 +12,7 @@ interface RuleProps {
     code: string;
     ruleName: string;
     ruleDetail: string;
-    value: object | string;
+    value: ValueObject;
     deletingMode: boolean;
     _id: string;
     updatingMode: boolean;
@@ -74,16 +74,7 @@ const Rule: React.FC<RuleProps> = ({ index, code, ruleName, ruleDetail, value, d
             </tr>
         );
     } else if (updatingMode) {
-        content = (
-            <RuleUpdating
-                index={index}
-                code={code}
-                ruleName={ruleName}
-                ruleDetail={ruleDetail}
-                value={value}
-                updatingMode={updatingMode}
-            />
-        );
+        content = <RuleUpdating index={index} code={code} ruleName={ruleName} ruleDetail={ruleDetail} value={value} />;
     } else {
         content = (
             <tr className="text-center capitalize">
@@ -146,6 +137,7 @@ const Rule: React.FC<RuleProps> = ({ index, code, ruleName, ruleDetail, value, d
                                 <button
                                     onClick={() => {
                                         hide();
+                                        setSelectedId("");
                                         overlayRef.current?.classList.replace("flex", "hidden");
                                     }}
                                     className="px-5 py-2 border border-blue hover:border-primary hover:bg-primary rounded-lg"

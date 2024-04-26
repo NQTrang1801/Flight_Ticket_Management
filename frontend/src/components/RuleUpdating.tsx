@@ -1,5 +1,5 @@
 import axios from "~/utils/axios";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import usePortal from "react-cool-portal";
 import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
 import * as yup from "yup";
@@ -33,6 +33,7 @@ interface RuleProps {
 }
 
 const RuleUpdating: React.FC<RuleProps> = ({ code, ruleName, ruleDetail, value, index }) => {
+    const [values, setValues] = useState(value);
     const { Portal, show, hide } = usePortal({
         defaultShow: false
     });
@@ -47,7 +48,7 @@ const RuleUpdating: React.FC<RuleProps> = ({ code, ruleName, ruleDetail, value, 
         defaultValues: {
             code: code,
             ruleName: ruleName,
-            ruleDetail: ruleDetail
+            ruleDetails: ruleDetail
         }
     });
 
@@ -66,6 +67,7 @@ const RuleUpdating: React.FC<RuleProps> = ({ code, ruleName, ruleDetail, value, 
         const ruleDetails = formData.ruleDetails;
         const code = formData.code;
         const arrValue = formData.value;
+
         let value: ValueObject;
 
         if (arrValue.length === 1) {
@@ -85,7 +87,7 @@ const RuleUpdating: React.FC<RuleProps> = ({ code, ruleName, ruleDetail, value, 
                         ruleName,
                         ruleDetails,
                         code,
-                        value
+                        value: { ...value, ...values }
                     },
                     {
                         headers: {
@@ -129,7 +131,7 @@ const RuleUpdating: React.FC<RuleProps> = ({ code, ruleName, ruleDetail, value, 
             <Portal>
                 <div className="fixed top-0 right-0 left-0 bottom-0 bg-[rgba(0,0,0,0.4)] z-50 flex items-center justify-center">
                     <div className="flex items-center justify-center">
-                        <div className="border border-blue p-8 bg-background relative rounded-xl w-[600px] no-scrollbar">
+                        <div className="border border-blue p-8 bg-background relative rounded-xl w-[500px] no-scrollbar">
                             <button
                                 onClick={hide}
                                 className="absolute right-4 top-4 border border-blue rounded-full p-1 hover:border-primary hover:bg-primary"
@@ -150,7 +152,7 @@ const RuleUpdating: React.FC<RuleProps> = ({ code, ruleName, ruleDetail, value, 
                                 </i>
                             </button>
                             <div className="flex justify-center mb-8">
-                                <div className="text-white font-semibold text-xl">Create a rule</div>
+                                <div className="text-white font-semibold text-xl">Update a rule</div>
                             </div>
                             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
                                 <div className="text-blue text-[15px]">Rule infomation</div>
@@ -200,12 +202,12 @@ const RuleUpdating: React.FC<RuleProps> = ({ code, ruleName, ruleDetail, value, 
                                 </div>
                                 <div className="text-blue text-[15px]">Values</div>
 
-                                {Object.entries(value).map(([key, value], index) => (
+                                {Object.entries(values).map(([key, val], index) => (
                                     <div
                                         key={`${key}-${index}`}
                                         className="grid grid-cols-5 gap-4 justify-center items-end"
                                     >
-                                        <div className="flex flex-col gap-2 col-span-2">
+                                        <div className="flex flex-col gap-2 col-span-3">
                                             <label htmlFor={`key-${index}`} className="flex gap-1 mb-1 items-center">
                                                 Key
                                                 <IsRequired />
@@ -215,10 +217,11 @@ const RuleUpdating: React.FC<RuleProps> = ({ code, ruleName, ruleDetail, value, 
                                                 placeholder="Key . . ."
                                                 defaultValue={key}
                                                 id={`key-${index}`}
+                                                disabled
                                                 className="bg-[rgba(141,124,221,0.1)] text-sm focus:border-primary focus:border focus:border-1 border border-blue border-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                             />
                                         </div>
-                                        <div className="flex flex-col gap-2 col-span-2">
+                                        <div className="flex flex-col gap-2">
                                             <label htmlFor={`key-${index}`} className="flex gap-1 mb-1 items-center">
                                                 Value
                                                 <IsRequired />
@@ -226,7 +229,8 @@ const RuleUpdating: React.FC<RuleProps> = ({ code, ruleName, ruleDetail, value, 
                                             <input
                                                 type="number"
                                                 id={`key-${index}`}
-                                                defaultValue={value}
+                                                defaultValue={val}
+                                                disabled
                                                 className="bg-[rgba(141,124,221,0.1)] text-sm focus:border-primary focus:border focus:border-1 border border-blue border-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                             />
                                         </div>
@@ -234,7 +238,11 @@ const RuleUpdating: React.FC<RuleProps> = ({ code, ruleName, ruleDetail, value, 
                                             <button
                                                 className="border border-1 border-blue rounded-lg py-[10px] hover:border-primary hover:bg-primary flex justify-center"
                                                 type="button"
-                                                onClick={() => remove(index)}
+                                                onClick={() => {
+                                                    const newValues = { ...values };
+                                                    delete newValues[key];
+                                                    setValues(newValues);
+                                                }}
                                             >
                                                 <i className="">
                                                     <svg
@@ -257,7 +265,7 @@ const RuleUpdating: React.FC<RuleProps> = ({ code, ruleName, ruleDetail, value, 
 
                                 {fields.map((field, index) => (
                                     <div key={field.id} className="grid grid-cols-5 gap-4 justify-center items-end">
-                                        <div className="flex flex-col gap-2 col-span-2">
+                                        <div className="flex flex-col gap-2 col-span-3">
                                             <label htmlFor={`key-${index}`} className="flex gap-1 mb-1 items-center">
                                                 Key
                                                 <IsRequired />
@@ -270,7 +278,7 @@ const RuleUpdating: React.FC<RuleProps> = ({ code, ruleName, ruleDetail, value, 
                                                 className="bg-[rgba(141,124,221,0.1)] text-sm focus:border-primary focus:border focus:border-1 border border-blue border-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                             />
                                         </div>
-                                        <div className="flex flex-col gap-2 col-span-2">
+                                        <div className="flex flex-col gap-2">
                                             <label htmlFor={`value-${index}`} className="flex gap-1 mb-1 items-center">
                                                 Value
                                                 <IsRequired />
@@ -325,7 +333,7 @@ const RuleUpdating: React.FC<RuleProps> = ({ code, ruleName, ruleDetail, value, 
                                     className="py-3 px-8 mt-3 text-base font-semibold rounded-lg border-blue border hover:border-primary hover:bg-primary"
                                     type="submit"
                                 >
-                                    Create rule
+                                    Update rule
                                 </button>
                             </form>
                         </div>
