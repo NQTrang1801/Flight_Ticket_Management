@@ -93,3 +93,19 @@ interface RuleData {
     value: ValueObject;
     _id: string;
 }
+
+interface AirportValidation {
+    code: string;
+    name: string;
+    country: string;
+    address: string;
+    timezone: string;
+    terminals: number;
+    capacity: number;
+    isInternational: boolean;
+    coordinates: {
+        type: string;
+        coordinates: number[];
+    };
+    status: boolean;
+}

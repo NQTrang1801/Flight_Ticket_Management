@@ -1,5 +1,6 @@
 import axios from "~/utils/axios";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import Tippy from "@tippyjs/react/headless";
 import usePortal from "react-cool-portal";
 import { useForm, SubmitHandler } from "react-hook-form";
 import * as yup from "yup";
@@ -8,8 +9,6 @@ import IsRequired from "~/icons/IsRequired";
 import { useAppDispatch } from "~/hook";
 import { startLoading, stopLoading } from "~/actions/loading";
 import { sendMessage } from "~/actions/message";
-import Tippy from "@tippyjs/react/headless";
-import Airport from "~/components/Airport";
 
 const schema = yup.object().shape({
     name: yup.string().required("Name is required."),
@@ -20,17 +19,44 @@ const schema = yup.object().shape({
     capacity: yup.number().default(2000)
 });
 
-function Airports() {
-    const [data, setData] = useState<AirportProps[]>();
-    const [deletingMode, setDeletingMode] = useState(false);
-    const [updatingMode, setUpdatingMode] = useState(false);
+interface AirportUpdatingProps {
+    _id: string;
+    code: string;
+    name: string;
+    country: string;
+    address: string;
+    timezone: string;
+    terminals: number;
+    capacity: number;
+    isInternational: boolean;
+    coordinates: {
+        type: string;
+        coordinates: number[];
+    };
+    status: boolean;
+}
+
+const AirportUpdating: React.FC<AirportUpdatingProps> = ({
+    _id,
+    code,
+    name,
+    country,
+    address,
+    timezone,
+    terminals,
+    capacity,
+    status,
+    isInternational,
+    coordinates
+}) => {
     const { Portal, show, hide } = usePortal({
         defaultShow: false
     });
-    const [timezone, setTimezone] = useState("GMT+7");
+
+    const [apTimezone, setApTimezone] = useState(timezone);
     const [timezoneVisible, setTimezoneVisible] = useState(false);
-    const [latitude, setLatitude] = useState(0.0);
-    const [longitude, setLongitude] = useState(0.0);
+    const [latitude, setLatitude] = useState(coordinates.coordinates[0]);
+    const [longitude, setLongitude] = useState(coordinates.coordinates[1]);
 
     const timezones = [
         "GMT-12",
@@ -61,7 +87,7 @@ function Airports() {
     ];
 
     const handleSelectTimezone = (value: string) => {
-        setTimezone(value);
+        setApTimezone(value);
         setTimezoneVisible(false);
     };
     const onChangeLatitude = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,51 +99,59 @@ function Airports() {
         setLongitude(value);
     };
 
-    const dispatch = useAppDispatch();
-    const [international, setInternational] = useState(false);
+    const [international, setInternational] = useState(isInternational);
     const [internationalVisible, setInternationalVisible] = useState(false);
 
-    const [status, setStatus] = useState(true);
+    const [apStatus, setApStatus] = useState(status);
     const [statusVisible, setStatusVisible] = useState(false);
-
-    // const { query } = useAppSelector((state) => state.searching!);
 
     const {
         register,
         handleSubmit,
         formState: { errors }
-    } = useForm<AirportProps>({
-        resolver: yupResolver(schema)
+    } = useForm({
+        resolver: yupResolver(schema),
+        defaultValues: {
+            name: name,
+            country: country,
+            address: address,
+            terminals: terminals,
+            capacity: capacity,
+            code: code
+        }
     });
 
-    const onSubmit: SubmitHandler<AirportProps> = async (data) => {
+    const dispatch = useAppDispatch();
+
+    const onSubmit: SubmitHandler<AirportValidation> = async (formData) => {
         hide();
         dispatch(startLoading());
-        const name = data.name;
-        const country = data.country;
-        const code = data.code;
-        const terminals = data.terminals;
-        const capacity = data.capacity;
-        const address = data.address;
+
+        const name = formData.name;
+        const country = formData.country;
+        const code = formData.code;
+        const address = formData.address;
+        const terminals = formData.terminals;
+        const capacity = formData.capacity;
 
         (async () => {
-            try {
-                await axios.post(
-                    "/airport/511454675/create",
+            axios
+                .put(
+                    `/airport/511246675/${_id}`,
                     {
                         name,
                         country,
                         code,
+                        address,
                         terminals,
                         capacity,
-                        address,
-                        timezone,
+                        status: apStatus,
                         isInternational: international,
+                        timezone: apTimezone,
                         coordinates: {
                             type: "Point",
                             coordinates: [latitude, longitude]
                         },
-                        status,
                         rule: []
                     },
                     {
@@ -126,179 +160,36 @@ function Airports() {
                             Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).data.token}`
                         }
                     }
-                );
-                dispatch(stopLoading());
-                dispatch(sendMessage("Created successfully!"));
-                setTimeout(() => window.location.reload(), 2000);
-            } catch (error) {
-                dispatch(stopLoading());
-                dispatch(sendMessage("Created failed!"));
-                console.error(error);
-            }
+                )
+                .then(() => {
+                    dispatch(stopLoading());
+                    dispatch(sendMessage("Updated sucessfully!"));
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
+                })
+                .catch((error) => {
+                    dispatch(stopLoading());
+                    dispatch(sendMessage("Updated failed!"));
+                    console.error(error);
+                });
         })();
     };
 
-    useEffect(() => {
-        (async () => {
-            await axios
-                .get("/airport/all", { headers: { "Content-Type": "application/json" } })
-                .then((response) => {
-                    setData(response.data);
-                })
-                .catch((err) => console.error(err));
-        })();
-    }, []);
-
-    console.log(data);
-
     return (
         <>
-            <div className="flex justify-between items-center mb-6">
-                <div className="flex gap-3 items-center">
-                    <button
-                        onClick={() => {
-                            setDeletingMode(false);
-                            setUpdatingMode(false);
-                            show();
-                        }}
-                        className="bg-block rounded-xl border-blue border hover:border-primary hover:bg-primary flex items-center justify-center p-3 w-[112px]"
-                    >
-                        <i className="mr-[3px]">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                id="add"
-                                x="0"
-                                y="0"
-                                version="1.1"
-                                viewBox="0 0 29 29"
-                                xmlSpace="preserve"
-                                width={20}
-                                height={20}
-                                className="translate-x-[-3px]"
-                            >
-                                <path
-                                    fill="none"
-                                    stroke="#fff"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeMiterlimit="10"
-                                    strokeWidth="2"
-                                    d="M14.5 22V7M7 14.5h15"
-                                ></path>
-                            </svg>
-                        </i>
-                        Create
-                    </button>
-
-                    <button
-                        onClick={() => {
-                            setDeletingMode(false);
-                            setUpdatingMode(!updatingMode);
-                        }}
-                        className={`bg-block hover:bg-primary hover:border-primary  rounded-xl border-blue border ${
-                            updatingMode ? "border-primary bg-primary" : ""
-                        } flex items-center justify-center p-3 w-[112px]`}
-                    >
-                        <i className="mr-1">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24"
-                                width={20}
-                                height={20}
-                                id="edit"
-                            >
-                                <g>
-                                    <path
-                                        fill="white"
-                                        d="M19.4 7.34 16.66 4.6A2 2 0 0 0 14 4.53l-9 9a2 2 0 0 0-.57 1.21L4 18.91a1 1 0 0 0 .29.8A1 1 0 0 0 5 20h.09l4.17-.38a2 2 0 0 0 1.21-.57l9-9a1.92 1.92 0 0 0-.07-2.71zM9.08 17.62l-3 .28.27-3L12 9.32l2.7 2.7zM16 10.68 13.32 8l1.95-2L18 8.73z"
-                                    ></path>
-                                </g>
-                            </svg>
-                        </i>
-                        Update
-                    </button>
-                </div>
-                <div className="flex gap-3 items-center">
-                    <button
-                        onClick={() => {
-                            setUpdatingMode(false);
-                            setDeletingMode(!deletingMode);
-                        }}
-                        className={`bg-block hover:bg-mdRed hover:border-mdRed  rounded-xl border-blue border ${
-                            deletingMode ? "border-mdRed bg-mdRed" : ""
-                        } flex items-center justify-center p-3 w-[112px]`}
-                    >
-                        <i className="mr-1">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 32 32"
-                                width={20}
-                                height={20}
-                                id="delete"
-                            >
-                                <path
-                                    className="fill-white"
-                                    d="M24.2,12.193,23.8,24.3a3.988,3.988,0,0,1-4,3.857H12.2a3.988,3.988,0,0,1-4-3.853L7.8,12.193a1,1,0,0,1,2-.066l.4,12.11a2,2,0,0,0,2,1.923h7.6a2,2,0,0,0,2-1.927l.4-12.106a1,1,0,0,1,2,.066Zm1.323-4.029a1,1,0,0,1-1,1H7.478a1,1,0,0,1,0-2h3.1a1.276,1.276,0,0,0,1.273-1.148,2.991,2.991,0,0,1,2.984-2.694h2.33a2.991,2.991,0,0,1,2.984,2.694,1.276,1.276,0,0,0,1.273,1.148h3.1A1,1,0,0,1,25.522,8.164Zm-11.936-1h4.828a3.3,3.3,0,0,1-.255-.944,1,1,0,0,0-.994-.9h-2.33a1,1,0,0,0-.994.9A3.3,3.3,0,0,1,13.586,7.164Zm1.007,15.151V13.8a1,1,0,0,0-2,0v8.519a1,1,0,0,0,2,0Zm4.814,0V13.8a1,1,0,0,0-2,0v8.519a1,1,0,0,0,2,0Z"
-                                ></path>
-                            </svg>
-                        </i>
-                        Delete
-                    </button>
-                </div>
-            </div>
-            {deletingMode && (
-                <div className="shadow-xl rounded-xl bg-block mb-6">
-                    <div className="bg-primary h-6 rounded-tr-xl rounded-tl-xl"></div>
-                    <div className="p-6 text-[15px]">Select a row below to delete.</div>
-                </div>
-            )}
-            {updatingMode && (
-                <div className="shadow-xl rounded-xl bg-block mb-6">
-                    <div className="bg-primary h-6 rounded-tr-xl rounded-tl-xl"></div>
-                    <div className="p-6 text-[15px]">Select a row below to update.</div>
-                </div>
-            )}
-            <div className="bg-block p-6 rounded-3xl shadow-xl">
-                <table className="w-full bg-block">
-                    <thead>
-                        <tr className="text-center bg-primary">
-                            <th className="">Code</th>
-                            <th className="">Name</th>
-                            <th className="">Country</th>
-                            <th className="">Address</th>
-                            <th className="">Timezone</th>
-                            <th className="">Terminals</th>
-                            <th className="">Capacity</th>
-                            <th className="">Coordinates</th>
-                            <th className="">International</th>
-                            <th className="">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {data &&
-                            data
-                                // ?.filter((actor) => actor.fullName.toLowerCase().includes(query.toLowerCase()))
-                                .map((airport) => (
-                                    <Airport
-                                        _id={airport._id}
-                                        code={airport.code}
-                                        key={airport.code}
-                                        name={airport.name}
-                                        country={airport.country}
-                                        address={airport.address}
-                                        timezone={airport.timezone}
-                                        terminals={airport.terminals}
-                                        capacity={airport.capacity}
-                                        isInternational={airport.isInternational}
-                                        coordinates={airport.coordinates}
-                                        status={airport.status}
-                                        deletingMode={deletingMode}
-                                        updatingMode={updatingMode}
-                                    />
-                                ))}
-                    </tbody>
-                </table>
-            </div>
+            <tr className="text-center capitalize hover:bg-hover cursor-pointer" onClick={() => show()}>
+                <td>{code}</td>
+                <td>{name}</td>
+                <td>{country}</td>
+                <td>{address}</td>
+                <td>{timezone}</td>
+                <td>{terminals}</td>
+                <td>{capacity}</td>
+                <td>{coordinates.coordinates.join(", ")}</td>
+                <td>{isInternational == false ? "False" : "True"}</td>
+                <td>{status === false ? "False" : "True"}</td>
+            </tr>
             <Portal>
                 <div className="fixed top-0 right-0 left-0 bottom-0 bg-[rgba(0,0,0,0.4)] z-50 flex items-center justify-center">
                     <div className="flex items-center justify-center">
@@ -323,7 +214,7 @@ function Airports() {
                                 </i>
                             </button>
                             <div className="flex justify-center mb-8">
-                                <div className="text-white font-semibold text-xl">Create new airport</div>
+                                <div className="text-white font-semibold text-xl">Update airport</div>
                             </div>
                             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
                                 <div className="grid grid-cols-2 gap-4">
@@ -475,7 +366,7 @@ function Airports() {
                                             render={(attrs) => (
                                                 <div
                                                     {...attrs}
-                                                    className={`flex w-[290px] text-white p-2 rounded-bl-lg rounded-br-lg flex-col bg-background outline-1 outline-border outline justify-center ${
+                                                    className={`flex w-[188px] text-white p-2 rounded-bl-lg rounded-br-lg flex-col bg-background outline-1 outline-border outline justify-center ${
                                                         timezoneVisible ? "outline-primary" : ""
                                                     }`}
                                                 >
@@ -484,7 +375,7 @@ function Airports() {
                                                             key={tz}
                                                             onClick={() => handleSelectTimezone(tz)}
                                                             className={`cursor-pointer py-3 px-4 hover:bg-primary text-left rounded-lg ${
-                                                                timezone === tz ? "text-blue pointer-events-none" : ""
+                                                                apTimezone === tz ? "text-blue pointer-events-none" : ""
                                                             }`}
                                                         >
                                                             {tz}
@@ -502,7 +393,7 @@ function Airports() {
                                                         : "rounded-lg"
                                                 }   flex justify-between items-center`}
                                             >
-                                                {timezone}
+                                                {apTimezone}
                                                 <i className={`${timezoneVisible ? "rotate-180" : ""}`}>
                                                     <svg
                                                         xmlns="http://www.w3.org/2000/svg"
@@ -539,22 +430,22 @@ function Airports() {
                                                 >
                                                     <div
                                                         onClick={() => {
-                                                            setStatus(false);
+                                                            setApStatus(false);
                                                             setStatusVisible(false);
                                                         }}
                                                         className={`cursor-pointer py-3 px-4 hover:bg-primary text-left rounded-lg ${
-                                                            status === false ? "text-blue pointer-events-none" : ""
+                                                            apStatus === false ? "text-blue pointer-events-none" : ""
                                                         }`}
                                                     >
                                                         False
                                                     </div>
                                                     <div
                                                         onClick={() => {
-                                                            setStatus(true);
+                                                            setApStatus(true);
                                                             setStatusVisible(false);
                                                         }}
                                                         className={`cursor-pointer py-3 px-4 hover:bg-primary text-left rounded-lg ${
-                                                            status === true ? "text-blue pointer-events-none" : ""
+                                                            apStatus === true ? "text-blue pointer-events-none" : ""
                                                         }`}
                                                     >
                                                         True
@@ -571,7 +462,7 @@ function Airports() {
                                                         : "rounded-lg"
                                                 }   flex justify-between items-center`}
                                             >
-                                                {status === false ? "False" : "True"}
+                                                {apStatus === false ? "False" : "True"}
                                                 <i className={`${statusVisible ? "rotate-180" : ""}`}>
                                                     <svg
                                                         xmlns="http://www.w3.org/2000/svg"
@@ -653,7 +544,7 @@ function Airports() {
                                     className="py-3 px-8 mt-3 text-base font-semibold rounded-lg border-blue border hover:border-primary hover:bg-primary"
                                     type="submit"
                                 >
-                                    Create airport
+                                    Update airport
                                 </button>
                             </form>
                         </div>
@@ -662,6 +553,6 @@ function Airports() {
             </Portal>
         </>
     );
-}
+};
 
-export default Airports;
+export default AirportUpdating;

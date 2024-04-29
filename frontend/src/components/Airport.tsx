@@ -5,10 +5,11 @@ import usePortal from "react-cool-portal";
 import { toast } from "react-toastify";
 import { useAppDispatch } from "~/hook";
 import { startLoading, stopLoading } from "~/actions/loading";
+import AirportUpdating from "./AirportUpdating";
 
 interface AirportProps {
     _id: string;
-    index: number;
+    code: string;
     name: string;
     country: string;
     address: string;
@@ -26,7 +27,7 @@ interface AirportProps {
 }
 
 const Airport: React.FC<AirportProps> = ({
-    index,
+    code,
     name,
     country,
     address,
@@ -79,7 +80,7 @@ const Airport: React.FC<AirportProps> = ({
     if (deletingMode) {
         content = (
             <tr className="text-center capitalize hover:bg-hover cursor-pointer" onClick={() => setSelectedId(_id)}>
-                <td>{index}</td>
+                <td>{code}</td>
                 <td>{name}</td>
                 <td>{country}</td>
                 <td>{address}</td>
@@ -91,10 +92,26 @@ const Airport: React.FC<AirportProps> = ({
                 <td>{status === false ? "False" : "True"}</td>
             </tr>
         );
+    } else if (updatingMode) {
+        content = (
+            <AirportUpdating
+                code={code}
+                _id={_id}
+                name={name}
+                address={address}
+                terminals={terminals}
+                country={country}
+                capacity={capacity}
+                coordinates={coordinates}
+                timezone={timezone}
+                isInternational={isInternational}
+                status={status}
+            />
+        );
     } else {
         content = (
             <tr className={`text-center`}>
-                <td>{index}</td>
+                <td>{code}</td>
                 <td>{name}</td>
                 <td>{country}</td>
                 <td>{address}</td>
