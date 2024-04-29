@@ -59,6 +59,7 @@ interface YearlyRevenueProps {
 }
 
 interface AirportProps {
+    _id: string;
     code: string;
     name: string;
     country: string;
