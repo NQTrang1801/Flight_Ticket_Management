@@ -109,3 +109,28 @@ interface AirportValidation {
     };
     status: boolean;
 }
+
+interface FlightScheduleData {
+    flight_number: string;
+    flight_code: string;
+    departure_airport: object;
+    destination_airport: object;
+    departure_datetime: Date;
+    duration: number;
+    seats: [
+        {
+            class: string;
+            count: number;
+            booked_seats: number;
+            status: boolean;
+        }
+    ];
+    booking_deadline: Date;
+    cancellation_deadline: Date;
+    ticket_price: object;
+    transit_airports: [];
+    rules: {
+        type: Array;
+        default: [];
+    };
+}

@@ -7,34 +7,59 @@ import axios from "~/utils/axios";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import IsRequired from "~/icons/IsRequired";
-import convertReleaseDate from "~/utils/convertReleaseDate";
-import { convertToBase64 } from "~/utils/convertToBase64";
 import { useAppDispatch } from "~/hook";
 import { startLoading, stopLoading } from "~/actions/loading";
 import { sendMessage } from "~/actions/message";
 import ScheduleList from "~/components/ScheduleList";
 
 const schema = yup.object().shape({
-    name: yup.string().required("Name is required."),
+    flight_number: yup.string().required("Flight number is required."),
+    flight_code: yup.string().required("Flight code is required."),
     duration: yup.number().required("Duration is required.").typeError("Duration must be a number."),
-    description: yup.string().required("Description is required."),
-    trailerLink: yup.string().required("Trailer link is required."),
-    releaseDate: yup.date().required("Release date is required.").typeError("Release date must be a date."),
-    nation: yup.string().required("Nation is required."),
-    director: yup.string().required("Director is required."),
-    moviePosters: yup
-        .array()
-        .of(
-            yup.object().shape({
-                base64: yup.mixed(),
-                isThumb: yup.boolean().required()
-            })
-        )
-        .required()
+    ticket_price: yup.number().required("Duration is required.").typeError("Duration must be a number.")
+    // description: yup.string().required("Description is required."),
+    // trailerLink: yup.string().required("Trailer link is required."),
+    // releaseDate: yup.date().required("Release date is required.").typeError("Release date must be a date."),
+    // nation: yup.string().required("Nation is required."),
+    // director: yup.string().required("Director is required."),
+    // moviePosters: yup
+    //     .array()
+    //     .of(
+    //         yup.object().shape({
+    //             base64: yup.mixed(),
+    //             isThumb: yup.boolean().required()
+    //         })
+    //     )
+    //     .required()
 });
 
 function FlightSchedule() {
+    const [data, setData] = useState<FlightScheduleData>();
+    const [airportData, setAirportData] = useState<AirportProps[]>();
+    const [departureAirport, setDepartureAirport] = useState({
+        id: "",
+        name: ""
+    });
+    const [arrivalAirport, setArrivalAirport] = useState({
+        id: "",
+        name: ""
+    });
+
+    const [seats, setSeats] = useState([
+        { class: "1", count: 0, booked_seats: 0, status: true },
+        { class: "2", count: 0, booked_seats: 0, status: true }
+    ]);
+
     const dispatch = useAppDispatch();
+
+    const [status1, setStatus1] = useState(true);
+    const [status1Visible, setStatus1Visible] = useState(false);
+
+    const [status2, setStatus2] = useState(true);
+    const [status2Visible, setStatus2Visible] = useState(false);
+
+    const [time, setTime] = useState();
+
     const [visible, setVisible] = useState(false);
     const [activeVisible, setActiveVisible] = useState(false);
     const [deletingMode, setDeletingMode] = useState(false);
@@ -74,7 +99,8 @@ function FlightSchedule() {
             profilePicture: string;
         }>
     );
-    const [participantsMenuVisible, setParticipantsMenuVisible] = useState(false);
+    const [departureAirportVisible, setDepartureAirportVisible] = useState(false);
+    const [arrivalAirportVisible, setArrivalAirportVisible] = useState(false);
 
     const { Portal, show, hide } = usePortal({
         defaultShow: false
@@ -96,110 +122,73 @@ function FlightSchedule() {
         name: "moviePosters"
     });
 
-    const onSubmit: SubmitHandler<IMovie> = async (data) => {
+    const onSubmit: SubmitHandler<AirportProps> = async (data) => {
         hide();
         dispatch(startLoading());
         const name = data.name;
-        const duration = data.duration;
-        const description = data.description;
-        const trailerLink = data.trailerLink;
-        const releaseDate = convertReleaseDate(data.releaseDate);
-        const nation = data.nation;
-        const director = data.director;
-        const movieCategoryIds = movieCategories.map((category) => category.id);
-        const movieParticipantIds = movieParticipants.map((participant) => participant.id);
-        const base64Promises = data.moviePosters.map(async (poster) => ({
-            ...poster,
-            base64: await convert(poster.base64[0])
-        }));
+        const country = data.country;
+        const code = data.code;
+        const terminals = data.terminals;
+        const capacity = data.capacity;
+        const address = data.address;
 
-        Promise.all(base64Promises)
-            .then((updatedPosters) => {
-                const validArr = updatedPosters.filter((poster) => poster.isThumb === true);
-                if (validArr.length === 1) setError(false);
-                else setError(true);
-                if (!error) {
-                    axios
-                        .post(
-                            "/movies",
-                            {
-                                name,
-                                duration,
-                                description,
-                                trailerLink,
-                                releaseDate,
-                                nation,
-                                totalReviews: 0,
-                                avrStars: 0,
-                                isActive,
-                                director,
-                                movieCategoryIds,
-                                movieParticipantIds,
-                                moviePosters: updatedPosters
-                            },
-                            {
-                                headers: {
-                                    "Content-Type": "application/json",
-                                    Authorization: `Bearer ${
-                                        JSON.parse(localStorage.getItem("user")!).data.accessToken
-                                    }`
-                                }
-                            }
-                        )
-                        .then(() => {
-                            dispatch(stopLoading());
-                            dispatch(sendMessage("Created sucessfully!"));
-                            setReloadFlag(true);
-                        })
-                        .catch((error) => {
-                            dispatch(stopLoading());
-                            dispatch(sendMessage("Created failed!"));
-                            console.error(error);
-                        });
-                }
-            })
-            .catch((error) => {
-                console.error("Failed to convert base64:", error);
-            });
-    };
-
-    const convert = async (file: File) => {
-        if (file) {
+        (async () => {
             try {
-                return await convertToBase64(file);
+                await axios.post(
+                    "/airport/511454675/create",
+                    {
+                        name,
+                        country,
+                        code,
+                        terminals,
+                        capacity,
+                        address,
+                        timezone,
+                        isInternational: international,
+                        coordinates: {
+                            type: "Point",
+                            coordinates: [latitude, longitude]
+                        },
+                        status,
+                        rule: []
+                    },
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).data.token}`
+                        }
+                    }
+                );
+                dispatch(stopLoading());
+                dispatch(sendMessage("Created successfully!"));
+                setTimeout(() => window.location.reload(), 2000);
             } catch (error) {
-                console.error("Failed to convert image to base64:", error);
+                dispatch(stopLoading());
+                dispatch(sendMessage("Created failed!"));
+                console.error(error);
             }
-        }
+        })();
     };
 
     useEffect(() => {
         (async () => {
             await axios
-                .get("/categories/no-pagination", {
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
+                .get("/flight/all", { headers: { "Content-Type": "application/json" } })
+                .then((response) => {
+                    setData(response.data);
                 })
-                .then((response) => setCategories(response.data))
-                .catch((error) => console.error(error));
+                .catch((err) => console.error(err));
         })();
 
         (async () => {
             await axios
-                .get("/people/no-pagination", {
-                    headers: { "Content-Type": "application/json" }
+                .get("/airport/all", { headers: { "Content-Type": "application/json" } })
+                .then((response) => {
+                    setAirportData(response.data);
                 })
-                .then((response) => setParticipants(response.data))
-                .catch((error) => console.error(error));
+                .catch((err) => console.error(err));
         })();
     }, []);
-
-    useEffect(() => {
-        if (reloadFlag) {
-            setReloadFlag(true);
-        }
-    }, [reloadFlag]);
 
     return (
         <>
@@ -453,101 +442,80 @@ function FlightSchedule() {
                             </div>
                             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
                                 <div className="text-blue text-[15px]">Flight Information</div>
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-3 gap-4">
                                     <div className="flex gap-2 flex-col">
-                                        <label htmlFor="name" className="flex gap-1 mb-1 items-center">
-                                            Name
+                                        <label htmlFor="flight_number" className="flex gap-1 mb-1 items-center">
+                                            Flight number
                                             <IsRequired />
                                         </label>
                                         <input
                                             type="text"
-                                            id="name"
-                                            placeholder="Name . . ."
-                                            {...register("name")}
+                                            id="flight_number"
+                                            placeholder="Flight number . . ."
+                                            {...register("flight_number")}
                                             className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                         />
-                                        {<span className="text-deepRed">{errors.name?.message}</span>}
+                                        {<span className="text-deepRed">{errors.flight_number?.message}</span>}
                                     </div>
                                     <div className="flex gap-2 flex-col">
-                                        <label htmlFor="director" className="flex gap-1 mb-1 items-center">
-                                            Director
+                                        <label htmlFor="flight_code" className="flex gap-1 mb-1 items-center">
+                                            Flight code
                                             <IsRequired />
                                         </label>
                                         <input
                                             type="text"
-                                            id="director"
-                                            {...register("director")}
-                                            placeholder="Ex: Christopher Nolan . . ."
+                                            id="flight_code"
+                                            {...register("flight_code")}
+                                            placeholder="Flight code . . ."
                                             className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                         />
-                                        {<span className="text-deepRed">{errors.director?.message}</span>}
+                                        {<span className="text-deepRed">{errors.flight_code?.message}</span>}
                                     </div>
-                                </div>
-                                <div className="flex gap-2 flex-col">
-                                    <label htmlFor="description" className="flex gap-1 mb-1 items-center">
-                                        Description
-                                        <IsRequired />
-                                    </label>
-                                    <input
-                                        type="text"
-                                        id="description"
-                                        {...register("description")}
-                                        placeholder="Description . . ."
-                                        className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
-                                    />
-                                    {<span className="text-deepRed">{errors.description?.message}</span>}
-                                </div>
-                                <div className="flex gap-2 flex-col">
-                                    <label htmlFor="trailerLink" className="flex gap-1 mb-1 items-center">
-                                        Trailer link
-                                        <IsRequired />
-                                    </label>
-                                    <input
-                                        type="text"
-                                        id="trailerLink"
-                                        {...register("trailerLink")}
-                                        placeholder="Trailer link . . ."
-                                        className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
-                                    />
-                                    {<span className="text-deepRed">{errors.trailerLink?.message}</span>}
-                                </div>
-                                <div className="flex gap-4">
-                                    <div className="flex gap-2 flex-col flex-1">
-                                        <label htmlFor="nation" className="flex gap-1 mb-1 items-center">
-                                            Nation
+                                    <div className="flex gap-2 flex-col">
+                                        <label htmlFor="ticket_price" className="flex gap-1 mb-1 items-center">
+                                            Ticket price
                                             <IsRequired />
                                         </label>
                                         <input
-                                            type="text"
-                                            id="nation"
-                                            {...register("nation")}
-                                            placeholder="Ex: United States . . ."
+                                            type="number"
+                                            id="ticket_price"
+                                            {...register("ticket_price")}
+                                            placeholder=""
+                                            defaultValue="0"
                                             className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                         />
-                                        {<span className="text-deepRed">{errors.nation?.message}</span>}
+                                        {<span className="text-deepRed">{errors.ticket_price?.message}</span>}
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="flex gap-2 flex-col">
-                                        <label htmlFor="releaseDate" className="flex gap-1 mb-1 items-center">
-                                            Date & Time
-                                            <IsRequired />
-                                        </label>
-                                        <div className="grid grid-cols-3 gap-4">
-                                            <input
-                                                type="date"
-                                                pattern="\d{4}-\d{2}-\d{2}"
-                                                id="releaseDate"
-                                                {...register("startTime")}
-                                                className="bg-[rgba(141,124,221,0.1)] col-span-2 text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
-                                            />
-                                            <input
-                                                type="time"
-                                                id="releaseDate"
-                                                // value={time}
-                                                onChange={(e) => setTime(e.target.value)}
-                                                className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
-                                            />
+                                <div className="grid grid-cols-3 gap-4">
+                                    <div className="flex gap-2 col-span-2 flex-col">
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div className="flex flex-col gap-2">
+                                                <label htmlFor="releaseDate" className="flex gap-1 mb-1 items-center">
+                                                    Departure date
+                                                    <IsRequired />
+                                                </label>
+                                                <input
+                                                    type="date"
+                                                    pattern="\d{4}-\d{2}-\d{2}"
+                                                    id="releaseDate"
+                                                    {...register("startTime")}
+                                                    className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
+                                                />
+                                            </div>
+                                            <div className="flex flex-col gap-2">
+                                                <label htmlFor="releaseDate" className="flex gap-1 mb-1 items-center">
+                                                    Departure time
+                                                    <IsRequired />
+                                                </label>
+                                                <input
+                                                    type="time"
+                                                    id="releaseDate"
+                                                    value={time}
+                                                    onChange={(e) => setTime(e.target.value)}
+                                                    className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
+                                                />
+                                            </div>
                                         </div>
                                         {<span className="text-deepRed">{errors.startTime?.message}</span>}
                                     </div>
@@ -560,197 +528,390 @@ function FlightSchedule() {
                                             type="number"
                                             id="duration"
                                             {...register("duration")}
-                                            placeholder="Ex: 180"
+                                            placeholder=""
+                                            defaultValue="0"
                                             className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                         />
                                         {<span className="text-deepRed">{errors.duration?.message}</span>}
                                     </div>
                                 </div>
-                                <div className="flex gap-2 flex-col">
-                                    <label htmlFor="movieCategoryIds" className="flex gap-1 mb-1 items-center">
-                                        Categories
-                                        <IsRequired />
-                                    </label>
-                                    <div className="flex gap-2 items-center overflow-x-scroll no-scrollbar">
-                                        {movieCategories &&
-                                            (movieCategories.length > 0 ? (
-                                                movieCategories.map((movieCategory) => (
-                                                    <span
-                                                        className="py-1 px-2 text-[13px] whitespace-nowrap flex gap-1 items-center rounded-md border border-blue"
-                                                        key={movieCategory.id}
-                                                    >
-                                                        {movieCategory.name}
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => {
-                                                                const filteredArray = movieCategories.filter(
-                                                                    (obj) => obj.id !== movieCategory.id
-                                                                );
-                                                                setMovieCategories(filteredArray);
-                                                            }}
-                                                        >
-                                                            <i>
-                                                                <svg
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                    viewBox="0 0 24 24"
-                                                                    width={12}
-                                                                    height={12}
-                                                                    id="close"
-                                                                >
-                                                                    <path
-                                                                        className="fill-white"
-                                                                        d="M13.41,12l6.3-6.29a1,1,0,1,0-1.42-1.42L12,10.59,5.71,4.29A1,1,0,0,0,4.29,5.71L10.59,12l-6.3,6.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L12,13.41l6.29,6.3a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.42Z"
-                                                                    ></path>
-                                                                </svg>
-                                                            </i>
-                                                        </button>
-                                                    </span>
-                                                ))
-                                            ) : (
-                                                <span className="text-xs">Click on tags below to add categories.</span>
-                                            ))}
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="flex gap-2 flex-col">
+                                        <label htmlFor="releaseDate" className="flex gap-1 mb-1 items-center">
+                                            Booking deadline
+                                            <IsRequired />
+                                        </label>
+                                        <input
+                                            type="date"
+                                            pattern="\d{4}-\d{2}-\d{2}"
+                                            id="releaseDate"
+                                            {...register("startTime")}
+                                            className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
+                                        />
                                     </div>
-                                    <div className="text-blue mt-1">All categories</div>
-                                    <div className="flex gap-2 items-center overflow-x-scroll no-scrollbar mb-2">
-                                        {categories &&
-                                            categories.map((category) => (
-                                                <span
-                                                    onClick={() => {
-                                                        setMovieCategories([...movieCategories, category]);
-                                                    }}
-                                                    className={`py-1 px-2 text-[13px] whitespace-nowrap rounded-md border border-blue hover:border-primary hover:bg-primary cursor-pointer ${
-                                                        movieCategories.some((obj) => obj.id === category.id)
-                                                            ? "opacity-50 pointer-events-none"
+                                    <div className="flex gap-2 flex-col">
+                                        <label htmlFor="releaseDate" className="flex gap-1 mb-1 items-center">
+                                            Cancellation deadline
+                                            <IsRequired />
+                                        </label>
+                                        <input
+                                            type="date"
+                                            pattern="\d{4}-\d{2}-\d{2}"
+                                            id="releaseDate"
+                                            {...register("startTime")}
+                                            className="bg-[rgba(141,124,221,0.1)] col-span-2 text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-2">
+                                    <div className="flex gap-2 flex-col">
+                                        <label htmlFor="movieParticipantIds" className="flex gap-1 mb-1 items-center">
+                                            Departure airport
+                                            <IsRequired />
+                                        </label>
+                                        <Tippy
+                                            visible={departureAirportVisible}
+                                            interactive
+                                            onClickOutside={() => setDepartureAirportVisible(false)}
+                                            offset={[0, 0]}
+                                            placement="bottom"
+                                            render={(attrs) => (
+                                                <ul
+                                                    className={`border border-primary rounded-lg p-2 max-h-[300px] w-[290px] overflow-y-scroll no-scrollbar bg-background ${
+                                                        departureAirportVisible
+                                                            ? "border-t-0 rounded-tl-none rounded-tr-none"
                                                             : ""
                                                     }`}
-                                                    key={category.id}
+                                                    {...attrs}
                                                 >
-                                                    {category.name}
-                                                </span>
-                                            ))}
+                                                    {airportData &&
+                                                        airportData
+                                                            .filter((airport) => airport._id !== arrivalAirport.id)
+                                                            .map((airport) => (
+                                                                <li
+                                                                    onClick={() => {
+                                                                        setDepartureAirport({
+                                                                            name: airport.name,
+                                                                            id: airport._id
+                                                                        });
+                                                                        setDepartureAirportVisible(false);
+                                                                    }}
+                                                                    key={airport._id}
+                                                                    className={`cursor-pointer py-2 px-4 text-[13px] hover:bg-primary text-left rounded-lg flex items-center p-2 ${
+                                                                        airport._id === departureAirport.id ||
+                                                                        airport._id === arrivalAirport.id
+                                                                            ? "text-blue pointer-events-none"
+                                                                            : ""
+                                                                    }`}
+                                                                >
+                                                                    {airport.name}
+                                                                </li>
+                                                            ))}
+                                                </ul>
+                                            )}
+                                        >
+                                            <div
+                                                className={`hover:border-primary py-3 px-4 border-blue border bg-background cursor-pointer w-[290px] mt-1 ${
+                                                    departureAirportVisible
+                                                        ? "rounded-tl-lg rounded-tr-lg border-primary"
+                                                        : "rounded-lg"
+                                                }   flex justify-between items-center`}
+                                                onClick={() => setDepartureAirportVisible(!departureAirportVisible)}
+                                            >
+                                                {departureAirport.name === "" ? "All airports" : departureAirport.name}
+                                                <i className={`${departureAirportVisible ? "rotate-180" : ""}`}>
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        width="20"
+                                                        height="20"
+                                                        viewBox="0 0 16 16"
+                                                        id="chevron-down"
+                                                    >
+                                                        <path
+                                                            fill="#fff"
+                                                            d="M4.14645,5.64645 C4.34171,5.45118 4.65829,5.45118 4.85355,5.64645 L7.9999975,8.79289 L11.1464,5.64645 C11.3417,5.45118 11.6583,5.45118 11.8536,5.64645 C12.0488,5.84171 12.0488,6.15829 11.8536,6.35355 L8.35355,9.85355 C8.15829,10.0488 7.84171,10.0488 7.64645,9.85355 L4.14645,6.35355 C3.95118,6.15829 3.95118,5.84171 4.14645,5.64645 Z"
+                                                        ></path>
+                                                    </svg>
+                                                </i>
+                                            </div>
+                                        </Tippy>
+                                    </div>
+                                    <div className="flex gap-2 flex-col">
+                                        <label htmlFor="movieParticipantIds" className="flex gap-1 mb-1 items-center">
+                                            Arrival airport
+                                            <IsRequired />
+                                        </label>
+                                        <Tippy
+                                            visible={arrivalAirportVisible}
+                                            interactive
+                                            onClickOutside={() => setArrivalAirportVisible(false)}
+                                            offset={[0, 0]}
+                                            placement="bottom"
+                                            render={(attrs) => (
+                                                <ul
+                                                    className={`border border-primary rounded-lg p-2 max-h-[300px] w-[290px] overflow-y-scroll no-scrollbar bg-background ${
+                                                        arrivalAirportVisible
+                                                            ? "border-t-0 rounded-tl-none rounded-tr-none"
+                                                            : ""
+                                                    }`}
+                                                    {...attrs}
+                                                >
+                                                    {airportData &&
+                                                        airportData
+                                                            .filter((airport) => departureAirport.id !== airport._id)
+                                                            .map((airport) => (
+                                                                <li
+                                                                    onClick={() => {
+                                                                        setArrivalAirport({
+                                                                            name: airport.name,
+                                                                            id: airport._id
+                                                                        });
+                                                                        setArrivalAirportVisible(false);
+                                                                    }}
+                                                                    key={airport._id}
+                                                                    className={`cursor-pointer py-2 px-4 text-[13px] hover:bg-primary text-left rounded-lg flex items-center p-2 ${
+                                                                        airport._id === arrivalAirport.id ||
+                                                                        airport._id === departureAirport.id
+                                                                            ? "text-blue pointer-events-none"
+                                                                            : ""
+                                                                    }`}
+                                                                >
+                                                                    {airport.name}
+                                                                </li>
+                                                            ))}
+                                                </ul>
+                                            )}
+                                        >
+                                            <div
+                                                className={`hover:border-primary py-3 px-4 border-blue border bg-background cursor-pointer w-[290px] mt-1 ${
+                                                    arrivalAirportVisible
+                                                        ? "rounded-tl-lg rounded-tr-lg border-primary"
+                                                        : "rounded-lg"
+                                                }   flex justify-between items-center`}
+                                                onClick={() => setArrivalAirportVisible(!arrivalAirportVisible)}
+                                            >
+                                                {arrivalAirport.name === "" ? "All airports" : arrivalAirport.name}
+                                                <i className={`${arrivalAirportVisible ? "rotate-180" : ""}`}>
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        width="20"
+                                                        height="20"
+                                                        viewBox="0 0 16 16"
+                                                        id="chevron-down"
+                                                    >
+                                                        <path
+                                                            fill="#fff"
+                                                            d="M4.14645,5.64645 C4.34171,5.45118 4.65829,5.45118 4.85355,5.64645 L7.9999975,8.79289 L11.1464,5.64645 C11.3417,5.45118 11.6583,5.45118 11.8536,5.64645 C12.0488,5.84171 12.0488,6.15829 11.8536,6.35355 L8.35355,9.85355 C8.15829,10.0488 7.84171,10.0488 7.64645,9.85355 L4.14645,6.35355 C3.95118,6.15829 3.95118,5.84171 4.14645,5.64645 Z"
+                                                        ></path>
+                                                    </svg>
+                                                </i>
+                                            </div>
+                                        </Tippy>
                                     </div>
                                 </div>
+                                <div className="outline outline-1 outline-border my-2"></div>
+                                <div className="text-blue text-[15px]">First class</div>
                                 <div className="flex gap-2 flex-col">
-                                    <label htmlFor="movieParticipantIds" className="flex gap-1 mb-1 items-center">
-                                        Actors
-                                        <IsRequired />
-                                    </label>
-                                    {movieParticipants && movieParticipants.length > 0 ? (
-                                        <ul className="grid grid-cols-2 gap-4">
-                                            {movieParticipants.map((movieParticipant) => (
-                                                <li
-                                                    key={movieParticipant.id}
-                                                    className={`cursor-pointer py-2 px-4 border border-blue hover:border-primary text-left rounded-lg flex justify-between items-center p-2 `}
-                                                >
-                                                    <div className="flex items-center">
-                                                        <img
-                                                            src={movieParticipant.profilePicture}
-                                                            alt="participant avatar"
-                                                            className="w-8 rounded-full aspect-square mr-3"
-                                                        />
-                                                        {movieParticipant.fullName}
-                                                    </div>
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => {
-                                                            const filteredArray = movieParticipants.filter(
-                                                                (obj) => obj.id !== movieParticipant.id
-                                                            );
-                                                            setMovieParticipants(filteredArray);
-                                                        }}
+                                    <div className="grid grid-cols-3 gap-4">
+                                        <div className="flex gap-2 flex-col">
+                                            <label className="flex gap-1 mb-1 items-center">
+                                                Seating capacity
+                                                <IsRequired />
+                                            </label>
+                                            <input
+                                                type="number"
+                                                id="count_1"
+                                                defaultValue="0"
+                                                className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
+                                            />
+                                        </div>
+
+                                        <div className="flex gap-2 flex-col">
+                                            <label className="flex gap-1 mb-1 items-center">
+                                                Booked seats
+                                                <IsRequired />
+                                            </label>
+                                            <input
+                                                type="number"
+                                                id="booked_seats_1"
+                                                defaultValue="0"
+                                                className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
+                                            />
+                                        </div>
+                                        <div className="flex gap-2 flex-col">
+                                            <label className="flex gap-1 mb-1 items-center">
+                                                Booked seats
+                                                <IsRequired />
+                                            </label>
+
+                                            <Tippy
+                                                interactive
+                                                onClickOutside={() => setStatus1Visible(!status1Visible)}
+                                                visible={status1Visible}
+                                                offset={[0, 0]}
+                                                placement="bottom"
+                                                render={(attrs) => (
+                                                    <div
+                                                        {...attrs}
+                                                        className={`flex w-[188px] text-white p-2 rounded-bl-lg rounded-br-lg flex-col bg-background outline-1 outline-border outline justify-center ${
+                                                            status1Visible ? "outline-primary" : ""
+                                                        }`}
                                                     >
-                                                        <i>
-                                                            <svg
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                viewBox="0 0 24 24"
-                                                                width={16}
-                                                                height={16}
-                                                                id="close"
-                                                            >
-                                                                <path
-                                                                    className="fill-white"
-                                                                    d="M13.41,12l6.3-6.29a1,1,0,1,0-1.42-1.42L12,10.59,5.71,4.29A1,1,0,0,0,4.29,5.71L10.59,12l-6.3,6.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L12,13.41l6.29,6.3a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.42Z"
-                                                                ></path>
-                                                            </svg>
-                                                        </i>
-                                                    </button>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    ) : (
-                                        <span className="text-xs">Click on all actors below to add actor.</span>
-                                    )}
-                                    <div className="text-blue mt-1">All actors</div>
-                                    <Tippy
-                                        visible={participantsMenuVisible}
-                                        interactive
-                                        onClickOutside={() => setParticipantsMenuVisible(false)}
-                                        offset={[0, -346]}
-                                        render={(attrs) => (
-                                            <ul
-                                                className={`border border-primary rounded-lg p-2 max-h-[300px] w-[290px] overflow-y-scroll no-scrollbar bg-background ${
-                                                    participantsMenuVisible
-                                                        ? "border-t-0 rounded-tl-none rounded-tr-none"
-                                                        : ""
-                                                }`}
-                                                {...attrs}
-                                            >
-                                                {participants &&
-                                                    participants.map((participant) => (
-                                                        <li
-                                                            onClick={() =>
-                                                                setMovieParticipants([
-                                                                    ...movieParticipants,
-                                                                    participant
-                                                                ])
-                                                            }
-                                                            key={participant.id}
-                                                            className={`cursor-pointer py-2 px-4 text-[13px] hover:bg-primary text-left rounded-lg flex items-center p-2 ${
-                                                                movieParticipants.some(
-                                                                    (movieParticipant) =>
-                                                                        movieParticipant.id === participant.id
-                                                                )
-                                                                    ? "text-blue pointer-events-none"
-                                                                    : ""
+                                                        <div
+                                                            onClick={() => {
+                                                                setStatus1(false);
+                                                                setStatus1Visible(false);
+                                                            }}
+                                                            className={`cursor-pointer py-3 px-4 hover:bg-primary text-left rounded-lg ${
+                                                                status1 === false ? "text-blue pointer-events-none" : ""
                                                             }`}
                                                         >
-                                                            <img
-                                                                src={participant.profilePicture}
-                                                                alt="participant avatar"
-                                                                className="w-8 rounded-full aspect-square mr-3"
-                                                            />
-                                                            {participant.fullName}
-                                                        </li>
-                                                    ))}
-                                            </ul>
-                                        )}
-                                    >
-                                        <div
-                                            className={`hover:border-primary py-3 px-4 border-blue border bg-background cursor-pointer w-[290px] mt-1 ${
-                                                participantsMenuVisible
-                                                    ? "rounded-tl-lg rounded-tr-lg border-primary"
-                                                    : "rounded-lg"
-                                            }   flex justify-between items-center`}
-                                            onClick={() => setParticipantsMenuVisible(!participantsMenuVisible)}
-                                        >
-                                            All actors
-                                            <i className={`${participantsMenuVisible ? "rotate-180" : ""}`}>
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    width="20"
-                                                    height="20"
-                                                    viewBox="0 0 16 16"
-                                                    id="chevron-down"
+                                                            False
+                                                        </div>
+                                                        <div
+                                                            onClick={() => {
+                                                                setStatus1(true);
+                                                                setStatus1Visible(false);
+                                                            }}
+                                                            className={`cursor-pointer py-3 px-4 hover:bg-primary text-left rounded-lg ${
+                                                                status1 === true ? "text-blue pointer-events-none" : ""
+                                                            }`}
+                                                        >
+                                                            True
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            >
+                                                <div
+                                                    tabIndex={-1}
+                                                    onClick={() => setStatus1Visible(!status1Visible)}
+                                                    className={`hover:outline-primary py-3 px-4 outline-blue outline-1 outline bg-[rgba(141,124,221,0.1)] cursor-pointer ${
+                                                        status1Visible
+                                                            ? "rounded-tl-lg rounded-tr-lg outline-primary"
+                                                            : "rounded-lg"
+                                                    }   flex justify-between items-center`}
                                                 >
-                                                    <path
-                                                        fill="#fff"
-                                                        d="M4.14645,5.64645 C4.34171,5.45118 4.65829,5.45118 4.85355,5.64645 L7.9999975,8.79289 L11.1464,5.64645 C11.3417,5.45118 11.6583,5.45118 11.8536,5.64645 C12.0488,5.84171 12.0488,6.15829 11.8536,6.35355 L8.35355,9.85355 C8.15829,10.0488 7.84171,10.0488 7.64645,9.85355 L4.14645,6.35355 C3.95118,6.15829 3.95118,5.84171 4.14645,5.64645 Z"
-                                                    ></path>
-                                                </svg>
-                                            </i>
+                                                    {status1 === false ? "False" : "True"}
+                                                    <i className={`${status1Visible ? "rotate-180" : ""}`}>
+                                                        <svg
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            width="20"
+                                                            height="20"
+                                                            viewBox="0 0 16 16"
+                                                            id="chevron-down"
+                                                        >
+                                                            <path
+                                                                fill="#fff"
+                                                                d="M4.14645,5.64645 C4.34171,5.45118 4.65829,5.45118 4.85355,5.64645 L7.9999975,8.79289 L11.1464,5.64645 C11.3417,5.45118 11.6583,5.45118 11.8536,5.64645 C12.0488,5.84171 12.0488,6.15829 11.8536,6.35355 L8.35355,9.85355 C8.15829,10.0488 7.84171,10.0488 7.64645,9.85355 L4.14645,6.35355 C3.95118,6.15829 3.95118,5.84171 4.14645,5.64645 Z"
+                                                            ></path>
+                                                        </svg>
+                                                    </i>
+                                                </div>
+                                            </Tippy>
                                         </div>
-                                    </Tippy>
+                                    </div>
                                 </div>
+                                <div className="text-blue text-[15px]">Second class</div>
+                                <div className="flex gap-2 flex-col">
+                                    <div className="grid grid-cols-3 gap-4">
+                                        <div className="flex gap-2 flex-col">
+                                            <label className="flex gap-1 mb-1 items-center">
+                                                Seating capacity
+                                                <IsRequired />
+                                            </label>
+                                            <input
+                                                type="number"
+                                                id="count_2"
+                                                defaultValue="0"
+                                                className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
+                                            />
+                                        </div>
+
+                                        <div className="flex gap-2 flex-col">
+                                            <label className="flex gap-1 mb-1 items-center">
+                                                Booked seats
+                                                <IsRequired />
+                                            </label>
+                                            <input
+                                                type="number"
+                                                id="booked_seats_2"
+                                                defaultValue="0"
+                                                className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
+                                            />
+                                        </div>
+                                        <div className="flex gap-2 flex-col">
+                                            <label className="flex gap-1 mb-1 items-center">
+                                                Booked seats
+                                                <IsRequired />
+                                            </label>
+                                            <Tippy
+                                                interactive
+                                                onClickOutside={() => setStatus2Visible(!status2Visible)}
+                                                visible={status2Visible}
+                                                offset={[0, 0]}
+                                                placement="bottom"
+                                                render={(attrs) => (
+                                                    <div
+                                                        {...attrs}
+                                                        className={`flex w-[188px] text-white p-2 rounded-bl-lg rounded-br-lg flex-col bg-background outline-1 outline-border outline justify-center ${
+                                                            status2Visible ? "outline-primary" : ""
+                                                        }`}
+                                                    >
+                                                        <div
+                                                            onClick={() => {
+                                                                setStatus2(false);
+                                                                setStatus2Visible(false);
+                                                            }}
+                                                            className={`cursor-pointer py-3 px-4 hover:bg-primary text-left rounded-lg ${
+                                                                status2 === false ? "text-blue pointer-events-none" : ""
+                                                            }`}
+                                                        >
+                                                            False
+                                                        </div>
+                                                        <div
+                                                            onClick={() => {
+                                                                setStatus2(true);
+                                                                setStatus2Visible(false);
+                                                            }}
+                                                            className={`cursor-pointer py-3 px-4 hover:bg-primary text-left rounded-lg ${
+                                                                status2 === true ? "text-blue pointer-events-none" : ""
+                                                            }`}
+                                                        >
+                                                            True
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            >
+                                                <div
+                                                    tabIndex={-1}
+                                                    onClick={() => setStatus2Visible(!status2Visible)}
+                                                    className={`hover:outline-primary py-3 px-4 outline-blue outline-1 outline bg-[rgba(141,124,221,0.1)] cursor-pointer ${
+                                                        status2Visible
+                                                            ? "rounded-tl-lg rounded-tr-lg outline-primary"
+                                                            : "rounded-lg"
+                                                    }   flex justify-between items-center`}
+                                                >
+                                                    {status2 === false ? "False" : "True"}
+                                                    <i className={`${status2Visible ? "rotate-180" : ""}`}>
+                                                        <svg
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            width="20"
+                                                            height="20"
+                                                            viewBox="0 0 16 16"
+                                                            id="chevron-down"
+                                                        >
+                                                            <path
+                                                                fill="#fff"
+                                                                d="M4.14645,5.64645 C4.34171,5.45118 4.65829,5.45118 4.85355,5.64645 L7.9999975,8.79289 L11.1464,5.64645 C11.3417,5.45118 11.6583,5.45118 11.8536,5.64645 C12.0488,5.84171 12.0488,6.15829 11.8536,6.35355 L8.35355,9.85355 C8.15829,10.0488 7.84171,10.0488 7.64645,9.85355 L4.14645,6.35355 C3.95118,6.15829 3.95118,5.84171 4.14645,5.64645 Z"
+                                                            ></path>
+                                                        </svg>
+                                                    </i>
+                                                </div>
+                                            </Tippy>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div className="outline outline-1 outline-border my-2"></div>
                                 <div className="text-blue text-[15px]">Intermediate Airport</div>
                                 {fields.map((field, index) => (

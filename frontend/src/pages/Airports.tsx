@@ -149,8 +149,6 @@ function Airports() {
         })();
     }, []);
 
-    console.log(data);
-
     return (
         <>
             <div className="flex justify-between items-center mb-6">
