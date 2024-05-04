@@ -13,12 +13,12 @@ import { sendMessage } from "~/actions/message";
 import ScheduleList from "~/components/ScheduleList";
 
 const schema = yup.object().shape({
-    flight_number: yup.string().required("Flight number is required."),
-    flight_code: yup.string().required("Flight code is required."),
+    flightNumber: yup.string().required("Flight number is required."),
+    flightCode: yup.string().required("Flight code is required."),
     duration: yup.number().required("Duration is required.").typeError("Duration must be a number."),
-    ticket_price: yup.number().required("Duration is required.").typeError("Duration must be a number.")
-    // description: yup.string().required("Description is required."),
-    // trailerLink: yup.string().required("Trailer link is required."),
+    ticketPrice: yup.number().required("Duration is required.").typeError("Duration must be a number."),
+    departureDate: yup.date().required("Departure date is required.").typeError("Departure date must be a date."),
+    departureTime: yup.date().required("Departure time is required."),
     // releaseDate: yup.date().required("Release date is required.").typeError("Release date must be a date."),
     // nation: yup.string().required("Nation is required."),
     // director: yup.string().required("Director is required."),
@@ -31,11 +31,23 @@ const schema = yup.object().shape({
     //         })
     //     )
     //     .required()
+
+    intermediateAirport: yup.array().of(
+        yup.object().shape({
+            stopDuration: yup
+                .number()
+                .required("Stop duration is required.")
+                .typeError("Stop duration must be a number."),
+            note: yup.string()
+        })
+    )
+    // .required("Intermediate is required")
 });
 
 function FlightSchedule() {
     const [data, setData] = useState<FlightScheduleData>();
     const [airportData, setAirportData] = useState<AirportProps[]>();
+
     const [departureAirport, setDepartureAirport] = useState({
         id: "",
         name: ""
@@ -111,15 +123,12 @@ function FlightSchedule() {
         handleSubmit,
         formState: { errors }
     } = useForm<IMovie>({
-        resolver: yupResolver(schema),
-        defaultValues: {
-            moviePosters: [{ isThumb: false }]
-        }
+        resolver: yupResolver(schema)
     });
 
     const { fields, append, remove } = useFieldArray({
         control,
-        name: "moviePosters"
+        name: "intermediateAirport"
     });
 
     const [dropdownStates, setDropdownStates] = useState(fields.map(() => false));
@@ -465,64 +474,65 @@ function FlightSchedule() {
                                 <div className="text-blue text-[15px]">Flight Information</div>
                                 <div className="grid grid-cols-3 gap-4">
                                     <div className="flex gap-2 flex-col">
-                                        <label htmlFor="flight_number" className="flex gap-1 mb-1 items-center">
+                                        <label htmlFor="flightNumber" className="flex gap-1 mb-1 items-center">
                                             Flight number
                                             <IsRequired />
                                         </label>
                                         <input
                                             type="text"
-                                            id="flight_number"
+                                            id="flightNumber"
                                             placeholder="Flight number . . ."
-                                            {...register("flight_number")}
+                                            {...register("flightNumber")}
                                             className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                         />
-                                        {<span className="text-deepRed">{errors.flight_number?.message}</span>}
+                                        {<span className="text-deepRed">{errors.flightNumber?.message}</span>}
                                     </div>
                                     <div className="flex gap-2 flex-col">
-                                        <label htmlFor="flight_code" className="flex gap-1 mb-1 items-center">
+                                        <label htmlFor="flightCode" className="flex gap-1 mb-1 items-center">
                                             Flight code
                                             <IsRequired />
                                         </label>
                                         <input
                                             type="text"
-                                            id="flight_code"
-                                            {...register("flight_code")}
+                                            id="flightCode"
+                                            {...register("flightCode")}
                                             placeholder="Flight code . . ."
                                             className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                         />
-                                        {<span className="text-deepRed">{errors.flight_code?.message}</span>}
+                                        {<span className="text-deepRed">{errors.flightCode?.message}</span>}
                                     </div>
                                     <div className="flex gap-2 flex-col">
-                                        <label htmlFor="ticket_price" className="flex gap-1 mb-1 items-center">
+                                        <label htmlFor="ticketPrice" className="flex gap-1 mb-1 items-center">
                                             Ticket price
                                             <IsRequired />
                                         </label>
                                         <input
                                             type="number"
-                                            id="ticket_price"
-                                            {...register("ticket_price")}
+                                            id="ticketPrice"
+                                            {...register("ticketPrice")}
                                             placeholder=""
                                             defaultValue="0"
                                             className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                         />
-                                        {<span className="text-deepRed">{errors.ticket_price?.message}</span>}
+                                        {<span className="text-deepRed">{errors.ticketPrice?.message}</span>}
                                     </div>
                                 </div>
                                 <div className="grid grid-cols-3 gap-4">
                                     <div className="flex gap-2 col-span-2 flex-col">
                                         <div className="grid grid-cols-2 gap-4">
                                             <div className="flex flex-col gap-2">
-                                                <label htmlFor="releaseDate" className="flex gap-1 mb-1 items-center">
+                                                <label htmlFor="departureDate" className="flex gap-1 mb-1 items-center">
                                                     Departure date
                                                     <IsRequired />
                                                 </label>
                                                 <input
                                                     type="date"
                                                     pattern="\d{4}-\d{2}-\d{2}"
-                                                    id="releaseDate"
-                                                    {...register("startTime")}
+                                                    id="departureDate"
+                                                    {...register("departureDate")}
                                                     className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                                 />
+                                                {<span className="text-deepRed">{errors.departureDate?.message}</span>}
                                             </div>
                                             <div className="flex flex-col gap-2">
                                                 <label htmlFor="releaseDate" className="flex gap-1 mb-1 items-center">
@@ -934,160 +944,167 @@ function FlightSchedule() {
                                         </div>
                                     </div>
                                 </div>
-
                                 <div className="outline outline-1 outline-border my-2"></div>
                                 <div className="text-blue text-[15px]">Intermediate Airports</div>
                                 {fields.map((field, index) => (
-                                    <div key={field.id} className="grid grid-cols-7 gap-4 items-center">
-                                        <div key={field.id} className="grid grid-rows-3 gap-4 mb-4 col-span-6">
-                                            <div className="flex gap-4">
-                                                <div className="flex gap-4">
-                                                    <div className="flex flex-col gap-4">
-                                                        <div className="flex gap-2 flex-col">
-                                                            <label
-                                                                htmlFor="movieParticipantIds"
-                                                                className="flex gap-1 mb-1 items-center"
-                                                            >
-                                                                Airport {index + 1}
-                                                            </label>
-                                                            <Tippy
-                                                                visible={dropdownStates[index]}
-                                                                interactive
-                                                                onClickOutside={() =>
-                                                                    setDropdownStates((prevState) =>
-                                                                        prevState.map((state, i) =>
-                                                                            i === index ? false : state
-                                                                        )
+                                    <div
+                                        key={field.id}
+                                        className="p-6 relative rounded-xl border grid grid-rows-2 gap-4 mb-2 border-primary"
+                                    >
+                                        <div className="grid grid-cols-3 gap-4">
+                                            <div className="flex col-span-2 gap-4">
+                                                <div className="flex flex-col gap-4">
+                                                    <div className="flex gap-2 flex-col">
+                                                        <label
+                                                            htmlFor="movieParticipantIds"
+                                                            className="flex gap-1 mb-1 items-center"
+                                                        >
+                                                            Airport {index + 1}
+                                                            <IsRequired />
+                                                        </label>
+                                                        <Tippy
+                                                            trigger="click"
+                                                            visible={dropdownStates[index]}
+                                                            interactive
+                                                            onClickOutside={() =>
+                                                                setDropdownStates((prevState) =>
+                                                                    prevState.map((state, i) =>
+                                                                        i === index ? false : state
                                                                     )
-                                                                }
-                                                                offset={[0, 0]}
-                                                                placement="bottom"
-                                                                render={(attrs) => (
-                                                                    <ul
-                                                                        className={`border border-primary rounded-lg p-2 max-h-[300px] w-[290px] overflow-y-scroll no-scrollbar bg-background ${
-                                                                            dropdownStates[index]
-                                                                                ? "border-t-0 rounded-tl-none rounded-tr-none"
-                                                                                : ""
-                                                                        }`}
-                                                                        {...attrs}
-                                                                    >
-                                                                        {airportData &&
-                                                                            airportData
-                                                                                .filter(filterAvailableAirports)
-                                                                                .map((airport) => (
-                                                                                    <li
-                                                                                        onClick={() =>
-                                                                                            handleAirportSelect(
-                                                                                                airport,
-                                                                                                index
-                                                                                            )
-                                                                                        }
-                                                                                        key={airport._id}
-                                                                                        className={`cursor-pointer py-2 px-4 text-[13px] hover:bg-primary text-left rounded-lg flex items-center p-2`}
-                                                                                    >
-                                                                                        {airport.name}
-                                                                                    </li>
-                                                                                ))}
-                                                                    </ul>
-                                                                )}
-                                                            >
-                                                                <div
-                                                                    className={`hover:border-primary py-3 px-4 border-blue border bg-background cursor-pointer w-[290px] ${
+                                                                )
+                                                            }
+                                                            offset={[0, 0]}
+                                                            placement="bottom"
+                                                            render={(attrs) => (
+                                                                <ul
+                                                                    className={`border border-primary rounded-lg p-2 max-h-[300px] w-[358px] overflow-y-scroll no-scrollbar bg-background ${
                                                                         dropdownStates[index]
-                                                                            ? "rounded-tl-lg rounded-tr-lg border-primary"
-                                                                            : "rounded-lg"
-                                                                    }   flex justify-between items-center`}
-                                                                    onClick={() =>
-                                                                        setDropdownStates((prevState) => {
-                                                                            const newState = [...prevState];
-                                                                            newState[index] = !newState[index];
-                                                                            return newState;
-                                                                        })
-                                                                    }
+                                                                            ? "border-t-0 rounded-tl-none rounded-tr-none"
+                                                                            : ""
+                                                                    }`}
+                                                                    {...attrs}
                                                                 >
-                                                                    {selectedAirports[index]
-                                                                        ? selectedAirports[index].name
-                                                                        : "Choose an airport"}
-                                                                    <i
-                                                                        className={`${
-                                                                            dropdownStates[index] ? "rotate-180" : ""
-                                                                        }`}
+                                                                    {airportData &&
+                                                                        airportData
+                                                                            .filter(filterAvailableAirports)
+                                                                            .map((airport) => (
+                                                                                <li
+                                                                                    onClick={() =>
+                                                                                        handleAirportSelect(
+                                                                                            airport,
+                                                                                            index
+                                                                                        )
+                                                                                    }
+                                                                                    key={airport._id}
+                                                                                    className={`cursor-pointer py-2 px-4 text-[13px] hover:bg-primary text-left rounded-lg flex items-center p-2`}
+                                                                                >
+                                                                                    {airport.name}
+                                                                                </li>
+                                                                            ))}
+                                                                </ul>
+                                                            )}
+                                                        >
+                                                            <div
+                                                                className={`hover:border-primary py-3 px-4 border-blue border bg-background cursor-pointer w-[358px] ${
+                                                                    dropdownStates[index]
+                                                                        ? "rounded-tl-lg rounded-tr-lg border-primary"
+                                                                        : "rounded-lg"
+                                                                }   flex justify-between items-center`}
+                                                                onClick={() =>
+                                                                    setDropdownStates((prevState) => {
+                                                                        const newState = [...prevState];
+                                                                        newState[index] = !newState[index];
+                                                                        return newState;
+                                                                    })
+                                                                }
+                                                            >
+                                                                {selectedAirports[index]
+                                                                    ? selectedAirports[index].name
+                                                                    : "Choose an airport"}
+                                                                <i
+                                                                    className={`${
+                                                                        dropdownStates[index] ? "rotate-180" : ""
+                                                                    }`}
+                                                                >
+                                                                    <svg
+                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                        width="20"
+                                                                        height="20"
+                                                                        viewBox="0 0 16 16"
+                                                                        id="chevron-down"
                                                                     >
-                                                                        <svg
-                                                                            xmlns="http://www.w3.org/2000/svg"
-                                                                            width="20"
-                                                                            height="20"
-                                                                            viewBox="0 0 16 16"
-                                                                            id="chevron-down"
-                                                                        >
-                                                                            <path
-                                                                                fill="#fff"
-                                                                                d="M4.14645,5.64645 C4.34171,5.45118 4.65829,5.45118 4.85355,5.64645 L7.9999975,8.79289 L11.1464,5.64645 C11.3417,5.45118 11.6583,5.45118 11.8536,5.64645 C12.0488,5.84171 12.0488,6.15829 11.8536,6.35355 L8.35355,9.85355 C8.15829,10.0488 7.84171,10.0488 7.64645,9.85355 L4.14645,6.35355 C3.95118,6.15829 3.95118,5.84171 4.14645,5.64645 Z"
-                                                                            ></path>
-                                                                        </svg>
-                                                                    </i>
-                                                                </div>
-                                                            </Tippy>
-                                                        </div>
+                                                                        <path
+                                                                            fill="#fff"
+                                                                            d="M4.14645,5.64645 C4.34171,5.45118 4.65829,5.45118 4.85355,5.64645 L7.9999975,8.79289 L11.1464,5.64645 C11.3417,5.45118 11.6583,5.45118 11.8536,5.64645 C12.0488,5.84171 12.0488,6.15829 11.8536,6.35355 L8.35355,9.85355 C8.15829,10.0488 7.84171,10.0488 7.64645,9.85355 L4.14645,6.35355 C3.95118,6.15829 3.95118,5.84171 4.14645,5.64645 Z"
+                                                                        ></path>
+                                                                    </svg>
+                                                                </i>
+                                                            </div>
+                                                        </Tippy>
                                                     </div>
                                                 </div>
-                                                <div className="flex gap-2 flex-col w-full">
-                                                    <label className="flex gap-1 mb-1 items-center">
-                                                        Stop duration (minutes)
-                                                        <IsRequired />
-                                                    </label>
-                                                    <input
-                                                        type="number"
-                                                        id="count_1"
-                                                        defaultValue="0"
-                                                        className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
-                                                    />
-                                                </div>
                                             </div>
-                                            <div className="flex gap-2 flex-col">
-                                                <label htmlFor="note" className="flex gap-1 mb-1 items-center">
-                                                    Note
+                                            <div className="flex gap-2 flex-col w-full">
+                                                <label
+                                                    htmlFor={`stop_duration_${index}`}
+                                                    className="flex gap-1 mb-1 items-center"
+                                                >
+                                                    Stop duration
+                                                    <IsRequired />
                                                 </label>
                                                 <input
-                                                    type="text"
-                                                    id="note"
-                                                    placeholder="Note . . ."
-                                                    {...register("note")}
+                                                    type="number"
+                                                    id={`stop_duration_${index}`}
+                                                    {...register(`intermediateAirport.${index}.stopDuration` as const)}
+                                                    defaultValue="0"
                                                     className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                                 />
-                                                {<span className="text-deepRed">{errors.note?.message}</span>}
+                                                <span className="text-deepRed">
+                                                    {errors?.intermediateAirport?.[index]?.stopDuration?.message}
+                                                </span>
                                             </div>
                                         </div>
-                                        <div className="flex flex-col gap-2">
-                                            <button
-                                                className="border border-1 border-blue rounded-lg py-[10px] hover:border-primary hover:bg-primary flex justify-center"
-                                                type="button"
-                                                onClick={() => remove(index)}
-                                            >
-                                                <i className="">
-                                                    <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        viewBox="0 0 32 32"
-                                                        width={24}
-                                                        height={24}
-                                                        id="delete"
-                                                    >
-                                                        <path
-                                                            className="fill-white"
-                                                            d="M24.2,12.193,23.8,24.3a3.988,3.988,0,0,1-4,3.857H12.2a3.988,3.988,0,0,1-4-3.853L7.8,12.193a1,1,0,0,1,2-.066l.4,12.11a2,2,0,0,0,2,1.923h7.6a2,2,0,0,0,2-1.927l.4-12.106a1,1,0,0,1,2,.066Zm1.323-4.029a1,1,0,0,1-1,1H7.478a1,1,0,0,1,0-2h3.1a1.276,1.276,0,0,0,1.273-1.148,2.991,2.991,0,0,1,2.984-2.694h2.33a2.991,2.991,0,0,1,2.984,2.694,1.276,1.276,0,0,0,1.273,1.148h3.1A1,1,0,0,1,25.522,8.164Zm-11.936-1h4.828a3.3,3.3,0,0,1-.255-.944,1,1,0,0,0-.994-.9h-2.33a1,1,0,0,0-.994.9A3.3,3.3,0,0,1,13.586,7.164Zm1.007,15.151V13.8a1,1,0,0,0-2,0v8.519a1,1,0,0,0,2,0Zm4.814,0V13.8a1,1,0,0,0-2,0v8.519a1,1,0,0,0,2,0Z"
-                                                        ></path>
-                                                    </svg>
-                                                </i>
-                                            </button>
+                                        <div className="flex gap-2 flex-col">
+                                            <label htmlFor={`note_${index}`} className="flex gap-1 mb-1 items-center">
+                                                Note
+                                            </label>
+                                            <input
+                                                type="text"
+                                                id={`note_${index}`}
+                                                placeholder="Note . . ."
+                                                {...register(`intermediateAirport.${index}.note` as const)}
+                                                className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
+                                            />
+                                            <div className="absolute top-2 right-2">
+                                                <button
+                                                    className="border border-1 border-blue rounded-full p-1 hover:border-primary hover:bg-primary flex justify-center"
+                                                    type="button"
+                                                    onClick={() => remove(index)}
+                                                >
+                                                    <i>
+                                                        <svg
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            viewBox="0 0 24 24"
+                                                            width={16}
+                                                            height={16}
+                                                            id="close"
+                                                        >
+                                                            <path
+                                                                className="fill-white"
+                                                                d="M13.41,12l6.3-6.29a1,1,0,1,0-1.42-1.42L12,10.59,5.71,4.29A1,1,0,0,0,4.29,5.71L10.59,12l-6.3,6.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L12,13.41l6.29,6.3a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.42Z"
+                                                            ></path>
+                                                        </svg>
+                                                    </i>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 ))}
                                 <div className="flex items-center justify-center">
-                                    {error && <span className="text-deepRed">A movie must have only one poster.</span>}
                                     <button
                                         type="button"
                                         className="outline outline-1 outline-blue px-5 py-3 rounded-lg hover:outline-primary hover:bg-primary"
-                                        onClick={() => append({ isThumb: false })}
+                                        onClick={() => append({ stopDuration: 0, note: "" })}
                                     >
                                         Add new airport
                                     </button>
@@ -1097,7 +1114,7 @@ function FlightSchedule() {
                                     className="py-3 px-8 mt-3 text-base font-semibold rounded-lg border-blue border hover:border-primary hover:bg-primary"
                                     type="submit"
                                 >
-                                    Create schedule
+                                    Create flight schedule
                                 </button>
                             </form>
                         </div>
