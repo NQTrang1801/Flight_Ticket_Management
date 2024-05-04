@@ -1,11 +1,19 @@
 @url_dev=http://localhost:5000/api/rule
-
+# router.post('/511454340/add-update-rule', authMiddleware, hasPermission, ruleController.addOrUpdateRule);
+# router.delete('/511627340/delete/:id', authMiddleware, hasPermission, ruleController.deleteRule);
+# router.get('/511320340/all', authMiddleware, hasPermission, ruleController.getAllRules);
+# router.get('/511320340/:id', authMiddleware, hasPermission, ruleController.getRuleById);
 ### get all
-GET {{url_dev}}/all-rules
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM2MjI5OCwiZXhwIjoxNzEzNDQ4Njk4fQ.ctM42P5c1b6mI95SDzoFWjwXuUx5TmQUl2wIGYROurU
+GET {{url_dev}}/511320340/all
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhiODNmZTkzMWY2NTAyMjgzYjViNiIsImlhdCI6MTcxMzk0NDY0MSwiZXhwIjoxNzE0MDMxMDQxfQ.jGVcF-AEXTIUxTcL-c2Y1sGRqh9hYVCRgitNa6rVV94
+
+## delete rule
+DELETE {{url_dev}}/511627340/delete/6628b879e931f6502283b5c4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhiODNmZTkzMWY2NTAyMjgzYjViNiIsImlhdCI6MTcxMzk0NDY0MSwiZXhwIjoxNzE0MDMxMDQxfQ.jGVcF-AEXTIUxTcL-c2Y1sGRqh9hYVCRgitNa6rVV94
+
 ### add rule MaxAirport
-POST {{url_dev}}/add-update-rule
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzQ5NTIxNiwiZXhwIjoxNzEzNTgxNjE2fQ.VbJeqISlEBqABYHLw5Q2DCM49kG4UaQ1Sv5R1cLjmOs
+POST {{url_dev}}/511454340/add-update-rule
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjkxMjU5ZTM3ZDhhYjQxZjVmYWYwNiIsImlhdCI6MTcxMzk2OTA4NSwiZXhwIjoxNzE0MDU1NDg1fQ.8_4hw5VamKpxovsv45vJVM0KM4SUrxFHXDF_aIKBaTs
 Content-Type: application/json
 {
     "ruleName": "Maximum number of airports",
@@ -15,7 +23,7 @@ Content-Type: application/json
 }
 
 ### add rule a flight
-POST {{url_dev}}/add-update-rule
+POST {{url_dev}}/511454340/add-update-rule
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzQ5NTIxNiwiZXhwIjoxNzEzNTgxNjE2fQ.VbJeqISlEBqABYHLw5Q2DCM49kG4UaQ1Sv5R1cLjmOs
 Content-Type: application/json
 {
@@ -29,8 +37,8 @@ Content-Type: application/json
 }
 
 ### add rule a flight
-POST {{url_dev}}/add-update-rule
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM2MjI5OCwiZXhwIjoxNzEzNDQ4Njk4fQ.ctM42P5c1b6mI95SDzoFWjwXuUx5TmQUl2wIGYROurU
+POST {{url_dev}}/511454340/add-update-rule
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjkxMjU5ZTM3ZDhhYjQxZjVmYWYwNiIsImlhdCI6MTcxMzk2OTA4NSwiZXhwIjoxNzE0MDU1NDg1fQ.8_4hw5VamKpxovsv45vJVM0KM4SUrxFHXDF_aIKBaTs
 Content-Type: application/json
 {
     "ruleName": "SGN - HAN",
@@ -38,13 +46,13 @@ Content-Type: application/json
     "ruleDetails": "Minimum flight time and the number of intermediaries",
     "value": {
         "min_duration": 35,
-        "max_transit_airport": 1
+        "max_transit_airport": 2
     }
 }
 
 ### add rule stop duration
-POST {{url_dev}}/add-update-rule
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzQ5NTIxNiwiZXhwIjoxNzEzNTgxNjE2fQ.VbJeqISlEBqABYHLw5Q2DCM49kG4UaQ1Sv5R1cLjmOs
+POST {{url_dev}}/511454340/add-update-rule
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjkxMjU5ZTM3ZDhhYjQxZjVmYWYwNiIsImlhdCI6MTcxMzk2OTA4NSwiZXhwIjoxNzE0MDU1NDg1fQ.8_4hw5VamKpxovsv45vJVM0KM4SUrxFHXDF_aIKBaTs
 Content-Type: application/json
 {
     "ruleName": "stop duration: 10 - 20 minute",
@@ -54,7 +62,7 @@ Content-Type: application/json
 }
 
 ### add rule stop duration
-POST {{url_dev}}/add-update-rule
+POST {{url_dev}}/511454340/add-update-rule
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM2MjI5OCwiZXhwIjoxNzEzNDQ4Njk4fQ.ctM42P5c1b6mI95SDzoFWjwXuUx5TmQUl2wIGYROurU
 Content-Type: application/json
 {

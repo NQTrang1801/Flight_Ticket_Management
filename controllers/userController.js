@@ -316,10 +316,10 @@ const getAllUsers = asyncHandler(async (req, res) => {
 
 //
 const updateGroupUser = asyncHandler(async (req, res) => {
-    const { _id } = req.user;
+    const { id } = req.params;
     const { group_id } = req.body;
-    validateMongoDbId(_id);
-    const user = await User.findById(_id);
+    validateMongoDbId(id);
+    const user = await User.findById(id);
     const gr = await Group.findById(group_id);
     if (gr) {
         user.group_id = group_id;

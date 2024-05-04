@@ -6,8 +6,8 @@ const asyncHandler = require('express-async-handler');
 const checkAirportCount = asyncHandler(async (req, res, next) => {
     try {
         const airportCount = await Airport.countDocuments();
-        const ruleMaxAirport = await Rule.findOne({ code: "QD1-1" });
-        if (airportCount >= ruleMaxAirport.value) {
+        const ruleMaxAirport = await Rule.findOne({ code: "R1-1" });
+        if (airportCount >= ruleMaxAirport.values?.max_airports) {
             return res.status(400).json({ message: "The maximum number of airports has reached" });
         }
         next();

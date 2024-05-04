@@ -7,7 +7,7 @@
 
 ### get all
 GET {{url_dev}}/511320413/all
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhjZGFjOTgyMzIzMjcyZDVjMDFjZCIsImlhdCI6MTcxMzk1MDk2MiwiZXhwIjoxNzE0MDM3MzYyfQ.ph_5wLtIKbL40nBUYMjetW-Q5rBJqyF7EBbeLpi6Gd4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjkxMjU5ZTM3ZDhhYjQxZjVmYWYwNiIsImlhdCI6MTcxMzk2ODExMCwiZXhwIjoxNzE0MDU0NTEwfQ.TMxh4gZ0dO6_BaWjIvFG5MogYo8JsMmvEN3X5apQ024
 
 ### get by id
 GET {{url_dev}}/511320413/6628cdac982323272d5c0163
@@ -23,9 +23,9 @@ Content-Type: application/json
 
 ### create group
 POST {{url_dev}}/511454413/create
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhhMDY0MGYwM2E1NjQwZmQ2ZjZkZSIsImlhdCI6MTcxMzkzOTg3MCwiZXhwIjoxNzE0MDI2MjcwfQ.0lfIxsFIUF8U3b6S3oLgvyFFdfzwkY8cXJ_Xb4Np00w
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjkxMjU5ZTM3ZDhhYjQxZjVmYWYwNiIsImlhdCI6MTcxMzk2ODExMCwiZXhwIjoxNzE0MDU0NTEwfQ.TMxh4gZ0dO6_BaWjIvFG5MogYo8JsMmvEN3X5apQ024
 Content-Type: application/json
 {
-    "groupCode": "580",
-    "groupName": "EXAMPLE"
+    "groupCode": "001",
+    "groupName": "Write"
 }

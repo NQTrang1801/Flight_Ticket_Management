@@ -13,11 +13,7 @@ const airportSchema = new mongoose.Schema({
         type: { type: String, default: 'Point'},
         coordinates: { type: [Number], required: false } // Tọa độ địa lý của sân bay, bắt buộc
     },
-    status: { type: Boolean, default: true },
-    rules: {
-        type: Array,
-        default: [],
-    }
+    status: { type: Boolean, default: true }
 });
 
 // Tạo index cho trường coordinates để hỗ trợ truy vấn vị trí địa lý

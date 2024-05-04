@@ -1,30 +1,39 @@
 @url_dev=http://localhost:5000/api/flight
 
 ### Tạo một chuyến bay mới
-POST {{url_dev}}/create
+POST {{url_dev}}/511454641/create
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzQ5NTIxNiwiZXhwIjoxNzEzNTgxNjE2fQ.VbJeqISlEBqABYHLw5Q2DCM49kG4UaQ1Sv5R1cLjmOs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MzY0OWZiNjc2ODViOWIwNGFjYjY0ZSIsImlhdCI6MTcxNDgzMzk2NiwiZXhwIjoxNzE0OTIwMzY2fQ.9srC2zSiON5ftn5AJAFe_MKUOwz4n5Ue7TbcXQ64TTw
 {
-    "flight_number": "MH370-BOEING77777",
-    "flight_code": "HAN-SGNNN",
-    "departure_airport": "66209c084fd0c1e8b4adf6ab",
-    "destination_airport": "66209c374fd0c1e8b4adf6bc",
+    "flight_number": "MH370-BOEING777777",
+    "flight_code": "HAN-SGNNNN",
+    "departure_airport": "66364a9367685b9b04acb66e",
+    "destination_airport": "66364da2083d44d27ecaad97",
     "departure_datetime": "2024-04-20T08:00:00.000Z",
-    "duration": 60,
+    "duration": 30,
     "ticket_price": 1000,
     "seats": [
         {"class": "1", "count": 20, "booked_seats": 0, "status": true},
         {"class": "2", "count": 80, "booked_seats": 0, "status": true}
     ],
     "transit_airports": [
-        {"airport_id": "66209c4e4fd0c1e8b4adf6ca", "stop_duration": 5, "rule_id": "66209b26eb9c360513f64115"},
-        {"airport_id": "66209c564fd0c1e8b4adf6d0", "stop_duration": 40, "rule_id": "66209b2aeb9c360513f6411a"},
-        {"airport_id": "66209c564fd0c1e8b4adf6d0", "stop_duration": 40, "rule_id": "66209b2aeb9c360513f6411a"}
+        {"airport_id": "66364a9367685b9b04acb66e", "stop_duration": 10, "note": ""},
+        {"airport_id": "66364a9d67685b9b04acb675", "stop_duration": 15, "note": "delay 2 minutes"}
     ],
-    "rules": [
-        {"rule_id": "66209b1aeb9c360513f6410b"}
-    ]
+    "rules": {
+        "regulation_1": {
+            "flight_time": "663649fb67685b9b04acb651",
+            "intermediate": "663649fb67685b9b04acb652"
+        },
+        "regulation_2": {
+            "tickets": "663649fb67685b9b04acb653"
+        },
+        "regulation_3": {
+            "booking": "663649fb67685b9b04acb654"
+        }
+    }
 }
+
 
 
 ### Lấy tất cả các chuyến bay

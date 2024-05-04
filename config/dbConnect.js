@@ -3,6 +3,8 @@ const Functionality = require('../models/functionalityModel')
 const User = require('../models/userModel')
 const Group = require('../models/groupModel')
 const Permission = require('../models/permissionModel')
+const Rule = require('../models/ruleModel')
+
 const dbConnect = () => {
     try {
         const conn = mongoose.connect(process.env.MONGODB_URL);
@@ -11,6 +13,8 @@ const dbConnect = () => {
                 const countF = await Functionality.countDocuments();
                 const countG = await Group.countDocuments();
                 const countP = await Permission.countDocuments();
+                const countR = await Rule.countDocuments();
+
                 if (countF === 0) {
                     await Functionality.create([
                         { functionalityCode: '511320447', functionalityName: 'GET COLLECTION USER', screenNameToLoad: 'USER MANAGEMENT' },
@@ -116,6 +120,59 @@ const dbConnect = () => {
                     }
                 }
 
+                if (countR == 0) {
+                    await Rule.create([
+                        { 
+                            ruleName: "Regulation Airport", 
+                            code: "R1-1", 
+                            detail: "Maximum number of airports",
+                            values: { 
+                                max_airports: 10
+                            }
+                        },
+                        { 
+                            ruleName: "Regulation flight time", 
+                            code: "R1-2", 
+                            detail: "minimum flight time",
+                            values: { 
+                                min_flight_time: 30
+                            }
+                        },
+                        { 
+                            ruleName: "Regulation intermediary airports", 
+                            code: "R1-3", 
+                            detail: "Maximum intermediate airports with a stop time limit",
+                            values: { 
+                                max_transit_airports: 2,
+                                min: 10,
+                                max: 20
+                            }
+                        },
+                        { 
+                            ruleName: "Regulations on tickets", 
+                            code: "R2", 
+                            detail: "Only sell tickets when there is room. There are 2 classes (1, 2). The ticket price is bound with different types of classes, each flight has a separate ticket price.",
+                            values: { 
+                                sell_only_available_seats: true,
+                                ticket_classes: { 
+                                    1: { price_multiplier: 1.05 },
+                                    2: { price_multiplier: 1 }
+                                },
+                                separate_ticket_prices: true
+                            }
+                        },
+                        { 
+                            ruleName: "Regulations booking", 
+                            code: "R3", 
+                            detail: "Only book tickets later 1 day before departure. On the date of departure, all votes will be canceled.",
+                            values: { 
+                                max_booking_days_before_departure: 1, 
+                                cancel_bookings: "" 
+                            }
+                        }
+                    ]);
+                    console.log('Inserted Rules default documents successfully.');
+                }                
 
             } catch (err) {
                 console.error('Error inserting default documents:', err);

@@ -6,26 +6,26 @@
 # router.delete("/511627990/delete/:id", authMiddleware, hasPermission, deletePermission);
 ### Create a permission
 POST {{url_dev}}/511454990/create
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhhMDY0MGYwM2E1NjQwZmQ2ZjZkZSIsImlhdCI6MTcxMzkzOTg3MCwiZXhwIjoxNzE0MDI2MjcwfQ.0lfIxsFIUF8U3b6S3oLgvyFFdfzwkY8cXJ_Xb4Np00w
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjkxMjU5ZTM3ZDhhYjQxZjVmYWYwNiIsImlhdCI6MTcxMzk2ODExMCwiZXhwIjoxNzE0MDU0NTEwfQ.TMxh4gZ0dO6_BaWjIvFG5MogYo8JsMmvEN3X5apQ024
 Content-Type: application/json
 {
-    "group_id": "6628a7d5068a4e014f78ad7a", 
-    "functionality_id": "6628a0640f03a5640fd6f625"
+    "group_id": "6629140ce37d8ab41f5faf2d", 
+    "functionality_id": "66291259e37d8ab41f5fae44"
 }
 ### Get all permissions
 GET {{url_dev}}/511320990/all
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhhMDY0MGYwM2E1NjQwZmQ2ZjZkZSIsImlhdCI6MTcxMzkzOTg3MCwiZXhwIjoxNzE0MDI2MjcwfQ.0lfIxsFIUF8U3b6S3oLgvyFFdfzwkY8cXJ_Xb4Np00w
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjkxMjU5ZTM3ZDhhYjQxZjVmYWYwNiIsImlhdCI6MTcxMzk2ODExMCwiZXhwIjoxNzE0MDU0NTEwfQ.TMxh4gZ0dO6_BaWjIvFG5MogYo8JsMmvEN3X5apQ024
 ### Get a single permission
 GET {{url_dev}}/511320990/6628a0640f03a5640fd6f68d
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhhMDY0MGYwM2E1NjQwZmQ2ZjZkZSIsImlhdCI6MTcxMzkzOTg3MCwiZXhwIjoxNzE0MDI2MjcwfQ.0lfIxsFIUF8U3b6S3oLgvyFFdfzwkY8cXJ_Xb4Np00w
 
 ### Update a permission
-PUT {{url_dev}}/511246990/update/6628a0640f03a5640fd6f68d
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhhMDY0MGYwM2E1NjQwZmQ2ZjZkZSIsImlhdCI6MTcxMzkzOTg3MCwiZXhwIjoxNzE0MDI2MjcwfQ.0lfIxsFIUF8U3b6S3oLgvyFFdfzwkY8cXJ_Xb4Np00w
+PUT {{url_dev}}/511246990/update/66291482e37d8ab41f5faf38
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjkxMjU5ZTM3ZDhhYjQxZjVmYWYwNiIsImlhdCI6MTcxMzk2ODExMCwiZXhwIjoxNzE0MDU0NTEwfQ.TMxh4gZ0dO6_BaWjIvFG5MogYo8JsMmvEN3X5apQ024
 Content-Type: application/json
 {
-    "group_id": "6628a7d5068a4e014f78ad7a",
-    "functionality_id": "6628a0640f03a5640fd6f628"
+    "group_id": "6629140ce37d8ab41f5faf2d",
+    "functionality_id": "66291259e37d8ab41f5fae66"
 }
 
 ### Delete a permission
