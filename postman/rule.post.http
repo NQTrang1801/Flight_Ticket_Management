@@ -5,7 +5,7 @@
 # router.get('/511320340/:id', authMiddleware, hasPermission, ruleController.getRuleById);
 ### get all
 GET {{url_dev}}/511320340/all
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhiODNmZTkzMWY2NTAyMjgzYjViNiIsImlhdCI6MTcxMzk0NDY0MSwiZXhwIjoxNzE0MDMxMDQxfQ.jGVcF-AEXTIUxTcL-c2Y1sGRqh9hYVCRgitNa6rVV94
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MzY0OWZiNjc2ODViOWIwNGFjYjY0ZSIsImlhdCI6MTcxNDgzMzk2NiwiZXhwIjoxNzE0OTIwMzY2fQ.9srC2zSiON5ftn5AJAFe_MKUOwz4n5Ue7TbcXQ64TTw
 
 ## delete rule
 DELETE {{url_dev}}/511627340/delete/6628b879e931f6502283b5c4
@@ -13,13 +13,15 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhiODNmZ
 
 ### add rule MaxAirport
 POST {{url_dev}}/511454340/add-update-rule
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjkxMjU5ZTM3ZDhhYjQxZjVmYWYwNiIsImlhdCI6MTcxMzk2OTA4NSwiZXhwIjoxNzE0MDU1NDg1fQ.8_4hw5VamKpxovsv45vJVM0KM4SUrxFHXDF_aIKBaTs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MzY0OWZiNjc2ODViOWIwNGFjYjY0ZSIsImlhdCI6MTcxNDgzMzk2NiwiZXhwIjoxNzE0OTIwMzY2fQ.9srC2zSiON5ftn5AJAFe_MKUOwz4n5Ue7TbcXQ64TTw
 Content-Type: application/json
 {
-    "ruleName": "Maximum number of airports",
-    "code": "QD1-1",
+    "ruleName": "Regulation Airport",
+    "code": "R1-1",
     "ruleDetails": "Rule to limit the maximum number of airports",
-    "value": 10
+    "values": {
+        "max_airports": 4
+    }
 }
 
 ### add rule a flight

@@ -63,71 +63,25 @@ const updateFlight = asyncHandler(async (req, res) => {
         const flight = await Flight.findOne({ _id: id });
 
         if (!flight) {
-            return res.status(404).json({ message: "Flight not found" });
+            return  res.status(400).json({ message: `not found` });
+        } 
+
+        const ruleFlightTime = await Rule.findOne({ _id: flightData?.rules?.regulation_1?.flight_time });
+        const ruleIntermediary = await Rule.findOne({ _id: flightData?.rules?.regulation_1?.intermediate });
+        const min_flight_time = ruleFlightTime?.values?.min_flight_time;
+
+        if (flightData.duration < min_flight_time) {
+            return res.status(400).json({ message: `The minimum flight time must be ${min_flight_time} minutes` });
         }
-
-        if (flightData?.rules) {
-            // Kiểm tra thời gian bay tối thiểu
-            const ruleFlightTime = await Rule.findOne({ _id: flightData?.rules?.regulation_1?.flight_time });
-            const ruleIntermediary = await Rule.findOne({ _id: flightData?.rules?.regulation_1?.intermediate });
-            const min_flight_time = ruleFlightTime?.values?.min_flight_time;
-
-            if (flightData?.duration) {
-                if (ruleFlightTime && flightData.duration < min_flight_time) {
-                    return res.status(400).json({ message: `The minimum flight time must be ${min_flight_time} minutes` });
-                }
-            } else {
-                if (ruleFlightTime && flight?.duration < min_flight_time) {
-                    return res.status(400).json({ message: `The minimum flight time must be ${min_flight_time} minutes` });
-                }
-            }
-
-            if (flightData?.transit_airports) {
-                // Kiểm tra số lượng sân bay trung gian và thời gian dừng
-                if (ruleIntermediary && flightData?.transit_airports?.length > ruleIntermediary?.values?.max_transit_airports) {
-                    return res.status(400).json({ message: `Only a maximum of ${ruleIntermediary?.values?.max_transit_airports} intermediary airports` });
-                }
-
-                for (const [index, airport] of flightData.transit_airports.entries()) {
-                    if (airport.stop_duration < ruleIntermediary?.values?.min || airport.stop_duration > ruleIntermediary?.values?.max) {
-                        const transit_airport = await Airport.findOne({ _id: airport?.airport_id });
-                        return res.status(400).json({ message: `The stop time at ${transit_airport.name} must be from ${ruleIntermediary?.values?.min} to ${ruleIntermediary?.values?.max} minutes` });
-                    }
-                }
-
-            } else {
-                if (ruleIntermediary && flight?.transit_airports?.length > ruleIntermediary?.values?.max_transit_airports) {
-                    return res.status(400).json({ message: `Only a maximum of ${ruleIntermediary?.values?.max_transit_airports} intermediary airports` });
-                }
-
-                for (const [index, airport] of flight.transit_airports.entries()) {
-                    if (airport.stop_duration < ruleIntermediary?.values?.min || airport.stop_duration > ruleIntermediary?.values?.max) {
-                        const transit_airport = await Airport.findOne({ _id: airport?.airport_id });
-                        return res.status(400).json({ message: `The stop time at ${transit_airport.name} must be from ${ruleIntermediary?.values?.min} to ${ruleIntermediary?.values?.max} minutes` });
-                    }
-                }
-            }
-        } else {
-            const ruleFlightTime = await Rule.findOne({ _id: flight?.rules?.regulation_1?.flight_time });
-            const ruleIntermediary = await Rule.findOne({ _id: flight?.rules?.regulation_1?.intermediate });
-            const min_flight_time = ruleFlightTime?.values?.min_flight_time;
-
-            if (flightData?.duration) {
-                if (flightData.duration < min_flight_time) {
-                    return res.status(400).json({ message: `The minimum flight time must be ${min_flight_time} minutes` });
-                }
-            }
-
-            if (flightData?.transit_airport) {
-                if ( flightData?.transit_airports?.length > ruleIntermediary?.values?.max_transit_airports) {
-                    return res.status(400).json({ message: `Only a maximum of ${ruleIntermediary?.values?.max_transit_airports} intermediary airports` });
-                }
-
-                for (const [index, airport] of flightData.transit_airports.entries()) {
-                    if (airport.stop_duration < ruleIntermediary?.values?.min || airport.stop_duration > ruleIntermediary?.values?.max) {
-                        const transit_airport = await Airport.findOne({ _id: airport?.airport_id });
-                        return res.status(400).json({ message: `The stop time at ${transit_airport.name} must be from ${ruleIntermediary?.values?.min} to ${ruleIntermediary?.values?.max} minutes` });
-                    }
+        // Kiểm tra số lượng sân bay trung gian và thời gian dừng
+        if (flightData?.transit_airports?.length > ruleIntermediary?.values?.max_transit_airports) {
+            return res.status(400).json({ message: `Only a maximum of ${ruleIntermediary?.values?.max_transit_airports} intermediary airports` });
+        }
+        if (flightData?.transit_airports) {
+            for (const airport of flightData.transit_airports) {
+                if (airport.stop_duration < ruleIntermediary?.values?.min || airport.stop_duration > ruleIntermediary?.values?.max) {
+                    const transit_airport = await Airport.findOne({ _id: airport?.airport_id });
+                    return res.status(400).json({ message: `The stop time at ${transit_airport.name} must be from ${ruleIntermediary?.values?.min} to ${ruleIntermediary?.values?.max} minutes` });
                 }
             }
         }
