@@ -122,6 +122,27 @@ function FlightSchedule() {
         name: "moviePosters"
     });
 
+    const [dropdownStates, setDropdownStates] = useState(fields.map(() => false));
+
+    const [selectedAirports, setSelectedAirports] = useState(Array(fields.length).fill(null));
+
+    const handleAirportSelect = (airport, index) => {
+        setDropdownStates((prevState) => {
+            const newState = [...prevState];
+            newState[index] = false;
+            return newState;
+        });
+        setSelectedAirports((prevState) => {
+            const newState = [...prevState];
+            newState[index] = airport;
+            return newState;
+        });
+    };
+
+    const filterAvailableAirports = (airport) => {
+        return selectedAirports.every((selectedAirport) => !selectedAirport || selectedAirport._id !== airport._id);
+    };
+
     const onSubmit: SubmitHandler<AirportProps> = async (data) => {
         hide();
         dispatch(startLoading());
@@ -440,7 +461,7 @@ function FlightSchedule() {
                             <div className="flex justify-center mb-8">
                                 <div className="text-white font-semibold text-xl">Create new schedule</div>
                             </div>
-                            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
+                            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
                                 <div className="text-blue text-[15px]">Flight Information</div>
                                 <div className="grid grid-cols-3 gap-4">
                                     <div className="flex gap-2 flex-col">
@@ -618,7 +639,9 @@ function FlightSchedule() {
                                                 }   flex justify-between items-center`}
                                                 onClick={() => setDepartureAirportVisible(!departureAirportVisible)}
                                             >
-                                                {departureAirport.name === "" ? "All airports" : departureAirport.name}
+                                                {departureAirport.name === ""
+                                                    ? "Choose an airport"
+                                                    : departureAirport.name}
                                                 <i className={`${departureAirportVisible ? "rotate-180" : ""}`}>
                                                     <svg
                                                         xmlns="http://www.w3.org/2000/svg"
@@ -690,7 +713,7 @@ function FlightSchedule() {
                                                 }   flex justify-between items-center`}
                                                 onClick={() => setArrivalAirportVisible(!arrivalAirportVisible)}
                                             >
-                                                {arrivalAirport.name === "" ? "All airports" : arrivalAirport.name}
+                                                {arrivalAirport.name === "" ? "Choose an airport" : arrivalAirport.name}
                                                 <i className={`${arrivalAirportVisible ? "rotate-180" : ""}`}>
                                                     <svg
                                                         xmlns="http://www.w3.org/2000/svg"
@@ -740,7 +763,7 @@ function FlightSchedule() {
                                         </div>
                                         <div className="flex gap-2 flex-col">
                                             <label className="flex gap-1 mb-1 items-center">
-                                                Booked seats
+                                                Status
                                                 <IsRequired />
                                             </label>
 
@@ -841,7 +864,7 @@ function FlightSchedule() {
                                         </div>
                                         <div className="flex gap-2 flex-col">
                                             <label className="flex gap-1 mb-1 items-center">
-                                                Booked seats
+                                                Status
                                                 <IsRequired />
                                             </label>
                                             <Tippy
@@ -913,46 +936,150 @@ function FlightSchedule() {
                                 </div>
 
                                 <div className="outline outline-1 outline-border my-2"></div>
-                                <div className="text-blue text-[15px]">Intermediate Airport</div>
+                                <div className="text-blue text-[15px]">Intermediate Airports</div>
                                 {fields.map((field, index) => (
-                                    <div key={field.id} className="grid grid-cols-2 gap-4 justify-center items-center">
-                                        <div className="flex flex-col gap-2">
-                                            <label htmlFor={`poster-${index}`} className="flex gap-1 mb-1 items-center">
-                                                Poster link
-                                                <IsRequired />
-                                            </label>
-                                            <input
-                                                type="file"
-                                                placeholder="Poster link..."
-                                                id={`poster-${index}`}
-                                                {...register(`moviePosters.${index}.base64` as const)}
-                                                className="bg-[rgba(141,124,221,0.1)] text-sm focus:border-primary focus:border focus:border-1 border border-blue border-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
-                                            />
-                                        </div>
-                                        <div className="flex gap-2 mt-8">
-                                            <div className="flex gap-2 flex-1 items-center">
-                                                <input
-                                                    type="checkbox"
-                                                    className="w-[20px] h-[20px]"
-                                                    {...register(`moviePosters.${index}.isThumb` as const)}
-                                                />
-                                                <label htmlFor={`poster-${index}`} className="flex gap-1 items-center">
-                                                    Thumbnail
-                                                </label>
+                                    <div key={field.id} className="grid grid-cols-7 gap-4 items-center">
+                                        <div key={field.id} className="grid grid-rows-3 gap-4 mb-4 col-span-6">
+                                            <div className="flex gap-4">
+                                                <div className="flex gap-4">
+                                                    <div className="flex flex-col gap-4">
+                                                        <div className="flex gap-2 flex-col">
+                                                            <label
+                                                                htmlFor="movieParticipantIds"
+                                                                className="flex gap-1 mb-1 items-center"
+                                                            >
+                                                                Airport {index + 1}
+                                                            </label>
+                                                            <Tippy
+                                                                visible={dropdownStates[index]}
+                                                                interactive
+                                                                onClickOutside={() =>
+                                                                    setDropdownStates((prevState) =>
+                                                                        prevState.map((state, i) =>
+                                                                            i === index ? false : state
+                                                                        )
+                                                                    )
+                                                                }
+                                                                offset={[0, 0]}
+                                                                placement="bottom"
+                                                                render={(attrs) => (
+                                                                    <ul
+                                                                        className={`border border-primary rounded-lg p-2 max-h-[300px] w-[290px] overflow-y-scroll no-scrollbar bg-background ${
+                                                                            dropdownStates[index]
+                                                                                ? "border-t-0 rounded-tl-none rounded-tr-none"
+                                                                                : ""
+                                                                        }`}
+                                                                        {...attrs}
+                                                                    >
+                                                                        {airportData &&
+                                                                            airportData
+                                                                                .filter(filterAvailableAirports)
+                                                                                .map((airport) => (
+                                                                                    <li
+                                                                                        onClick={() =>
+                                                                                            handleAirportSelect(
+                                                                                                airport,
+                                                                                                index
+                                                                                            )
+                                                                                        }
+                                                                                        key={airport._id}
+                                                                                        className={`cursor-pointer py-2 px-4 text-[13px] hover:bg-primary text-left rounded-lg flex items-center p-2`}
+                                                                                    >
+                                                                                        {airport.name}
+                                                                                    </li>
+                                                                                ))}
+                                                                    </ul>
+                                                                )}
+                                                            >
+                                                                <div
+                                                                    className={`hover:border-primary py-3 px-4 border-blue border bg-background cursor-pointer w-[290px] ${
+                                                                        dropdownStates[index]
+                                                                            ? "rounded-tl-lg rounded-tr-lg border-primary"
+                                                                            : "rounded-lg"
+                                                                    }   flex justify-between items-center`}
+                                                                    onClick={() =>
+                                                                        setDropdownStates((prevState) => {
+                                                                            const newState = [...prevState];
+                                                                            newState[index] = !newState[index];
+                                                                            return newState;
+                                                                        })
+                                                                    }
+                                                                >
+                                                                    {selectedAirports[index]
+                                                                        ? selectedAirports[index].name
+                                                                        : "Choose an airport"}
+                                                                    <i
+                                                                        className={`${
+                                                                            dropdownStates[index] ? "rotate-180" : ""
+                                                                        }`}
+                                                                    >
+                                                                        <svg
+                                                                            xmlns="http://www.w3.org/2000/svg"
+                                                                            width="20"
+                                                                            height="20"
+                                                                            viewBox="0 0 16 16"
+                                                                            id="chevron-down"
+                                                                        >
+                                                                            <path
+                                                                                fill="#fff"
+                                                                                d="M4.14645,5.64645 C4.34171,5.45118 4.65829,5.45118 4.85355,5.64645 L7.9999975,8.79289 L11.1464,5.64645 C11.3417,5.45118 11.6583,5.45118 11.8536,5.64645 C12.0488,5.84171 12.0488,6.15829 11.8536,6.35355 L8.35355,9.85355 C8.15829,10.0488 7.84171,10.0488 7.64645,9.85355 L4.14645,6.35355 C3.95118,6.15829 3.95118,5.84171 4.14645,5.64645 Z"
+                                                                            ></path>
+                                                                        </svg>
+                                                                    </i>
+                                                                </div>
+                                                            </Tippy>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="flex gap-2 flex-col w-full">
+                                                    <label className="flex gap-1 mb-1 items-center">
+                                                        Stop duration (minutes)
+                                                        <IsRequired />
+                                                    </label>
+                                                    <input
+                                                        type="number"
+                                                        id="count_1"
+                                                        defaultValue="0"
+                                                        className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
+                                                    />
+                                                </div>
                                             </div>
+                                            <div className="flex gap-2 flex-col">
+                                                <label htmlFor="note" className="flex gap-1 mb-1 items-center">
+                                                    Note
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    id="note"
+                                                    placeholder="Note . . ."
+                                                    {...register("note")}
+                                                    className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
+                                                />
+                                                {<span className="text-deepRed">{errors.note?.message}</span>}
+                                            </div>
+                                        </div>
+                                        <div className="flex flex-col gap-2">
                                             <button
-                                                className="border border-1 border-blue rounded-lg px-5 py-3 hover:border-primary hover:bg-primary"
+                                                className="border border-1 border-blue rounded-lg py-[10px] hover:border-primary hover:bg-primary flex justify-center"
                                                 type="button"
                                                 onClick={() => remove(index)}
                                             >
-                                                Delete this field
+                                                <i className="">
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 32 32"
+                                                        width={24}
+                                                        height={24}
+                                                        id="delete"
+                                                    >
+                                                        <path
+                                                            className="fill-white"
+                                                            d="M24.2,12.193,23.8,24.3a3.988,3.988,0,0,1-4,3.857H12.2a3.988,3.988,0,0,1-4-3.853L7.8,12.193a1,1,0,0,1,2-.066l.4,12.11a2,2,0,0,0,2,1.923h7.6a2,2,0,0,0,2-1.927l.4-12.106a1,1,0,0,1,2,.066Zm1.323-4.029a1,1,0,0,1-1,1H7.478a1,1,0,0,1,0-2h3.1a1.276,1.276,0,0,0,1.273-1.148,2.991,2.991,0,0,1,2.984-2.694h2.33a2.991,2.991,0,0,1,2.984,2.694,1.276,1.276,0,0,0,1.273,1.148h3.1A1,1,0,0,1,25.522,8.164Zm-11.936-1h4.828a3.3,3.3,0,0,1-.255-.944,1,1,0,0,0-.994-.9h-2.33a1,1,0,0,0-.994.9A3.3,3.3,0,0,1,13.586,7.164Zm1.007,15.151V13.8a1,1,0,0,0-2,0v8.519a1,1,0,0,0,2,0Zm4.814,0V13.8a1,1,0,0,0-2,0v8.519a1,1,0,0,0,2,0Z"
+                                                        ></path>
+                                                    </svg>
+                                                </i>
                                             </button>
                                         </div>
-                                        {
-                                            <span className="text-deepRed mt-[-8px]">
-                                                {errors?.moviePosters?.[index]?.base64?.message}
-                                            </span>
-                                        }
                                     </div>
                                 ))}
                                 <div className="flex items-center justify-center">
