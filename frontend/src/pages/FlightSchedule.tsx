@@ -15,38 +15,35 @@ import ScheduleList from "~/components/ScheduleList";
 const schema = yup.object().shape({
     flightNumber: yup.string().required("Flight number is required."),
     flightCode: yup.string().required("Flight code is required."),
-    duration: yup.number().required("Duration is required.").typeError("Duration must be a number."),
-    ticketPrice: yup.number().required("Duration is required.").typeError("Duration must be a number."),
-    departureDate: yup.date().required("Departure date is required.").typeError("Departure date must be a date."),
-    departureTime: yup.date().required("Departure time is required."),
-    // releaseDate: yup.date().required("Release date is required.").typeError("Release date must be a date."),
-    // nation: yup.string().required("Nation is required."),
-    // director: yup.string().required("Director is required."),
-    // moviePosters: yup
-    //     .array()
-    //     .of(
-    //         yup.object().shape({
-    //             base64: yup.mixed(),
-    //             isThumb: yup.boolean().required()
-    //         })
-    //     )
-    //     .required()
+    duration: yup.number().required("Duration is required.").typeError("Duration is required."),
+    ticketPrice: yup.number().required("Ticket price is required.").typeError("Ticket price is required."),
+    departureDate: yup.date().required("Departure date is required.").typeError("Date is required."),
+    departureTime: yup.string().required("Time is required.").typeError("Time is required."),
+    bookingDeadline: yup.date().required("Booking deadline is required.").typeError("Booking deadline is required."),
+    cancellationDeadline: yup
+        .date()
+        .required("Cancellation deadline is required.")
+        .typeError("Cancellation deadline is required."),
+    firstClassCapacity: yup.number().required("Capacity is required.").typeError("Capacity is required."),
+    firstClassBookedSeats: yup.number().required("Booked seats is required.").typeError("Booked seats is required."),
+
+    secondClassCapacity: yup.number().required("Capacity is required.").typeError("Capacity is required."),
+    secondClassBookedSeats: yup.number().required("Booked seats is required.").typeError("Booked seats is required."),
 
     intermediateAirport: yup.array().of(
         yup.object().shape({
-            stopDuration: yup
-                .number()
-                .required("Stop duration is required.")
-                .typeError("Stop duration must be a number."),
+            stopDuration: yup.number().required("Duration is required.").typeError("Duration is required."),
             note: yup.string()
         })
     )
-    // .required("Intermediate is required")
 });
 
 function FlightSchedule() {
     const [data, setData] = useState<FlightScheduleData>();
     const [airportData, setAirportData] = useState<AirportProps[]>();
+    const [ruleData, setRuleData] = useState<RuleData[]>();
+
+    const [formSubmitted, setFormSubmitted] = useState(false);
 
     const [departureAirport, setDepartureAirport] = useState({
         id: "",
@@ -57,11 +54,6 @@ function FlightSchedule() {
         name: ""
     });
 
-    const [seats, setSeats] = useState([
-        { class: "1", count: 0, booked_seats: 0, status: true },
-        { class: "2", count: 0, booked_seats: 0, status: true }
-    ]);
-
     const dispatch = useAppDispatch();
 
     const [status1, setStatus1] = useState(true);
@@ -70,47 +62,10 @@ function FlightSchedule() {
     const [status2, setStatus2] = useState(true);
     const [status2Visible, setStatus2Visible] = useState(false);
 
-    const [time, setTime] = useState();
+    const [time, setTime] = useState("");
 
-    const [visible, setVisible] = useState(false);
-    const [activeVisible, setActiveVisible] = useState(false);
     const [deletingMode, setDeletingMode] = useState(false);
-    const [type, setType] = useState("");
-    const [title, setTitle] = useState("All");
-    const [isActive, setActive] = useState(false);
-    const [reloadFlag, setReloadFlag] = useState(false);
-    const [error, setError] = useState(false);
-    const [movieFilteringVisible, setMovieFilteringVisible] = useState(false);
-    const [movieFiltering, setMovieFiltering] = useState<{ id: string; name: string }>({
-        id: "",
-        name: ""
-    });
-    const [categories, setCategories] = useState(
-        Array<{
-            id: string;
-            name: string;
-        }>
-    );
-    const [movieCategories, setMovieCategories] = useState(
-        Array<{
-            id: string;
-            name: string;
-        }>
-    );
-    const [participants, setParticipants] = useState(
-        Array<{
-            id: string;
-            fullName: string;
-            profilePicture: string;
-        }>
-    );
-    const [movieParticipants, setMovieParticipants] = useState(
-        Array<{
-            id: string;
-            fullName: string;
-            profilePicture: string;
-        }>
-    );
+
     const [departureAirportVisible, setDepartureAirportVisible] = useState(false);
     const [arrivalAirportVisible, setArrivalAirportVisible] = useState(false);
 
@@ -122,7 +77,7 @@ function FlightSchedule() {
         register,
         handleSubmit,
         formState: { errors }
-    } = useForm<IMovie>({
+    } = useForm<FlightScheduleValidation>({
         resolver: yupResolver(schema)
     });
 
@@ -134,6 +89,7 @@ function FlightSchedule() {
     const [dropdownStates, setDropdownStates] = useState(fields.map(() => false));
 
     const [selectedAirports, setSelectedAirports] = useState(Array(fields.length).fill(null));
+    const [selectedRules, setSelectedRules] = useState<String[]>([]);
 
     const handleAirportSelect = (airport, index) => {
         setDropdownStates((prevState) => {
@@ -152,52 +108,74 @@ function FlightSchedule() {
         return selectedAirports.every((selectedAirport) => !selectedAirport || selectedAirport._id !== airport._id);
     };
 
-    const onSubmit: SubmitHandler<AirportProps> = async (data) => {
+    const onSubmit: SubmitHandler<FlightScheduleValidation> = async (data) => {
         hide();
         dispatch(startLoading());
-        const name = data.name;
-        const country = data.country;
-        const code = data.code;
-        const terminals = data.terminals;
-        const capacity = data.capacity;
-        const address = data.address;
 
-        (async () => {
-            try {
-                await axios.post(
-                    "/airport/511454675/create",
-                    {
-                        name,
-                        country,
-                        code,
-                        terminals,
-                        capacity,
-                        address,
-                        timezone,
-                        isInternational: international,
-                        coordinates: {
-                            type: "Point",
-                            coordinates: [latitude, longitude]
-                        },
-                        status,
-                        rule: []
-                    },
-                    {
-                        headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).data.token}`
-                        }
-                    }
-                );
-                dispatch(stopLoading());
-                dispatch(sendMessage("Created successfully!"));
-                setTimeout(() => window.location.reload(), 2000);
-            } catch (error) {
-                dispatch(stopLoading());
-                dispatch(sendMessage("Created failed!"));
-                console.error(error);
-            }
-        })();
+        const flight_code = data.flightCode;
+        const flight_number = data.flightNumber;
+        const ticket_price = data.ticketPrice;
+        const departure_airport = departureAirport;
+        const destination_airport = arrivalAirport;
+        const duration = data.duration;
+        const departure_datetime = data.departureDate.toDateString() + data.departureTime.toDateString();
+
+        const firstClassCapacity = data.firstClassCapacity;
+        const firstClassBookedSeats = data.firstClassBookedSeats;
+        const secondClassCapacity = data.secondClassCapacity;
+        const secondClassBookedSeats = data.secondClassBookedSeats;
+
+        const airport_ids = selectedAirports.map((selectedAirport) => selectedAirport._id);
+
+        console.log(airport_ids);
+
+        // (async () => {
+        //     try {
+        //         await axios.post(
+        //             "/airport/511454675/create",
+        //             {
+        //                 flight_code,
+        //                 flight_number,
+        //                 ticket_price,
+        //                 departure_airport,
+        //                 destination_airport,
+        //                 duration,
+        //                 departure_datetime,
+        //                 seats: [
+        //                     {
+        //                         class: "1",
+        //                         count: firstClassCapacity,
+        //                         booked_seats: firstClassBookedSeats,
+        //                         status: status1
+        //                     },
+        //                     {
+        //                         class: "2",
+        //                         count: secondClassCapacity,
+        //                         booked_seats: secondClassBookedSeats,
+        //                         status: status2
+        //                     }
+        //                 ],
+        //                 transit_airports: [
+        //                     { airport_id: "66364a9367685b9b04acb66e", stop_duration: 10, note: "" },
+        //                     { airport_id: "66364a9d67685b9b04acb675", stop_duration: 15, note: "delay 2 minutes" }
+        //                 ]
+        //             },
+        //             {
+        //                 headers: {
+        //                     "Content-Type": "application/json",
+        //                     Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).data.token}`
+        //                 }
+        //             }
+        //         );
+        //         dispatch(stopLoading());
+        //         dispatch(sendMessage("Created successfully!"));
+        //         setTimeout(() => window.location.reload(), 2000);
+        //     } catch (error) {
+        //         dispatch(stopLoading());
+        //         dispatch(sendMessage("Created failed!"));
+        //         console.error(error);
+        //     }
+        // })();
     };
 
     useEffect(() => {
@@ -218,184 +196,24 @@ function FlightSchedule() {
                 })
                 .catch((err) => console.error(err));
         })();
+
+        (async () => {
+            try {
+                const response = await axios.get("rule/511320340/all", {
+                    headers: {
+                        Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).data.token}`
+                    }
+                });
+                setRuleData(response.data);
+            } catch (error) {
+                console.error(error);
+            }
+        })();
     }, []);
 
     return (
         <>
-            <div className="flex justify-between items-center mb-6">
-                <div className="flex gap-4">
-                    <div>
-                        <Tippy
-                            visible={visible}
-                            interactive
-                            onClickOutside={() => setVisible(false)}
-                            offset={[0, 0]}
-                            render={(attrs) => (
-                                <div
-                                    {...attrs}
-                                    tabIndex={-1}
-                                    className={`flex text-white p-2 rounded-bl-xl rounded-br-xl flex-col bg-background border-border border justify-center w-[232px] ${
-                                        visible ? "border-primary border-t-0 bg-block" : ""
-                                    }`}
-                                >
-                                    <button
-                                        onClick={() => {
-                                            setType("");
-                                            setVisible(false);
-                                            setTitle("All");
-                                        }}
-                                        className={`py-3 px-4 hover:bg-primary text-left rounded-lg ${
-                                            type === "" ? "text-blue pointer-events-none" : ""
-                                        }`}
-                                    >
-                                        All movies
-                                    </button>
-                                    <button
-                                        onClick={() => {
-                                            setType("BANNER");
-                                            setVisible(false);
-                                            setTitle("Banner");
-                                        }}
-                                        className={`py-3 px-4 hover:bg-primary text-left rounded-lg ${
-                                            type === "BANNER" ? "text-blue pointer-events-none" : ""
-                                        }`}
-                                    >
-                                        Banner movies
-                                    </button>
-                                    <button
-                                        onClick={() => {
-                                            setType("NOW_PLAYING");
-                                            setVisible(false);
-                                            setTitle("Now playing");
-                                        }}
-                                        className={`py-3 px-4 hover:bg-primary text-left rounded-lg ${
-                                            type === "NOW_PLAYING" ? "text-blue pointer-events-none" : ""
-                                        }`}
-                                    >
-                                        Now playing movies
-                                    </button>
-                                    <button
-                                        onClick={() => {
-                                            setType("TOP_FEATURED");
-                                            setVisible(false);
-                                            setTitle("Top featured");
-                                        }}
-                                        className={`py-3 px-4 hover:bg-primary text-left rounded-lg ${
-                                            type === "TOP_FEATURED" ? "text-blue pointer-events-none" : ""
-                                        }`}
-                                    >
-                                        Top featured movies
-                                    </button>
-                                    <button
-                                        onClick={() => {
-                                            setType("COMING_SOON");
-                                            setVisible(false);
-                                            setTitle("Coming soon");
-                                        }}
-                                        className={`py-3 px-4 hover:bg-primary text-left rounded-lg ${
-                                            type === "COMING_SOON" ? "text-blue pointer-events-none" : ""
-                                        }`}
-                                    >
-                                        Coming soon movies
-                                    </button>
-                                </div>
-                            )}
-                        >
-                            <button
-                                onClick={() => setVisible(!visible)}
-                                className={`hover:border-primary bg-block py-3 px-5 border-blue border ${
-                                    visible ? "rounded-tl-xl rounded-tr-xl border-primary" : "rounded-xl"
-                                }   flex justify-between items-center w-[232px]`}
-                            >
-                                <span className="">{title} movies</span>
-                                <i className={`${visible ? "rotate-180" : ""}`}>
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="20"
-                                        height="20"
-                                        viewBox="0 0 16 16"
-                                        id="chevron-down"
-                                    >
-                                        <path
-                                            fill="#fff"
-                                            d="M4.14645,5.64645 C4.34171,5.45118 4.65829,5.45118 4.85355,5.64645 L7.9999975,8.79289 L11.1464,5.64645 C11.3417,5.45118 11.6583,5.45118 11.8536,5.64645 C12.0488,5.84171 12.0488,6.15829 11.8536,6.35355 L8.35355,9.85355 C8.15829,10.0488 7.84171,10.0488 7.64645,9.85355 L4.14645,6.35355 C3.95118,6.15829 3.95118,5.84171 4.14645,5.64645 Z"
-                                        ></path>
-                                    </svg>
-                                </i>
-                            </button>
-                        </Tippy>
-                    </div>
-                    <div>
-                        <Tippy
-                            visible={movieFilteringVisible}
-                            interactive
-                            onClickOutside={() => setMovieFilteringVisible(false)}
-                            offset={[0, 0]}
-                            render={(attrs) => (
-                                <div
-                                    {...attrs}
-                                    tabIndex={-1}
-                                    className={`flex text-white p-2 rounded-bl-xl rounded-br-xl flex-col bg-background border-border border justify-center w-[170px] ${
-                                        movieFilteringVisible ? "border-primary border-t-0 bg-block" : ""
-                                    }`}
-                                >
-                                    <button
-                                        onClick={() => {
-                                            setMovieFiltering({ id: "", name: "" });
-                                            setMovieFilteringVisible(false);
-                                        }}
-                                        className={`py-3 px-4 hover:bg-primary text-left rounded-lg ${
-                                            movieFiltering.id === "" && "text-blue pointer-events-none"
-                                        }`}
-                                    >
-                                        All categories
-                                    </button>
-                                    {categories.map((category) => (
-                                        <button
-                                            key={category.id}
-                                            onClick={() => {
-                                                setMovieFiltering({ id: category.id, name: category.name });
-                                                setMovieFilteringVisible(false);
-                                            }}
-                                            className={`py-3 px-4 hover:bg-primary text-left rounded-lg ${
-                                                movieFiltering.id === category.id ? "text-blue pointer-events-none" : ""
-                                            }`}
-                                        >
-                                            {category.name}
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
-                        >
-                            <button
-                                onClick={() => setMovieFilteringVisible(!movieFilteringVisible)}
-                                className={`hover:border-primary bg-block py-3 px-5 border-blue border ${
-                                    movieFilteringVisible ? "rounded-tl-xl rounded-tr-xl border-primary" : "rounded-xl"
-                                }   flex justify-between items-center w-[170px]`}
-                            >
-                                {movieFiltering.id !== "" ? (
-                                    <span className="">{movieFiltering.name}</span>
-                                ) : (
-                                    <span className="">All categories</span>
-                                )}
-                                <i className={`${movieFilteringVisible ? "rotate-180" : ""}`}>
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="20"
-                                        height="20"
-                                        viewBox="0 0 16 16"
-                                        id="chevron-down"
-                                    >
-                                        <path
-                                            fill="#fff"
-                                            d="M4.14645,5.64645 C4.34171,5.45118 4.65829,5.45118 4.85355,5.64645 L7.9999975,8.79289 L11.1464,5.64645 C11.3417,5.45118 11.6583,5.45118 11.8536,5.64645 C12.0488,5.84171 12.0488,6.15829 11.8536,6.35355 L8.35355,9.85355 C8.15829,10.0488 7.84171,10.0488 7.64645,9.85355 L4.14645,6.35355 C3.95118,6.15829 3.95118,5.84171 4.14645,5.64645 Z"
-                                        ></path>
-                                    </svg>
-                                </i>
-                            </button>
-                        </Tippy>
-                    </div>
-                </div>
+            <div className="flex justify-end items-center mb-6">
                 <div className="flex gap-3 items-center">
                     <button
                         onClick={() => {
@@ -438,12 +256,7 @@ function FlightSchedule() {
                     <div className="p-6 text-[15px]">Select a movie below to delete.</div>
                 </div>
             )}
-            <ScheduleList
-                type={type}
-                deletingMode={deletingMode}
-                reloadFlag={reloadFlag}
-                categoryId={movieFiltering.id}
-            />
+            <ScheduleList deletingMode={deletingMode} />
             <Portal>
                 <div className="fixed top-0 right-0 left-0 bottom-0 bg-[rgba(0,0,0,0.4)] z-50 flex items-center justify-center">
                     <div className="flex items-center justify-center">
@@ -481,7 +294,7 @@ function FlightSchedule() {
                                         <input
                                             type="text"
                                             id="flightNumber"
-                                            placeholder="Flight number . . ."
+                                            placeholder="Ex: MH370"
                                             {...register("flightNumber")}
                                             className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                         />
@@ -496,7 +309,7 @@ function FlightSchedule() {
                                             type="text"
                                             id="flightCode"
                                             {...register("flightCode")}
-                                            placeholder="Flight code . . ."
+                                            placeholder="Ex: HAN-SGN"
                                             className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                         />
                                         {<span className="text-deepRed">{errors.flightCode?.message}</span>}
@@ -510,8 +323,7 @@ function FlightSchedule() {
                                             type="number"
                                             id="ticketPrice"
                                             {...register("ticketPrice")}
-                                            placeholder=""
-                                            defaultValue="0"
+                                            placeholder="Ex: 1000"
                                             className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                         />
                                         {<span className="text-deepRed">{errors.ticketPrice?.message}</span>}
@@ -535,20 +347,23 @@ function FlightSchedule() {
                                                 {<span className="text-deepRed">{errors.departureDate?.message}</span>}
                                             </div>
                                             <div className="flex flex-col gap-2">
-                                                <label htmlFor="releaseDate" className="flex gap-1 mb-1 items-center">
+                                                <label htmlFor="departureTime" className="flex gap-1 mb-1 items-center">
                                                     Departure time
                                                     <IsRequired />
                                                 </label>
                                                 <input
                                                     type="time"
-                                                    id="releaseDate"
+                                                    id="departureTime"
                                                     value={time}
-                                                    onChange={(e) => setTime(e.target.value)}
+                                                    {...register("departureTime")}
+                                                    onChange={(e) => {
+                                                        setTime(e.target.value);
+                                                    }}
                                                     className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                                 />
+                                                {<span className="text-deepRed">{errors.departureTime?.message}</span>}
                                             </div>
                                         </div>
-                                        {<span className="text-deepRed">{errors.startTime?.message}</span>}
                                     </div>
                                     <div className="flex gap-2 flex-col flex-1">
                                         <label htmlFor="duration" className="flex gap-1 mb-1 items-center">
@@ -559,8 +374,7 @@ function FlightSchedule() {
                                             type="number"
                                             id="duration"
                                             {...register("duration")}
-                                            placeholder=""
-                                            defaultValue="0"
+                                            placeholder="Ex: 90"
                                             className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                         />
                                         {<span className="text-deepRed">{errors.duration?.message}</span>}
@@ -568,30 +382,32 @@ function FlightSchedule() {
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="flex gap-2 flex-col">
-                                        <label htmlFor="releaseDate" className="flex gap-1 mb-1 items-center">
+                                        <label htmlFor="bookingDeadline" className="flex gap-1 mb-1 items-center">
                                             Booking deadline
                                             <IsRequired />
                                         </label>
                                         <input
                                             type="date"
                                             pattern="\d{4}-\d{2}-\d{2}"
-                                            id="releaseDate"
-                                            {...register("startTime")}
+                                            id="bookingDeadline"
+                                            {...register("bookingDeadline")}
                                             className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                         />
+                                        {<span className="text-deepRed">{errors.bookingDeadline?.message}</span>}
                                     </div>
                                     <div className="flex gap-2 flex-col">
-                                        <label htmlFor="releaseDate" className="flex gap-1 mb-1 items-center">
+                                        <label htmlFor="cancellationDeadline" className="flex gap-1 mb-1 items-center">
                                             Cancellation deadline
                                             <IsRequired />
                                         </label>
                                         <input
                                             type="date"
                                             pattern="\d{4}-\d{2}-\d{2}"
-                                            id="releaseDate"
-                                            {...register("startTime")}
+                                            id="cancellationDeadline"
+                                            {...register("cancellationDeadline")}
                                             className="bg-[rgba(141,124,221,0.1)] col-span-2 text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                         />
+                                        {<span className="text-deepRed">{errors.cancellationDeadline?.message}</span>}
                                     </div>
                                 </div>
                                 <div className="grid grid-cols-2 gap-2">
@@ -668,6 +484,9 @@ function FlightSchedule() {
                                                 </i>
                                             </div>
                                         </Tippy>
+                                        {formSubmitted && departureAirport.id === "" && (
+                                            <span className="text-deepRed">Departure airport is required.</span>
+                                        )}
                                     </div>
                                     <div className="flex gap-2 flex-col">
                                         <label htmlFor="movieParticipantIds" className="flex gap-1 mb-1 items-center">
@@ -740,43 +559,60 @@ function FlightSchedule() {
                                                 </i>
                                             </div>
                                         </Tippy>
+                                        {
+                                            <span className="text-deepRed">
+                                                {formSubmitted &&
+                                                    arrivalAirport.id === "" &&
+                                                    "Arrival airport is required."}
+                                            </span>
+                                        }
                                     </div>
                                 </div>
                                 <div className="outline outline-1 outline-border my-2"></div>
-                                <div className="text-blue text-[15px]">First class</div>
+                                <div className="text-blue text-[15px]">First class seats</div>
                                 <div className="flex gap-2 flex-col">
                                     <div className="grid grid-cols-3 gap-4">
                                         <div className="flex gap-2 flex-col">
-                                            <label className="flex gap-1 mb-1 items-center">
+                                            <label
+                                                htmlFor="firstClassCapacity"
+                                                className="flex gap-1 mb-1 items-center"
+                                            >
                                                 Seating capacity
                                                 <IsRequired />
                                             </label>
                                             <input
                                                 type="number"
-                                                id="count_1"
-                                                defaultValue="0"
+                                                id="firstClassCapacity"
+                                                placeholder="Ex: 20"
+                                                {...register("firstClassCapacity")}
                                                 className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                             />
+                                            {<span className="text-deepRed">{errors.firstClassCapacity?.message}</span>}
                                         </div>
 
                                         <div className="flex gap-2 flex-col">
-                                            <label className="flex gap-1 mb-1 items-center">
+                                            <label
+                                                htmlFor="firstClassBookedSeats"
+                                                className="flex gap-1 mb-1 items-center"
+                                            >
                                                 Booked seats
                                                 <IsRequired />
                                             </label>
                                             <input
                                                 type="number"
-                                                id="booked_seats_1"
-                                                defaultValue="0"
+                                                id="firstClassBookedSeats"
+                                                placeholder="Ex: 80"
+                                                {...register("firstClassBookedSeats")}
                                                 className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                             />
+                                            {
+                                                <span className="text-deepRed">
+                                                    {errors.firstClassBookedSeats?.message}
+                                                </span>
+                                            }
                                         </div>
                                         <div className="flex gap-2 flex-col">
-                                            <label className="flex gap-1 mb-1 items-center">
-                                                Status
-                                                <IsRequired />
-                                            </label>
-
+                                            <label className="flex gap-1 mb-1 items-center">Status</label>
                                             <Tippy
                                                 interactive
                                                 onClickOutside={() => setStatus1Visible(!status1Visible)}
@@ -844,39 +680,54 @@ function FlightSchedule() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="text-blue text-[15px]">Second class</div>
+                                <div className="text-blue text-[15px]">Second class seats</div>
                                 <div className="flex gap-2 flex-col">
                                     <div className="grid grid-cols-3 gap-4">
                                         <div className="flex gap-2 flex-col">
-                                            <label className="flex gap-1 mb-1 items-center">
+                                            <label
+                                                htmlFor="secondClassCapacity"
+                                                className="flex gap-1 mb-1 items-center"
+                                            >
                                                 Seating capacity
                                                 <IsRequired />
                                             </label>
                                             <input
                                                 type="number"
-                                                id="count_2"
-                                                defaultValue="0"
+                                                id="secondClassCapacity"
+                                                placeholder="Ex: 20"
+                                                {...register("secondClassCapacity")}
                                                 className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                             />
+                                            {
+                                                <span className="text-deepRed">
+                                                    {errors.secondClassCapacity?.message}
+                                                </span>
+                                            }
                                         </div>
 
                                         <div className="flex gap-2 flex-col">
-                                            <label className="flex gap-1 mb-1 items-center">
+                                            <label
+                                                htmlFor="secondClassBookedSeats"
+                                                className="flex gap-1 mb-1 items-center"
+                                            >
                                                 Booked seats
                                                 <IsRequired />
                                             </label>
                                             <input
                                                 type="number"
-                                                id="booked_seats_2"
-                                                defaultValue="0"
+                                                id="secondClassBookedSeats"
+                                                placeholder="Ex: 80"
+                                                {...register("secondClassBookedSeats")}
                                                 className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                             />
+                                            {
+                                                <span className="text-deepRed">
+                                                    {errors.secondClassBookedSeats?.message}
+                                                </span>
+                                            }
                                         </div>
                                         <div className="flex gap-2 flex-col">
-                                            <label className="flex gap-1 mb-1 items-center">
-                                                Status
-                                                <IsRequired />
-                                            </label>
+                                            <label className="flex gap-1 mb-1 items-center">Status</label>
                                             <Tippy
                                                 interactive
                                                 onClickOutside={() => setStatus2Visible(!status2Visible)}
@@ -944,6 +795,51 @@ function FlightSchedule() {
                                         </div>
                                     </div>
                                 </div>
+                                <div className="outline outline-1 outline-border my-2"></div>
+                                <div className="text-blue text-[15px]">Regulations</div>
+                                <span className="text-[13px]">Click to select rules below.</span>
+                                <ul className="flex gap-4 flex-col">
+                                    {ruleData?.map((rule) => (
+                                        <li
+                                            key={rule._id}
+                                            onClick={() => {
+                                                if (selectedRules.includes(rule._id)) {
+                                                    const newArr = selectedRules.filter(
+                                                        (selectedRule) => rule._id !== selectedRule
+                                                    );
+                                                    setSelectedRules(newArr);
+                                                } else {
+                                                    setSelectedRules([...selectedRules, rule._id]);
+                                                }
+                                            }}
+                                            className={`rounded-lg border border-primary py-2 flex flex-col gap-1 cursor-pointer px-4 ${
+                                                selectedRules.includes(rule._id) && "bg-primary"
+                                            }`}
+                                        >
+                                            <div>
+                                                <span className="font-medium underline">{rule.code}:</span>
+                                                <span className=""> {rule.ruleDetails}</span>
+                                            </div>
+                                            <div className="flex gap-2">
+                                                <span className="font-medium underline">Value: </span>
+                                                {Object.entries(rule.value).map(([key, value], index) => {
+                                                    if (index === Object.entries(rule.value).length - 1)
+                                                        return (
+                                                            <div key={key}>
+                                                                {key}: {value}
+                                                            </div>
+                                                        );
+                                                    else
+                                                        return (
+                                                            <div key={key}>
+                                                                {key}: {value},
+                                                            </div>
+                                                        );
+                                                })}
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
                                 <div className="outline outline-1 outline-border my-2"></div>
                                 <div className="text-blue text-[15px]">Intermediate Airports</div>
                                 {fields.map((field, index) => (
@@ -1041,6 +937,14 @@ function FlightSchedule() {
                                                                 </i>
                                                             </div>
                                                         </Tippy>
+                                                        {
+                                                            <span className="text-deepRed">
+                                                                {formSubmitted &&
+                                                                    selectedAirports.length < fields.length &&
+                                                                    typeof selectedAirports[index] === "undefined" &&
+                                                                    "Airport is required."}
+                                                            </span>
+                                                        }
                                                     </div>
                                                 </div>
                                             </div>
@@ -1056,7 +960,7 @@ function FlightSchedule() {
                                                     type="number"
                                                     id={`stop_duration_${index}`}
                                                     {...register(`intermediateAirport.${index}.stopDuration` as const)}
-                                                    defaultValue="0"
+                                                    placeholder="Ex: 30"
                                                     className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                                 />
                                                 <span className="text-deepRed">
@@ -1071,7 +975,7 @@ function FlightSchedule() {
                                             <input
                                                 type="text"
                                                 id={`note_${index}`}
-                                                placeholder="Note . . ."
+                                                placeholder="Ex: Refueling"
                                                 {...register(`intermediateAirport.${index}.note` as const)}
                                                 className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                             />
@@ -1079,7 +983,12 @@ function FlightSchedule() {
                                                 <button
                                                     className="border border-1 border-blue rounded-full p-1 hover:border-primary hover:bg-primary flex justify-center"
                                                     type="button"
-                                                    onClick={() => remove(index)}
+                                                    onClick={() => {
+                                                        remove(index);
+                                                        setSelectedAirports((prevSelectedAirports) =>
+                                                            prevSelectedAirports.filter((_, idx) => idx !== index)
+                                                        );
+                                                    }}
                                                 >
                                                     <i>
                                                         <svg
@@ -1104,7 +1013,7 @@ function FlightSchedule() {
                                     <button
                                         type="button"
                                         className="outline outline-1 outline-blue px-5 py-3 rounded-lg hover:outline-primary hover:bg-primary"
-                                        onClick={() => append({ stopDuration: 0, note: "" })}
+                                        onClick={() => append({})}
                                     >
                                         Add new airport
                                     </button>
@@ -1113,6 +1022,9 @@ function FlightSchedule() {
                                 <button
                                     className="py-3 px-8 mt-3 text-base font-semibold rounded-lg border-blue border hover:border-primary hover:bg-primary"
                                     type="submit"
+                                    onClick={() => {
+                                        setFormSubmitted(true);
+                                    }}
                                 >
                                     Create flight schedule
                                 </button>

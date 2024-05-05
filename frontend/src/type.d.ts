@@ -134,3 +134,25 @@ interface FlightScheduleData {
         default: [];
     };
 }
+
+interface FlightScheduleValidation {
+    flightNumber: string;
+    flightCode: string;
+    duration: number;
+    ticketPrice: number;
+    departureDate: Date;
+    departureTime: Date;
+    bookingDeadline: Date;
+    cancellationDeadline: Date;
+
+    firstClassCapacity: number;
+    firstClassBookedSeats: number;
+
+    secondClassCapacity: number;
+    secondClassBookedSeats: number;
+
+    intermediateAirport: {
+        stopDuration: number;
+        note: string;
+    }[];
+}
