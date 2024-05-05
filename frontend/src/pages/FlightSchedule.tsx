@@ -11,6 +11,7 @@ import { useAppDispatch } from "~/hook";
 import { startLoading, stopLoading } from "~/actions/loading";
 import { sendMessage } from "~/actions/message";
 import ScheduleList from "~/components/ScheduleList";
+import convertDate from "~/utils/convertDate";
 
 const schema = yup.object().shape({
     flightNumber: yup.string().required("Flight number is required."),
@@ -109,7 +110,7 @@ function FlightSchedule() {
     };
 
     const onSubmit: SubmitHandler<FlightScheduleValidation> = async (data) => {
-        hide();
+        // hide();
         dispatch(startLoading());
 
         const flight_code = data.flightCode;
@@ -118,7 +119,7 @@ function FlightSchedule() {
         const departure_airport = departureAirport;
         const destination_airport = arrivalAirport;
         const duration = data.duration;
-        const departure_datetime = data.departureDate.toDateString() + data.departureTime.toDateString();
+        const departure_datetime = `${convertDate(data.departureDate)} ${data.departureTime}:00`;
 
         const firstClassCapacity = data.firstClassCapacity;
         const firstClassBookedSeats = data.firstClassBookedSeats;
@@ -126,56 +127,60 @@ function FlightSchedule() {
         const secondClassBookedSeats = data.secondClassBookedSeats;
 
         const airport_ids = selectedAirports.map((selectedAirport) => selectedAirport._id);
+        const stopDurations = data.intermediateAirport.map((airport) => airport.stopDuration);
+        const notes = data.intermediateAirport.map((airport) => airport.note);
 
-        console.log(airport_ids);
+        const transit_airports = airport_ids.map((airportId, index) => ({
+            airport_id: airportId,
+            stop_duration: stopDurations[index],
+            note: notes[index]
+        }));
 
-        // (async () => {
-        //     try {
-        //         await axios.post(
-        //             "/airport/511454675/create",
-        //             {
-        //                 flight_code,
-        //                 flight_number,
-        //                 ticket_price,
-        //                 departure_airport,
-        //                 destination_airport,
-        //                 duration,
-        //                 departure_datetime,
-        //                 seats: [
-        //                     {
-        //                         class: "1",
-        //                         count: firstClassCapacity,
-        //                         booked_seats: firstClassBookedSeats,
-        //                         status: status1
-        //                     },
-        //                     {
-        //                         class: "2",
-        //                         count: secondClassCapacity,
-        //                         booked_seats: secondClassBookedSeats,
-        //                         status: status2
-        //                     }
-        //                 ],
-        //                 transit_airports: [
-        //                     { airport_id: "66364a9367685b9b04acb66e", stop_duration: 10, note: "" },
-        //                     { airport_id: "66364a9d67685b9b04acb675", stop_duration: 15, note: "delay 2 minutes" }
-        //                 ]
-        //             },
-        //             {
-        //                 headers: {
-        //                     "Content-Type": "application/json",
-        //                     Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).data.token}`
-        //                 }
-        //             }
-        //         );
-        //         dispatch(stopLoading());
-        //         dispatch(sendMessage("Created successfully!"));
-        //         setTimeout(() => window.location.reload(), 2000);
-        //     } catch (error) {
-        //         dispatch(stopLoading());
-        //         dispatch(sendMessage("Created failed!"));
-        //         console.error(error);
-        //     }
-        // })();
+        (async () => {
+            try {
+                await axios.post(
+                    "/airport/511454675/create",
+                    {
+                        flight_code,
+                        flight_number,
+                        ticket_price,
+                        departure_airport,
+                        destination_airport,
+                        duration,
+                        departure_datetime,
+                        seats: [
+                            {
+                                class: "1",
+                                count: firstClassCapacity,
+                                booked_seats: firstClassBookedSeats,
+                                status: status1
+                            },
+                            {
+                                class: "2",
+                                count: secondClassCapacity,
+                                booked_seats: secondClassBookedSeats,
+                                status: status2
+                            }
+                        ],
+                        transit_airports,
+                        rules: []
+                    },
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).data.token}`
+                        }
+                    }
+                );
+                dispatch(stopLoading());
+                dispatch(sendMessage("Created successfully!"));
+                setTimeout(() => window.location.reload(), 2000);
+            } catch (error) {
+                dispatch(stopLoading());
+                dispatch(sendMessage("Created failed!"));
+                console.error(error);
+            }
+        })();
     };
 
     useEffect(() => {
@@ -1013,7 +1018,7 @@ function FlightSchedule() {
                                     <button
                                         type="button"
                                         className="outline outline-1 outline-blue px-5 py-3 rounded-lg hover:outline-primary hover:bg-primary"
-                                        onClick={() => append({})}
+                                        onClick={() => append({ stopDuration: 0, note: "" })}
                                     >
                                         Add new airport
                                     </button>

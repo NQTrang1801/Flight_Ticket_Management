@@ -58,12 +58,12 @@ function Regulations() {
         const ruleDetails = formData.ruleDetails;
         const code = formData.code;
         const arrValue = formData.value;
-        let value: ValueObject;
+        let values: ValueObject;
 
         if (arrValue.length === 1) {
-            value = { [arrValue[0].key]: arrValue[0].value };
+            values = { [arrValue[0].key]: arrValue[0].value };
         } else {
-            value = arrValue.reduce((obj: ValueObject, item) => {
+            values = arrValue.reduce((obj: ValueObject, item) => {
                 obj[item.key] = item.value;
                 return obj;
             }, {});
@@ -77,7 +77,7 @@ function Regulations() {
                         ruleName,
                         ruleDetails,
                         code,
-                        value
+                        values
                     },
                     {
                         headers: {

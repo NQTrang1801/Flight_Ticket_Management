@@ -1,4 +1,4 @@
-function convertReleaseDate(date: Date) {
+function convertDate(date: Date) {
     const selectedDate = new Date(date);
     const year = selectedDate.getFullYear();
     const month = (selectedDate.getMonth() + 1).toString().padStart(2, "0");
@@ -7,4 +7,4 @@ function convertReleaseDate(date: Date) {
     return `${year}-${month}-${day}`;
 }
 
-export default convertReleaseDate;
+export default convertDate;

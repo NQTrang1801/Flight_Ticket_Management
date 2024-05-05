@@ -11,7 +11,7 @@ import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
 import { useAppDispatch } from "~/hook";
 import { startLoading, stopLoading } from "~/actions/loading";
 import { sendMessage } from "~/actions/message";
-import convertReleaseDate from "~/utils/convertReleaseDate";
+import convertReleaseDate from "~/utils/convertDate";
 import { convertToBase64 } from "~/utils/convertToBase64";
 import Rating from "react-rating";
 
