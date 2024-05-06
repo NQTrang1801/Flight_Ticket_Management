@@ -126,8 +126,8 @@ interface FlightScheduleData {
             status: boolean;
         }
     ];
-    booking_deadline: Date;
-    cancellation_deadline: Date;
+    booking_deadline: string;
+    cancellation_deadline: string;
     ticket_price: string;
     transit_airports: {
         airport_id: string;
