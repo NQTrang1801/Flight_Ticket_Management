@@ -88,7 +88,6 @@ function FlightSchedule() {
     const [dropdownStates, setDropdownStates] = useState(fields.map(() => false));
 
     const [selectedAirports, setSelectedAirports] = useState(Array(fields.length).fill(null));
-    const [selectedRules, setSelectedRules] = useState<string[]>([]);
 
     const handleAirportSelect = (airport: AirportData, index: number) => {
         setDropdownStates((prevState) => {
@@ -215,15 +214,15 @@ function FlightSchedule() {
 
                 const data = flightResponse.data.map((flight: FlightScheduleData) => ({
                     ...flight,
-                    departure_airport: airportResponse.data.find(
+                    departure_airport_name: airportResponse.data.find(
                         (airport: AirportData) => airport._id === flight.departure_airport
                     )?.name,
-                    destination_airport: airportResponse.data.find(
+                    destination_airport_name: airportResponse.data.find(
                         (airport: AirportData) => airport._id === flight.destination_airport
                     )?.name,
                     transit_airports: flight.transit_airports.map((transit_airport) => ({
                         ...transit_airport,
-                        airport_id: airportResponse.data.find(
+                        airport_name: airportResponse.data.find(
                             (airport: AirportData) => airport._id === transit_airport.airport_id
                         )?.name
                     }))
@@ -298,6 +297,8 @@ function FlightSchedule() {
                                     cancellation_deadline={schedule.cancellation_deadline}
                                     ticket_price={schedule.ticket_price}
                                     transit_airports={schedule.transit_airports}
+                                    departure_airport_name={schedule.departure_airport_name}
+                                    destination_airport_name={schedule.destination_airport_name}
                                     rules={schedule.rules}
                                 />
                             ))}
@@ -842,51 +843,6 @@ function FlightSchedule() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="outline outline-1 outline-border my-2"></div>
-                                <div className="text-blue text-[15px]">Regulations</div>
-                                <span className="text-[13px]">Click to select rules below.</span>
-                                <ul className="flex gap-4 flex-col">
-                                    {ruleData?.map((rule) => (
-                                        <li
-                                            key={rule._id}
-                                            onClick={() => {
-                                                if (selectedRules.includes(rule._id)) {
-                                                    const newArr = selectedRules.filter(
-                                                        (selectedRule) => rule._id !== selectedRule
-                                                    );
-                                                    setSelectedRules(newArr);
-                                                } else {
-                                                    setSelectedRules([...selectedRules, rule._id]);
-                                                }
-                                            }}
-                                            className={`rounded-lg border border-primary py-2 flex flex-col gap-1 cursor-pointer px-4 ${
-                                                selectedRules.includes(rule._id) && "bg-primary"
-                                            }`}
-                                        >
-                                            <div>
-                                                <span className="font-medium underline">{rule.code}:</span>
-                                            </div>
-                                            <div className="flex gap-1">
-                                                <span className=""> {rule.detail}.</span>
-                                                <span className="">Values: </span>
-                                                {Object.entries(rule.values).map(([key, value], index) => {
-                                                    if (index === Object.entries(rule.values).length - 1)
-                                                        return (
-                                                            <div key={key}>
-                                                                {key}: {value}.
-                                                            </div>
-                                                        );
-                                                    else
-                                                        return (
-                                                            <div key={key}>
-                                                                {key}: {value},
-                                                            </div>
-                                                        );
-                                                })}
-                                            </div>
-                                        </li>
-                                    ))}
-                                </ul>
                                 <div className="outline outline-1 outline-border my-2"></div>
                                 <div className="text-blue text-[15px]">Intermediate Airports</div>
                                 {fields.map((field, index) => (

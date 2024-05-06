@@ -115,7 +115,9 @@ interface FlightScheduleData {
     flight_number: string;
     flight_code: string;
     departure_airport: string;
+    departure_airport_name: string;
     destination_airport: string;
+    destination_airport_name: string;
     departure_datetime: string;
     duration: number;
     seats: [
@@ -128,9 +130,10 @@ interface FlightScheduleData {
     ];
     booking_deadline: string;
     cancellation_deadline: string;
-    ticket_price: string;
+    ticket_price: number;
     transit_airports: {
         airport_id: string;
+        airport_name: string;
         stop_duration: number;
         note: string;
     }[];
@@ -156,8 +159,8 @@ interface FlightScheduleValidation {
     secondClassCapacity: number;
     secondClassBookedSeats: number;
 
-    intermediateAirport: {
+    intermediateAirport: Array<{
         stopDuration: number;
         note: string;
-    }[];
+    }>;
 }

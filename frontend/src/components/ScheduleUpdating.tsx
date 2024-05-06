@@ -1,6 +1,6 @@
 import Tippy from "@tippyjs/react/headless";
 import "tippy.js/dist/tippy.css";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import usePortal from "react-cool-portal";
 import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
 import axios from "~/utils/axios";
@@ -11,6 +11,8 @@ import { useAppDispatch } from "~/hook";
 import { startLoading, stopLoading } from "~/actions/loading";
 import { sendMessage } from "~/actions/message";
 import convertDate from "~/utils/convertDate";
+import getFormattedDateTime from "~/utils/getFormattedDateTime";
+import formatDate from "~/utils/formatDate";
 
 const schema = yup.object().shape({
     flightNumber: yup.string().required("Flight number is required."),
@@ -38,28 +40,40 @@ const schema = yup.object().shape({
     )
 });
 
-function ScheduleUpdating() {
-    const [data, setData] = useState<FlightScheduleData[]>();
-    const [airportData, setAirportData] = useState<AirportData[]>();
-    const [ruleData, setRuleData] = useState<RuleData[]>();
-
+const ScheduleUpdating: React.FC<FlightScheduleData> = ({
+    _id,
+    flight_number,
+    flight_code,
+    departure_airport,
+    departure_airport_name,
+    destination_airport,
+    destination_airport_name,
+    departure_datetime,
+    duration,
+    seats,
+    booking_deadline,
+    cancellation_deadline,
+    ticket_price,
+    transit_airports,
+    rules
+}) => {
     const [formSubmitted, setFormSubmitted] = useState(false);
 
     const [departureAirport, setDepartureAirport] = useState({
-        id: "",
-        name: ""
+        id: departure_airport,
+        name: departure_airport_name
     });
     const [arrivalAirport, setArrivalAirport] = useState({
-        id: "",
-        name: ""
+        id: destination_airport,
+        name: destination_airport_name
     });
 
     const dispatch = useAppDispatch();
 
-    const [status1, setStatus1] = useState(true);
+    const [status1, setStatus1] = useState(seats[0].status);
     const [status1Visible, setStatus1Visible] = useState(false);
 
-    const [status2, setStatus2] = useState(true);
+    const [status2, setStatus2] = useState(seats[1].status);
     const [status2Visible, setStatus2Visible] = useState(false);
 
     const [time, setTime] = useState("");
@@ -67,8 +81,8 @@ function ScheduleUpdating() {
     const [departureAirportVisible, setDepartureAirportVisible] = useState(false);
     const [arrivalAirportVisible, setArrivalAirportVisible] = useState(false);
 
-    const { Portal, show, hide } = usePortal({
-        defaultShow: false
+    const { Portal, hide } = usePortal({
+        defaultShow: true
     });
     const {
         control,
@@ -76,7 +90,24 @@ function ScheduleUpdating() {
         handleSubmit,
         formState: { errors }
     } = useForm<FlightScheduleValidation>({
-        resolver: yupResolver(schema)
+        resolver: yupResolver(schema),
+        defaultValues: {
+            flightCode: flight_code,
+            flightNumber: flight_number,
+            duration: duration,
+            departureAirport: departure_airport,
+            destinationAirport: destination_airport,
+            bookingDeadline: booking_deadline,
+            departureDate: formatDate(getFormattedDateTime(departure_datetime).split(" ")[0]),
+            departureTime: getFormattedDateTime(departure_datetime).split(" ")[1],
+            cancellationDeadline: cancellation_deadline,
+            ticketPrice: ticket_price,
+            firstClassBookedSeats: seats[0]?.booked_seats,
+            firstClassCapacity: seats[0]?.count,
+            secondClassBookedSeats: seats[1].booked_seats,
+            secondClassCapacity: seats[1].count,
+            intermediateAirport: transit_airports
+        }
     });
 
     const { fields, append, remove } = useFieldArray({
@@ -135,8 +166,8 @@ function ScheduleUpdating() {
 
         (async () => {
             try {
-                await axios.post(
-                    "/flight/511454641/create",
+                await axios.put(
+                    `/flight//511246641/${_id}`,
                     {
                         flight_code,
                         flight_number,
@@ -160,18 +191,7 @@ function ScheduleUpdating() {
                             }
                         ],
                         transit_airports,
-                        rules: {
-                            regulation_1: {
-                                flight_time: ruleData?.find((rule) => rule.values.min_flight_time),
-                                intermediate: ruleData?.find((rule) => rule.values.max_transit_airports)
-                            },
-                            regulation_2: {
-                                tickets: "663649fb67685b9b04acb653"
-                            },
-                            regulation_3: {
-                                booking: "663649fb67685b9b04acb654"
-                            }
-                        }
+                        rules: rules
                     },
                     {
                         headers: {
@@ -181,63 +201,15 @@ function ScheduleUpdating() {
                     }
                 );
                 dispatch(stopLoading());
-                dispatch(sendMessage("Created successfully!"));
+                dispatch(sendMessage("Updated successfully!"));
                 setTimeout(() => window.location.reload(), 2000);
             } catch (error) {
                 dispatch(stopLoading());
-                dispatch(sendMessage("Created failed!"));
+                dispatch(sendMessage("Updated failed!"));
                 console.error(error);
             }
         })();
     };
-
-    useEffect(() => {
-        (async () => {
-            try {
-                dispatch(startLoading());
-
-                const flightResponse = await axios.get("/flight/all", {
-                    headers: { "Content-Type": "application/json" }
-                });
-
-                const airportResponse = await axios.get("/airport/all", {
-                    headers: { "Content-Type": "application/json" }
-                });
-                setAirportData(airportResponse.data);
-
-                const ruleResponse = await axios.get("rule/511320340/all", {
-                    headers: {
-                        Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).data.token}`
-                    }
-                });
-                setRuleData(ruleResponse.data);
-
-                const data = flightResponse.data.map((flight: FlightScheduleData) => ({
-                    ...flight,
-                    departure_airport: airportResponse.data.find(
-                        (airport: AirportData) => airport._id === flight.departure_airport
-                    )?.name,
-                    destination_airport: airportResponse.data.find(
-                        (airport: AirportData) => airport._id === flight.destination_airport
-                    )?.name,
-                    transit_airports: flight.transit_airports.map((transit_airport) => ({
-                        ...transit_airport,
-                        airport_id: airportResponse.data.find(
-                            (airport: AirportData) => airport._id === transit_airport.airport_id
-                        )?.name
-                    }))
-                }));
-
-                setData(data);
-
-                dispatch(stopLoading());
-            } catch (error) {
-                console.error(error);
-            }
-        })();
-    }, [dispatch]);
-
-    console.log(data);
 
     return (
         <>
@@ -265,7 +237,7 @@ function ScheduleUpdating() {
                                 </i>
                             </button>
                             <div className="flex justify-center mb-8">
-                                <div className="text-white font-semibold text-xl">Create new schedule</div>
+                                <div className="text-white font-semibold text-xl">Update flight schedule</div>
                             </div>
                             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
                                 <div className="text-blue text-[15px]">Flight Information</div>
@@ -780,51 +752,6 @@ function ScheduleUpdating() {
                                     </div>
                                 </div>
                                 <div className="outline outline-1 outline-border my-2"></div>
-                                <div className="text-blue text-[15px]">Regulations</div>
-                                <span className="text-[13px]">Click to select rules below.</span>
-                                <ul className="flex gap-4 flex-col">
-                                    {ruleData?.map((rule) => (
-                                        <li
-                                            key={rule._id}
-                                            onClick={() => {
-                                                if (selectedRules.includes(rule._id)) {
-                                                    const newArr = selectedRules.filter(
-                                                        (selectedRule) => rule._id !== selectedRule
-                                                    );
-                                                    setSelectedRules(newArr);
-                                                } else {
-                                                    setSelectedRules([...selectedRules, rule._id]);
-                                                }
-                                            }}
-                                            className={`rounded-lg border border-primary py-2 flex flex-col gap-1 cursor-pointer px-4 ${
-                                                selectedRules.includes(rule._id) && "bg-primary"
-                                            }`}
-                                        >
-                                            <div>
-                                                <span className="font-medium underline">{rule.code}:</span>
-                                            </div>
-                                            <div className="flex gap-1">
-                                                <span className=""> {rule.detail}.</span>
-                                                <span className="">Values: </span>
-                                                {Object.entries(rule.values).map(([key, value], index) => {
-                                                    if (index === Object.entries(rule.values).length - 1)
-                                                        return (
-                                                            <div key={key}>
-                                                                {key}: {value}.
-                                                            </div>
-                                                        );
-                                                    else
-                                                        return (
-                                                            <div key={key}>
-                                                                {key}: {value},
-                                                            </div>
-                                                        );
-                                                })}
-                                            </div>
-                                        </li>
-                                    ))}
-                                </ul>
-                                <div className="outline outline-1 outline-border my-2"></div>
                                 <div className="text-blue text-[15px]">Intermediate Airports</div>
                                 {fields.map((field, index) => (
                                     <div
@@ -1019,6 +946,6 @@ function ScheduleUpdating() {
             </Portal>
         </>
     );
-}
+};
 
 export default ScheduleUpdating;

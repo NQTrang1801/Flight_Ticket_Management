@@ -20,7 +20,10 @@ const ScheduleItem: React.FC<FlightScheduleData> = ({
     booking_deadline,
     cancellation_deadline,
     ticket_price,
-    transit_airports
+    transit_airports,
+    departure_airport_name,
+    destination_airport_name,
+    rules
 }) => {
     const [selectedId, setSelectedId] = useState("");
     const [updatingMode, setUpdatingMode] = useState(false);
@@ -192,7 +195,23 @@ const ScheduleItem: React.FC<FlightScheduleData> = ({
                 </div>
             </li>
             {updatingMode ? (
-                <ScheduleUpdating />
+                <ScheduleUpdating
+                    _id={_id}
+                    flight_number={flight_number}
+                    flight_code={flight_code}
+                    departure_airport={departure_airport}
+                    destination_airport={destination_airport}
+                    departure_datetime={departure_datetime}
+                    duration={duration}
+                    seats={seats}
+                    booking_deadline={booking_deadline}
+                    cancellation_deadline={cancellation_deadline}
+                    ticket_price={ticket_price}
+                    transit_airports={transit_airports}
+                    departure_airport_name={departure_airport_name}
+                    destination_airport_name={destination_airport_name}
+                    rules={rules}
+                />
             ) : (
                 <Portal>
                     <div className="fixed top-0 right-0 left-0 bottom-0 bg-[rgba(0,0,0,0.4)] z-50 flex items-center justify-center">
