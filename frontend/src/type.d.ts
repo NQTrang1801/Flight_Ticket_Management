@@ -58,7 +58,7 @@ interface YearlyRevenueProps {
     }[];
 }
 
-interface AirportProps {
+interface AirportData {
     _id: string;
     code: string;
     name: string;
@@ -78,8 +78,8 @@ interface AirportProps {
 interface RuleValidation {
     ruleName: string;
     code: string;
-    ruleDetails: string;
-    value: { key: string; value: number }[];
+    detail: string;
+    values: { key: string; value: number }[];
 }
 
 interface ValueObject {
@@ -89,8 +89,8 @@ interface ValueObject {
 interface RuleData {
     ruleName: string;
     code: string;
-    ruleDetails: string;
-    value: ValueObject;
+    detail: string;
+    values: ValueObject;
     _id: string;
 }
 
@@ -111,11 +111,12 @@ interface AirportValidation {
 }
 
 interface FlightScheduleData {
+    _id: string;
     flight_number: string;
     flight_code: string;
-    departure_airport: object;
-    destination_airport: object;
-    departure_datetime: Date;
+    departure_airport: string;
+    destination_airport: string;
+    departure_datetime: string;
     duration: number;
     seats: [
         {
@@ -127,8 +128,12 @@ interface FlightScheduleData {
     ];
     booking_deadline: Date;
     cancellation_deadline: Date;
-    ticket_price: object;
-    transit_airports: [];
+    ticket_price: string;
+    transit_airports: {
+        airport_id: string;
+        stop_duration: number;
+        note: string;
+    }[];
     rules: {
         type: Array;
         default: [];
@@ -141,7 +146,7 @@ interface FlightScheduleValidation {
     duration: number;
     ticketPrice: number;
     departureDate: Date;
-    departureTime: Date;
+    departureTime: string;
     bookingDeadline: Date;
     cancellationDeadline: Date;
 

@@ -12,9 +12,9 @@ import Rule from "~/components/Rule";
 
 const schema = yup.object().shape({
     ruleName: yup.string().required("Rule name is required."),
-    ruleDetails: yup.string().required("Rule detail is required."),
+    detail: yup.string().required("Rule detail is required."),
     code: yup.string().required("Code is required."),
-    value: yup
+    values: yup
         .array()
         .of(
             yup.object().shape({
@@ -45,7 +45,7 @@ function Regulations() {
 
     const { fields, append, remove } = useFieldArray({
         control,
-        name: "value"
+        name: "values"
     });
 
     const dispatch = useAppDispatch();
@@ -55,9 +55,9 @@ function Regulations() {
         dispatch(startLoading());
 
         const ruleName = formData.ruleName;
-        const ruleDetails = formData.ruleDetails;
+        const detail = formData.detail;
         const code = formData.code;
-        const arrValue = formData.value;
+        const arrValue = formData.values;
         let values: ValueObject;
 
         if (arrValue.length === 1) {
@@ -75,7 +75,7 @@ function Regulations() {
                     "/rule/511454340/add-update-rule",
                     {
                         ruleName,
-                        ruleDetails,
+                        detail,
                         code,
                         values
                     },
@@ -232,7 +232,7 @@ function Regulations() {
                                 <th className="">Code</th>
                                 <th className="">Rule name</th>
                                 <th className="">Rule detail</th>
-                                <th className="">Value</th>
+                                <th className="">Values</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -246,8 +246,8 @@ function Regulations() {
                                             _id={rule._id}
                                             code={rule.code}
                                             ruleName={rule.ruleName}
-                                            ruleDetail={rule.ruleDetails}
-                                            value={rule.value}
+                                            ruleDetail={rule.detail}
+                                            value={rule.values}
                                             deletingMode={deletingMode}
                                             updatingMode={updatingMode}
                                         />
@@ -284,8 +284,8 @@ function Regulations() {
                             </div>
                             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
                                 <div className="text-blue text-[15px]">Rule infomation</div>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="flex gap-2 flex-col">
+                                <div className="grid grid-cols-3 gap-4">
+                                    <div className="flex gap-2 col-span-2 flex-col">
                                         <label htmlFor="ruleName" className="flex gap-1 mb-1 items-center">
                                             Rule name
                                             <IsRequired />
@@ -316,17 +316,17 @@ function Regulations() {
                                 </div>
                                 <div className="flex gap-2 flex-col">
                                     <label htmlFor="ruleDetails" className="flex gap-1 mb-1 items-center">
-                                        Rule details
+                                        Rule detail
                                         <IsRequired />
                                     </label>
                                     <input
                                         type="text"
                                         id="ruleDetails"
-                                        placeholder="Rule details . . ."
-                                        {...register("ruleDetails")}
+                                        placeholder="Rule detail . . ."
+                                        {...register("detail")}
                                         className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                     />
-                                    {<span className="text-deepRed">{errors.ruleDetails?.message}</span>}
+                                    {<span className="text-deepRed">{errors.detail?.message}</span>}
                                 </div>
                                 <div className="text-blue text-[15px]">Values</div>
                                 {fields.map((field, index) => (
@@ -340,7 +340,7 @@ function Regulations() {
                                                 type="text"
                                                 placeholder="Key . . ."
                                                 id={`key-${index}`}
-                                                {...register(`value.${index}.key` as const)}
+                                                {...register(`values.${index}.key` as const)}
                                                 className="bg-[rgba(141,124,221,0.1)] text-sm focus:border-primary focus:border focus:border-1 border border-blue border-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                             />
                                         </div>
@@ -353,7 +353,7 @@ function Regulations() {
                                                 type="number"
                                                 id={`value-${index}`}
                                                 className="bg-[rgba(141,124,221,0.1)] text-sm focus:border-primary focus:border focus:border-1 border border-blue border-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
-                                                {...register(`value.${index}.value` as const)}
+                                                {...register(`values.${index}.value` as const)}
                                             />
                                         </div>
                                         <div className="flex flex-col gap-2">
@@ -380,7 +380,7 @@ function Regulations() {
                                         </div>
                                         {
                                             <span className="text-deepRed mt-[-8px]">
-                                                {errors?.value?.[index]?.key?.message}
+                                                {errors?.values?.[index]?.key?.message}
                                             </span>
                                         }
                                     </div>

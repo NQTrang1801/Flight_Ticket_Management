@@ -11,9 +11,9 @@ import { sendMessage } from "~/actions/message";
 
 const schema = yup.object().shape({
     ruleName: yup.string().required("Rule name is required."),
-    ruleDetails: yup.string().required("Rule detail is required."),
+    detail: yup.string().required("Rule detail is required."),
     code: yup.string().required("Code is required."),
-    value: yup
+    values: yup
         .array()
         .of(
             yup.object().shape({
@@ -28,12 +28,12 @@ interface RuleProps {
     index: number;
     code: string;
     ruleName: string;
-    ruleDetail: string;
-    value: ValueObject;
+    detail: string;
+    values: ValueObject;
 }
 
-const RuleUpdating: React.FC<RuleProps> = ({ code, ruleName, ruleDetail, value, index }) => {
-    const [values, setValues] = useState(value);
+const RuleUpdating: React.FC<RuleProps> = ({ code, ruleName, detail, values, index }) => {
+    const [stateValues, setStateValues] = useState(values);
     const { Portal, show, hide } = usePortal({
         defaultShow: false
     });
@@ -48,13 +48,13 @@ const RuleUpdating: React.FC<RuleProps> = ({ code, ruleName, ruleDetail, value, 
         defaultValues: {
             code: code,
             ruleName: ruleName,
-            ruleDetails: ruleDetail
+            detail: detail
         }
     });
 
     const { fields, append, remove } = useFieldArray({
         control,
-        name: "value"
+        name: "values"
     });
 
     const dispatch = useAppDispatch();
@@ -64,16 +64,16 @@ const RuleUpdating: React.FC<RuleProps> = ({ code, ruleName, ruleDetail, value, 
         dispatch(startLoading());
 
         const ruleName = formData.ruleName;
-        const ruleDetails = formData.ruleDetails;
+        const detail = formData.detail;
         const code = formData.code;
-        const arrValue = formData.value;
+        const arrValues = formData.values;
 
-        let value: ValueObject;
+        let objValues: ValueObject;
 
-        if (arrValue.length === 1) {
-            value = { [arrValue[0].key]: arrValue[0].value };
+        if (arrValues.length === 1) {
+            objValues = { [arrValues[0].key]: arrValues[0].value };
         } else {
-            value = arrValue.reduce((obj: ValueObject, item) => {
+            objValues = arrValues.reduce((obj: ValueObject, item) => {
                 obj[item.key] = item.value;
                 return obj;
             }, {});
@@ -85,9 +85,9 @@ const RuleUpdating: React.FC<RuleProps> = ({ code, ruleName, ruleDetail, value, 
                     "/rule/511454340/add-update-rule",
                     {
                         ruleName,
-                        ruleDetails,
+                        detail,
                         code,
-                        value: { ...value, ...values }
+                        values: { ...objValues, ...stateValues }
                     },
                     {
                         headers: {
@@ -113,19 +113,17 @@ const RuleUpdating: React.FC<RuleProps> = ({ code, ruleName, ruleDetail, value, 
 
     return (
         <>
-            <tr className="text-center capitalize hover:bg-hover cursor-pointer" onClick={() => show()}>
+            <tr className="text-center hover:bg-hover cursor-pointer" onClick={() => show()}>
                 <td>{index}</td>
                 <td>{code}</td>
                 <td>{ruleName}</td>
-                <td>{ruleDetail}</td>
+                <td>{detail}</td>
                 <td>
-                    {typeof value === "object"
-                        ? Object.entries(value).map(([key, value]) => (
-                              <div key={key}>
-                                  {key}: {value}
-                              </div>
-                          ))
-                        : value}
+                    {Object.entries(values).map(([key, value]) => (
+                        <div key={key}>
+                            {key}: {value}
+                        </div>
+                    ))}
                 </td>
             </tr>
             <Portal>
@@ -155,7 +153,7 @@ const RuleUpdating: React.FC<RuleProps> = ({ code, ruleName, ruleDetail, value, 
                                 <div className="text-white font-semibold text-xl">Update a rule</div>
                             </div>
                             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
-                                <div className="text-blue text-[15px]">Rule infomation</div>
+                                {/* <div className="text-blue text-[15px]">Rule infomation</div>
                                 <div className="grid grid-cols-5 gap-4">
                                     <div className="flex gap-2 flex-col col-span-4">
                                         <label htmlFor="ruleName" className="flex gap-1 mb-1 items-center">
@@ -166,6 +164,7 @@ const RuleUpdating: React.FC<RuleProps> = ({ code, ruleName, ruleDetail, value, 
                                             type="text"
                                             id="ruleName"
                                             placeholder="Rule name . . ."
+                                            disabled
                                             {...register("ruleName")}
                                             className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                         />
@@ -179,6 +178,7 @@ const RuleUpdating: React.FC<RuleProps> = ({ code, ruleName, ruleDetail, value, 
                                         <input
                                             type="text"
                                             id="code"
+                                            disabled
                                             placeholder="Code . . ."
                                             {...register("code")}
                                             className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
@@ -187,22 +187,23 @@ const RuleUpdating: React.FC<RuleProps> = ({ code, ruleName, ruleDetail, value, 
                                     </div>
                                 </div>
                                 <div className="flex gap-2 flex-col">
-                                    <label htmlFor="ruleDetails" className="flex gap-1 mb-1 items-center">
+                                    <label htmlFor="detail" className="flex gap-1 mb-1 items-center">
                                         Rule details
                                         <IsRequired />
                                     </label>
                                     <input
                                         type="text"
-                                        id="ruleDetails"
+                                        disabled
+                                        id="detail"
                                         placeholder="Rule details . . ."
-                                        {...register("ruleDetails")}
+                                        {...register("detail")}
                                         className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                     />
-                                    {<span className="text-deepRed">{errors.ruleDetails?.message}</span>}
-                                </div>
+                                    {<span className="text-deepRed">{errors.detail?.message}</span>}
+                                </div> */}
                                 <div className="text-blue text-[15px]">Values</div>
 
-                                {Object.entries(values).map(([key, val], index) => (
+                                {Object.entries(stateValues).map(([key, val], index) => (
                                     <div
                                         key={`${key}-${index}`}
                                         className="grid grid-cols-5 gap-4 justify-center items-end"
@@ -239,9 +240,9 @@ const RuleUpdating: React.FC<RuleProps> = ({ code, ruleName, ruleDetail, value, 
                                                 className="border border-1 border-blue rounded-lg py-[10px] hover:border-primary hover:bg-primary flex justify-center"
                                                 type="button"
                                                 onClick={() => {
-                                                    const newValues = { ...values };
+                                                    const newValues = { ...stateValues };
                                                     delete newValues[key];
-                                                    setValues(newValues);
+                                                    setStateValues(newValues);
                                                 }}
                                             >
                                                 <i className="">
@@ -274,7 +275,7 @@ const RuleUpdating: React.FC<RuleProps> = ({ code, ruleName, ruleDetail, value, 
                                                 type="text"
                                                 placeholder="Key . . ."
                                                 id={`key-${index}`}
-                                                {...register(`value.${index}.key` as const)}
+                                                {...register(`values.${index}.key` as const)}
                                                 className="bg-[rgba(141,124,221,0.1)] text-sm focus:border-primary focus:border focus:border-1 border border-blue border-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                             />
                                         </div>
@@ -287,7 +288,7 @@ const RuleUpdating: React.FC<RuleProps> = ({ code, ruleName, ruleDetail, value, 
                                                 type="number"
                                                 id={`value-${index}`}
                                                 className="bg-[rgba(141,124,221,0.1)] text-sm focus:border-primary focus:border focus:border-1 border border-blue border-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
-                                                {...register(`value.${index}.value` as const)}
+                                                {...register(`values.${index}.value` as const)}
                                             />
                                         </div>
                                         <div className="flex flex-col gap-2">
@@ -314,7 +315,7 @@ const RuleUpdating: React.FC<RuleProps> = ({ code, ruleName, ruleDetail, value, 
                                         </div>
                                         {
                                             <span className="text-deepRed mt-[-8px]">
-                                                {errors?.value?.[index]?.key?.message}
+                                                {errors?.values?.[index]?.key?.message}
                                             </span>
                                         }
                                     </div>

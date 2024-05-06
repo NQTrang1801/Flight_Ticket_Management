@@ -10,7 +10,7 @@ import { useAppDispatch } from "~/hook";
 import { startLoading, stopLoading } from "~/actions/loading";
 import { sendMessage } from "~/actions/message";
 import Tippy from "@tippyjs/react/headless";
-import convertReleaseDate from "~/utils/convertReleaseDate";
+import convertReleaseDate from "~/utils/convertDate";
 import SkeletonActors from "~/components/SkeletonActors";
 import { useAppSelector } from "~/hook";
 import Ticket from "~/components/Ticket";

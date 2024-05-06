@@ -1,23 +1,27 @@
 import React from "react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import axios from "~/utils/axios";
 import usePortal from "react-cool-portal";
 import { toast } from "react-toastify";
 import { useAppDispatch } from "~/hook";
 import { startLoading, stopLoading } from "~/actions/loading";
 
-const ScheduleItem: React.FC<FlightDataProps> = ({
-    flightCode,
-    ticketPrice,
-    departureAirport,
-    arrivalAirport,
-    dateTime,
-    flightDuration,
-    seatQuantityClass1,
-    seatQuantityClass2,
-    layover
+const ScheduleItem: React.FC<FlightScheduleData> = ({
+    _id,
+    flight_number,
+    flight_code,
+    departure_airport,
+    destination_airport,
+    departure_datetime,
+    duration,
+    seats,
+    booking_deadline,
+    cancellation_deadline,
+    ticket_price,
+    transit_airports,
+    rules
 }) => {
-    const [selectedId, setSelectedId] = useState(String);
+    const [selectedId, setSelectedId] = useState("");
     const overlayRef = useRef<HTMLDivElement>(null);
     const { Portal, hide, show } = usePortal({
         defaultShow: false
@@ -28,16 +32,18 @@ const ScheduleItem: React.FC<FlightDataProps> = ({
         hide();
         dispatch(startLoading());
         await axios
-            .delete(`/movies/${selectedId}`, {
+            .delete(`/airport/511627675/${selectedId}`, {
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).data.accessToken}`
+                    Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).data.token}`
                 }
             })
             .then(() => {
                 dispatch(stopLoading());
-                window.location.reload();
                 toast("Deleted successfully!");
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
             })
             .catch((error) => {
                 console.error(error);
@@ -46,104 +52,101 @@ const ScheduleItem: React.FC<FlightDataProps> = ({
             });
     };
 
+    useEffect(() => {
+        if (selectedId !== "") show();
+    }, [selectedId, show]);
+
+    let content;
+
+    content = (
+        <li className="p-6 rounded-xl overflow-hidden shadow-xl border border-primary bg-background relative">
+            <div className="bg-primary absolute top-0 left-0 right-0 p-3 text-center font-semibold text-base">
+                Flight Schedule
+            </div>
+            <div className="absolute top-16 right-6 flex gap-2">
+                <button
+                    onClick={() => {}}
+                    className="hover:bg-primary hover:border-primary rounded-lg border border-blue flex items-center justify-center p-1"
+                >
+                    <i className="">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width={24} height={24} id="edit">
+                            <path
+                                className="fill-white"
+                                d="M5,18H9.24a1,1,0,0,0,.71-.29l6.92-6.93h0L19.71,8a1,1,0,0,0,0-1.42L15.47,2.29a1,1,0,0,0-1.42,0L11.23,5.12h0L4.29,12.05a1,1,0,0,0-.29.71V17A1,1,0,0,0,5,18ZM14.76,4.41l2.83,2.83L16.17,8.66,13.34,5.83ZM6,13.17l5.93-5.93,2.83,2.83L8.83,16H6ZM21,20H3a1,1,0,0,0,0,2H21a1,1,0,0,0,0-2Z"
+                            ></path>
+                        </svg>
+                    </i>
+                </button>
+                <button
+                    onClick={() => {}}
+                    className="hover:bg-mdRed hover:border-mdRed rounded-lg border border-blue flex items-center justify-center p-1"
+                >
+                    <i>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width={24} height={24} id="delete">
+                            <path
+                                className="fill-white"
+                                d="M24.2,12.193,23.8,24.3a3.988,3.988,0,0,1-4,3.857H12.2a3.988,3.988,0,0,1-4-3.853L7.8,12.193a1,1,0,0,1,2-.066l.4,12.11a2,2,0,0,0,2,1.923h7.6a2,2,0,0,0,2-1.927l.4-12.106a1,1,0,0,1,2,.066Zm1.323-4.029a1,1,0,0,1-1,1H7.478a1,1,0,0,1,0-2h3.1a1.276,1.276,0,0,0,1.273-1.148,2.991,2.991,0,0,1,2.984-2.694h2.33a2.991,2.991,0,0,1,2.984,2.694,1.276,1.276,0,0,0,1.273,1.148h3.1A1,1,0,0,1,25.522,8.164Zm-11.936-1h4.828a3.3,3.3,0,0,1-.255-.944,1,1,0,0,0-.994-.9h-2.33a1,1,0,0,0-.994.9A3.3,3.3,0,0,1,13.586,7.164Zm1.007,15.151V13.8a1,1,0,0,0-2,0v8.519a1,1,0,0,0,2,0Zm4.814,0V13.8a1,1,0,0,0-2,0v8.519a1,1,0,0,0,2,0Z"
+                            ></path>
+                        </svg>
+                    </i>
+                </button>
+            </div>
+            <div className="mt-12">
+                <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <span className="font-semibold">Flight code</span>: {flight_code}
+                    </div>
+                    <div>
+                        <span className="font-semibold">Price</span>: {ticket_price} USD
+                    </div>
+                    <div>
+                        <span className="font-semibold">Departure airport</span>: {departure_airport}
+                    </div>
+                    <div>
+                        <span className="font-semibold">Arrival airport</span>: {destination_airport}
+                    </div>
+                    <div>
+                        <span className="font-semibold">Departure date & time</span>: {departure_datetime}
+                    </div>
+                    <div>
+                        <span className="font-semibold">Duration</span>: {duration}
+                    </div>
+                    {/* <div>
+                        <span className="font-semibold">First class</span>: {seatQuantityClass1} seats
+                    </div>
+                    <div>
+                        <span className="font-semibold">Second class</span>: {seatQuantityClass2} seats
+                    </div> */}
+                </div>
+                {transit_airports.length > 0 && (
+                    <table className="w-full mt-6 bg-block">
+                        <thead>
+                            <tr className="text-center bg-primary">
+                                <th className="w-32">Index</th>
+                                <th className="w-72">Intermediate airport</th>
+                                <th className="w-48">Stop time</th>
+                                <th>Note</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {transit_airports.map((airport, index) => (
+                                <tr key={airport.airport_id} className="text-center">
+                                    <td>{index + 1}</td>
+                                    <td>{airport.airport_id}</td>
+                                    <td>{airport.stop_duration}</td>
+                                    <td>{airport.note}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                )}
+            </div>
+        </li>
+    );
+
     return (
         <>
-            <li className="p-6 rounded-xl overflow-hidden shadow-xl border border-primary bg-background relative">
-                <div className="bg-primary absolute top-0 left-0 right-0 p-3 text-center font-semibold text-base">
-                    Flight Schedule
-                </div>
-                <div className="absolute top-16 right-6 flex gap-2">
-                    <button
-                        onClick={() => {}}
-                        className="hover:bg-primary hover:border-primary rounded-lg border border-blue flex items-center justify-center p-1"
-                    >
-                        <i className="">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24"
-                                width={24}
-                                height={24}
-                                id="edit"
-                            >
-                                <path
-                                    className="fill-white"
-                                    d="M5,18H9.24a1,1,0,0,0,.71-.29l6.92-6.93h0L19.71,8a1,1,0,0,0,0-1.42L15.47,2.29a1,1,0,0,0-1.42,0L11.23,5.12h0L4.29,12.05a1,1,0,0,0-.29.71V17A1,1,0,0,0,5,18ZM14.76,4.41l2.83,2.83L16.17,8.66,13.34,5.83ZM6,13.17l5.93-5.93,2.83,2.83L8.83,16H6ZM21,20H3a1,1,0,0,0,0,2H21a1,1,0,0,0,0-2Z"
-                                ></path>
-                            </svg>
-                        </i>
-                    </button>
-                    <button
-                        onClick={() => {}}
-                        className="hover:bg-mdRed hover:border-mdRed rounded-lg border border-blue flex items-center justify-center p-1"
-                    >
-                        <i>
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 32 32"
-                                width={24}
-                                height={24}
-                                id="delete"
-                            >
-                                <path
-                                    className="fill-white"
-                                    d="M24.2,12.193,23.8,24.3a3.988,3.988,0,0,1-4,3.857H12.2a3.988,3.988,0,0,1-4-3.853L7.8,12.193a1,1,0,0,1,2-.066l.4,12.11a2,2,0,0,0,2,1.923h7.6a2,2,0,0,0,2-1.927l.4-12.106a1,1,0,0,1,2,.066Zm1.323-4.029a1,1,0,0,1-1,1H7.478a1,1,0,0,1,0-2h3.1a1.276,1.276,0,0,0,1.273-1.148,2.991,2.991,0,0,1,2.984-2.694h2.33a2.991,2.991,0,0,1,2.984,2.694,1.276,1.276,0,0,0,1.273,1.148h3.1A1,1,0,0,1,25.522,8.164Zm-11.936-1h4.828a3.3,3.3,0,0,1-.255-.944,1,1,0,0,0-.994-.9h-2.33a1,1,0,0,0-.994.9A3.3,3.3,0,0,1,13.586,7.164Zm1.007,15.151V13.8a1,1,0,0,0-2,0v8.519a1,1,0,0,0,2,0Zm4.814,0V13.8a1,1,0,0,0-2,0v8.519a1,1,0,0,0,2,0Z"
-                                ></path>
-                            </svg>
-                        </i>
-                    </button>
-                </div>
-                <div className="mt-12">
-                    <div className="grid md:grid-cols-2 gap-4">
-                        <div>
-                            <span className="font-semibold">Flight code</span>: {flightCode}
-                        </div>
-                        <div>
-                            <span className="font-semibold">Price</span>: {ticketPrice} USD
-                        </div>
-                        <div>
-                            <span className="font-semibold">Departure airport</span>: {departureAirport}
-                        </div>
-                        <div>
-                            <span className="font-semibold">Arrival airport</span>: {arrivalAirport}
-                        </div>
-                        <div>
-                            <span className="font-semibold">Date</span>: {dateTime}
-                        </div>
-                        <div>
-                            <span className="font-semibold">Duration</span>: {flightDuration}
-                        </div>
-                        <div>
-                            <span className="font-semibold">First class</span>: {seatQuantityClass1} seats
-                        </div>
-                        <div>
-                            <span className="font-semibold">Second class</span>: {seatQuantityClass2} seats
-                        </div>
-                    </div>
-                    {layover.length > 0 && (
-                        <table className="w-full mt-6 bg-block">
-                            <thead>
-                                <tr className="text-center bg-primary">
-                                    <th className="w-32">Index</th>
-                                    <th className="w-72">Intermediate airport</th>
-                                    <th className="w-48">Stop time</th>
-                                    <th>Note</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {layover.map((item) => (
-                                    <tr key={item.stt} className="text-center">
-                                        <td>{item.stt}</td>
-                                        <td>{item.airport}</td>
-                                        <td>{item.stopTime}</td>
-                                        <td>{item.note}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    )}
-                </div>
-            </li>
-
+            {content}
             <Portal>
                 <div className="fixed top-0 right-0 left-0 bottom-0 bg-[rgba(0,0,0,0.4)] z-50 flex items-center justify-center">
                     <div className="flex items-center justify-center">

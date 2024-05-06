@@ -7,7 +7,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { startLoading, stopLoading } from "~/actions/loading";
 import { sendMessage } from "~/actions/message";
 import { useAppDispatch } from "~/hook";
-import convertReleaseDate from "~/utils/convertReleaseDate";
+import convertReleaseDate from "~/utils/convertDate";
 import usePortal from "react-cool-portal";
 import IsRequired from "~/icons/IsRequired";
 import Tippy from "@tippyjs/react/headless";

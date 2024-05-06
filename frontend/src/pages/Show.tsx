@@ -10,7 +10,7 @@ import { useAppDispatch } from "~/hook";
 import usePortal from "react-cool-portal";
 import IsRequired from "~/icons/IsRequired";
 import Tippy from "@tippyjs/react/headless";
-import convertReleaseDate from "~/utils/convertReleaseDate";
+import convertReleaseDate from "~/utils/convertDate";
 import compareDate from "~/utils/compareDate";
 import getHourMinuteFromISOString from "~/utils/getHourMinuteFromISOString";
 import getFormattedDateTime from "~/utils/getFormattedDateTime";

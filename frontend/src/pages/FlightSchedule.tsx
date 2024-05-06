@@ -10,8 +10,8 @@ import IsRequired from "~/icons/IsRequired";
 import { useAppDispatch } from "~/hook";
 import { startLoading, stopLoading } from "~/actions/loading";
 import { sendMessage } from "~/actions/message";
-import ScheduleList from "~/components/ScheduleList";
 import convertDate from "~/utils/convertDate";
+import ScheduleItem from "~/components/ScheduleItem";
 
 const schema = yup.object().shape({
     flightNumber: yup.string().required("Flight number is required."),
@@ -40,8 +40,8 @@ const schema = yup.object().shape({
 });
 
 function FlightSchedule() {
-    const [data, setData] = useState<FlightScheduleData>();
-    const [airportData, setAirportData] = useState<AirportProps[]>();
+    const [data, setData] = useState<FlightScheduleData[]>();
+    const [airportData, setAirportData] = useState<AirportData[]>();
     const [ruleData, setRuleData] = useState<RuleData[]>();
 
     const [formSubmitted, setFormSubmitted] = useState(false);
@@ -64,8 +64,6 @@ function FlightSchedule() {
     const [status2Visible, setStatus2Visible] = useState(false);
 
     const [time, setTime] = useState("");
-
-    const [deletingMode, setDeletingMode] = useState(false);
 
     const [departureAirportVisible, setDepartureAirportVisible] = useState(false);
     const [arrivalAirportVisible, setArrivalAirportVisible] = useState(false);
@@ -90,9 +88,9 @@ function FlightSchedule() {
     const [dropdownStates, setDropdownStates] = useState(fields.map(() => false));
 
     const [selectedAirports, setSelectedAirports] = useState(Array(fields.length).fill(null));
-    const [selectedRules, setSelectedRules] = useState<String[]>([]);
+    const [selectedRules, setSelectedRules] = useState<string[]>([]);
 
-    const handleAirportSelect = (airport, index) => {
+    const handleAirportSelect = (airport: AirportData, index: number) => {
         setDropdownStates((prevState) => {
             const newState = [...prevState];
             newState[index] = false;
@@ -105,19 +103,19 @@ function FlightSchedule() {
         });
     };
 
-    const filterAvailableAirports = (airport) => {
+    const filterAvailableAirports = (airport: AirportData) => {
         return selectedAirports.every((selectedAirport) => !selectedAirport || selectedAirport._id !== airport._id);
     };
 
     const onSubmit: SubmitHandler<FlightScheduleValidation> = async (data) => {
-        // hide();
+        hide();
         dispatch(startLoading());
 
         const flight_code = data.flightCode;
         const flight_number = data.flightNumber;
         const ticket_price = data.ticketPrice;
-        const departure_airport = departureAirport;
-        const destination_airport = arrivalAirport;
+        const departure_airport = departureAirport.id;
+        const destination_airport = arrivalAirport.id;
         const duration = data.duration;
         const departure_datetime = `${convertDate(data.departureDate)} ${data.departureTime}:00`;
 
@@ -139,7 +137,7 @@ function FlightSchedule() {
         (async () => {
             try {
                 await axios.post(
-                    "/airport/511454675/create",
+                    "/flight/511454641/create",
                     {
                         flight_code,
                         flight_number,
@@ -163,7 +161,18 @@ function FlightSchedule() {
                             }
                         ],
                         transit_airports,
-                        rules: []
+                        rules: {
+                            regulation_1: {
+                                flight_time: ruleData?.find((rule) => rule.values.min_flight_time),
+                                intermediate: ruleData?.find((rule) => rule.values.max_transit_airports)
+                            },
+                            regulation_2: {
+                                tickets: "663649fb67685b9b04acb653"
+                            },
+                            regulation_3: {
+                                booking: "663649fb67685b9b04acb654"
+                            }
+                        }
                     },
                     {
                         headers: {
@@ -185,36 +194,51 @@ function FlightSchedule() {
 
     useEffect(() => {
         (async () => {
-            await axios
-                .get("/flight/all", { headers: { "Content-Type": "application/json" } })
-                .then((response) => {
-                    setData(response.data);
-                })
-                .catch((err) => console.error(err));
-        })();
-
-        (async () => {
-            await axios
-                .get("/airport/all", { headers: { "Content-Type": "application/json" } })
-                .then((response) => {
-                    setAirportData(response.data);
-                })
-                .catch((err) => console.error(err));
-        })();
-
-        (async () => {
             try {
-                const response = await axios.get("rule/511320340/all", {
+                dispatch(startLoading());
+
+                const flightResponse = await axios.get("/flight/all", {
+                    headers: { "Content-Type": "application/json" }
+                });
+
+                const airportResponse = await axios.get("/airport/all", {
+                    headers: { "Content-Type": "application/json" }
+                });
+                setAirportData(airportResponse.data);
+
+                const ruleResponse = await axios.get("rule/511320340/all", {
                     headers: {
                         Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).data.token}`
                     }
                 });
-                setRuleData(response.data);
+                setRuleData(ruleResponse.data);
+
+                const data = flightResponse.data.map((flight: FlightScheduleData) => ({
+                    ...flight,
+                    departure_airport: airportResponse.data.find(
+                        (airport: AirportData) => airport._id === flight.departure_airport
+                    )?.name,
+                    destination_airport: airportResponse.data.find(
+                        (airport: AirportData) => airport._id === flight.destination_airport
+                    )?.name,
+                    transit_airports: flight.transit_airports.map((transit_airport) => ({
+                        ...transit_airport,
+                        airport_id: airportResponse.data.find(
+                            (airport: AirportData) => airport._id === transit_airport.airport_id
+                        )?.name
+                    }))
+                }));
+
+                setData(data);
+
+                dispatch(stopLoading());
             } catch (error) {
                 console.error(error);
             }
         })();
-    }, []);
+    }, [dispatch]);
+
+    console.log(data);
 
     return (
         <>
@@ -222,7 +246,6 @@ function FlightSchedule() {
                 <div className="flex gap-3 items-center">
                     <button
                         onClick={() => {
-                            setDeletingMode(false);
                             show();
                         }}
                         className="rounded-xl bg-block border-blue border hover:border-primary hover:bg-primary flex items-center justify-center p-3 w-[112px]"
@@ -255,13 +278,32 @@ function FlightSchedule() {
                     </button>
                 </div>
             </div>
-            {deletingMode && (
-                <div className="shadow-xl rounded-xl bg-block mb-6">
-                    <div className="bg-primary h-6 rounded-tr-xl rounded-tl-xl"></div>
-                    <div className="p-6 text-[15px]">Select a movie below to delete.</div>
+
+            <div className="mb-10">
+                <div className="bg-block p-6 rounded-3xl shadow-xl">
+                    <ul className="w-full grid grid-cols-1 gap-8">
+                        {data &&
+                            data.map((schedule) => (
+                                <ScheduleItem
+                                    key={schedule._id}
+                                    _id={schedule._id}
+                                    flight_number={schedule.flight_number}
+                                    flight_code={schedule.flight_code}
+                                    departure_airport={schedule.departure_airport}
+                                    destination_airport={schedule.destination_airport}
+                                    departure_datetime={schedule.departure_datetime}
+                                    duration={schedule.duration}
+                                    seats={schedule.seats}
+                                    booking_deadline={schedule.booking_deadline}
+                                    cancellation_deadline={schedule.cancellation_deadline}
+                                    ticket_price={schedule.ticket_price}
+                                    transit_airports={schedule.transit_airports}
+                                    rules={schedule.rules}
+                                />
+                            ))}
+                    </ul>
                 </div>
-            )}
-            <ScheduleList deletingMode={deletingMode} />
+            </div>
             <Portal>
                 <div className="fixed top-0 right-0 left-0 bottom-0 bg-[rgba(0,0,0,0.4)] z-50 flex items-center justify-center">
                     <div className="flex items-center justify-center">
@@ -321,7 +363,7 @@ function FlightSchedule() {
                                     </div>
                                     <div className="flex gap-2 flex-col">
                                         <label htmlFor="ticketPrice" className="flex gap-1 mb-1 items-center">
-                                            Ticket price
+                                            Ticket price (USD)
                                             <IsRequired />
                                         </label>
                                         <input
@@ -606,7 +648,7 @@ function FlightSchedule() {
                                             <input
                                                 type="number"
                                                 id="firstClassBookedSeats"
-                                                placeholder="Ex: 80"
+                                                placeholder="Ex: 10"
                                                 {...register("firstClassBookedSeats")}
                                                 className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                             />
@@ -699,7 +741,7 @@ function FlightSchedule() {
                                             <input
                                                 type="number"
                                                 id="secondClassCapacity"
-                                                placeholder="Ex: 20"
+                                                placeholder="Ex: 80"
                                                 {...register("secondClassCapacity")}
                                                 className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                             />
@@ -721,7 +763,7 @@ function FlightSchedule() {
                                             <input
                                                 type="number"
                                                 id="secondClassBookedSeats"
-                                                placeholder="Ex: 80"
+                                                placeholder="Ex: 60"
                                                 {...register("secondClassBookedSeats")}
                                                 className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                             />
@@ -823,15 +865,15 @@ function FlightSchedule() {
                                         >
                                             <div>
                                                 <span className="font-medium underline">{rule.code}:</span>
-                                                <span className=""> {rule.ruleDetails}</span>
                                             </div>
-                                            <div className="flex gap-2">
-                                                <span className="font-medium underline">Value: </span>
-                                                {Object.entries(rule.value).map(([key, value], index) => {
-                                                    if (index === Object.entries(rule.value).length - 1)
+                                            <div className="flex gap-1">
+                                                <span className=""> {rule.detail}.</span>
+                                                <span className="">Values: </span>
+                                                {Object.entries(rule.values).map(([key, value], index) => {
+                                                    if (index === Object.entries(rule.values).length - 1)
                                                         return (
                                                             <div key={key}>
-                                                                {key}: {value}
+                                                                {key}: {value}.
                                                             </div>
                                                         );
                                                     else

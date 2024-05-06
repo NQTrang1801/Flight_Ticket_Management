@@ -41,7 +41,7 @@ const Airport: React.FC<AirportProps> = ({
     updatingMode,
     _id
 }) => {
-    const [selectedId, setSelectedId] = useState(String);
+    const [selectedId, setSelectedId] = useState("");
     const overlayRef = useRef<HTMLDivElement>(null);
     const { Portal, hide, show } = usePortal({
         defaultShow: false

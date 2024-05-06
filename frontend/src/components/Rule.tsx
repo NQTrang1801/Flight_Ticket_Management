@@ -57,39 +57,35 @@ const Rule: React.FC<RuleProps> = ({ index, code, ruleName, ruleDetail, value, d
     let content;
     if (deletingMode) {
         content = (
-            <tr className="text-center capitalize hover:bg-hover cursor-pointer" onClick={() => setSelectedId(_id)}>
+            <tr className="text-center hover:bg-hover cursor-pointer" onClick={() => setSelectedId(_id)}>
                 <td>{index}</td>
                 <td>{code}</td>
                 <td>{ruleName}</td>
                 <td>{ruleDetail}</td>
                 <td>
-                    {typeof value === "object"
-                        ? Object.entries(value).map(([key, value]) => (
-                              <div key={key}>
-                                  {key}: {value}
-                              </div>
-                          ))
-                        : value}
+                    {Object.entries(value).map(([key, value]) => (
+                        <div key={key}>
+                            {key}: {value}
+                        </div>
+                    ))}
                 </td>
             </tr>
         );
     } else if (updatingMode) {
-        content = <RuleUpdating index={index} code={code} ruleName={ruleName} ruleDetail={ruleDetail} value={value} />;
+        content = <RuleUpdating index={index} code={code} ruleName={ruleName} detail={ruleDetail} values={value} />;
     } else {
         content = (
-            <tr className="text-center capitalize">
+            <tr className="text-center">
                 <td>{index}</td>
                 <td>{code}</td>
                 <td>{ruleName}</td>
                 <td>{ruleDetail}</td>
                 <td>
-                    {typeof value === "object"
-                        ? Object.entries(value).map(([key, value]) => (
-                              <div key={key}>
-                                  {key}: {value}
-                              </div>
-                          ))
-                        : value}
+                    {Object.entries(value).map(([key, value]) => (
+                        <div key={key}>
+                            {key}: {value}
+                        </div>
+                    ))}
                 </td>
             </tr>
         );

@@ -21,7 +21,7 @@ const schema = yup.object().shape({
 });
 
 function Airports() {
-    const [data, setData] = useState<AirportProps[]>();
+    const [data, setData] = useState<AirportData[]>();
     const [deletingMode, setDeletingMode] = useState(false);
     const [updatingMode, setUpdatingMode] = useState(false);
     const { Portal, show, hide } = usePortal({
@@ -80,17 +80,15 @@ function Airports() {
     const [status, setStatus] = useState(true);
     const [statusVisible, setStatusVisible] = useState(false);
 
-    // const { query } = useAppSelector((state) => state.searching!);
-
     const {
         register,
         handleSubmit,
         formState: { errors }
-    } = useForm<AirportProps>({
+    } = useForm<AirportData>({
         resolver: yupResolver(schema)
     });
 
-    const onSubmit: SubmitHandler<AirportProps> = async (data) => {
+    const onSubmit: SubmitHandler<AirportData> = async (data) => {
         hide();
         dispatch(startLoading());
         const name = data.name;
@@ -132,7 +130,7 @@ function Airports() {
                 setTimeout(() => window.location.reload(), 2000);
             } catch (error) {
                 dispatch(stopLoading());
-                dispatch(sendMessage("Created failed!"));
+                dispatch(sendMessage(`Created failed! ${error.response.data.message}`));
                 console.error(error);
             }
         })();
