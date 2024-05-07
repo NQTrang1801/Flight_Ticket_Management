@@ -119,10 +119,10 @@ const ScheduleItem: React.FC<FlightScheduleData> = ({
                             <span className="font-semibold">Flight number</span>: {flight_number}
                         </div>
                         <div>
-                            <span className="font-semibold">Departure airport</span>: {departure_airport}
+                            <span className="font-semibold">Departure airport</span>: {departure_airport_name}
                         </div>
                         <div>
-                            <span className="font-semibold">Arrival airport</span>: {destination_airport}
+                            <span className="font-semibold">Arrival airport</span>: {destination_airport_name}
                         </div>
 
                         <div>
@@ -184,7 +184,7 @@ const ScheduleItem: React.FC<FlightScheduleData> = ({
                                 {transit_airports.map((airport, index) => (
                                     <tr key={airport.airport_id} className="text-center">
                                         <td>{index + 1}</td>
-                                        <td>{airport.airport_id}</td>
+                                        <td>{airport.airport_name}</td>
                                         <td>{airport.stop_duration} minutes</td>
                                         <td>{airport.note}</td>
                                     </tr>

@@ -1,6 +1,6 @@
 import Tippy from "@tippyjs/react/headless";
 import "tippy.js/dist/tippy.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import usePortal from "react-cool-portal";
 import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
 import axios from "~/utils/axios";
@@ -57,6 +57,8 @@ const ScheduleUpdating: React.FC<FlightScheduleData> = ({
     transit_airports,
     rules
 }) => {
+    const [airportData, setAirportData] = useState<AirportData[]>();
+
     const [formSubmitted, setFormSubmitted] = useState(false);
 
     const [departureAirport, setDepartureAirport] = useState({
@@ -76,7 +78,7 @@ const ScheduleUpdating: React.FC<FlightScheduleData> = ({
     const [status2, setStatus2] = useState(seats[1].status);
     const [status2Visible, setStatus2Visible] = useState(false);
 
-    const [time, setTime] = useState("");
+    const [time, setTime] = useState(getFormattedDateTime(departure_datetime).split(" ")[1].slice(0, -3));
 
     const [departureAirportVisible, setDepartureAirportVisible] = useState(false);
     const [arrivalAirportVisible, setArrivalAirportVisible] = useState(false);
@@ -99,14 +101,17 @@ const ScheduleUpdating: React.FC<FlightScheduleData> = ({
             destinationAirport: destination_airport,
             bookingDeadline: booking_deadline,
             departureDate: formatDate(getFormattedDateTime(departure_datetime).split(" ")[0]),
-            departureTime: getFormattedDateTime(departure_datetime).split(" ")[1],
+            departureTime: getFormattedDateTime(departure_datetime).split(" ")[1].slice(0, -3),
             cancellationDeadline: cancellation_deadline,
             ticketPrice: ticket_price,
-            firstClassBookedSeats: seats[0]?.booked_seats,
-            firstClassCapacity: seats[0]?.count,
+            firstClassBookedSeats: seats[0].booked_seats,
+            firstClassCapacity: seats[0].count,
             secondClassBookedSeats: seats[1].booked_seats,
             secondClassCapacity: seats[1].count,
-            intermediateAirport: transit_airports
+            intermediateAirport: transit_airports.map((airport) => ({
+                ...airport,
+                stopDuration: airport.stop_duration
+            }))
         }
     });
 
@@ -167,7 +172,7 @@ const ScheduleUpdating: React.FC<FlightScheduleData> = ({
         (async () => {
             try {
                 await axios.put(
-                    `/flight//511246641/${_id}`,
+                    `/flight/511246641/${_id}`,
                     {
                         flight_code,
                         flight_number,
@@ -205,11 +210,29 @@ const ScheduleUpdating: React.FC<FlightScheduleData> = ({
                 setTimeout(() => window.location.reload(), 2000);
             } catch (error) {
                 dispatch(stopLoading());
-                dispatch(sendMessage("Updated failed!"));
+                dispatch(sendMessage(`Updated failed!`));
                 console.error(error);
             }
         })();
     };
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const airportResponse = await axios.get("/airport/all", {
+                    headers: { "Content-Type": "application/json" }
+                });
+                setAirportData(airportResponse.data);
+                setSelectedAirports(
+                    airportResponse.data.filter((airport: AirportData) =>
+                        transit_airports.some((transit_airport) => transit_airport.airport_id === airport._id)
+                    )
+                );
+            } catch (error) {
+                console.error(error);
+            }
+        })();
+    }, [transit_airports]);
 
     return (
         <>
@@ -418,7 +441,7 @@ const ScheduleUpdating: React.FC<FlightScheduleData> = ({
                                                     departureAirportVisible
                                                         ? "rounded-tl-lg rounded-tr-lg border-primary"
                                                         : "rounded-lg"
-                                                }   flex justify-between items-center`}
+                                                }   flex justify-between items-center text-[13px]`}
                                                 onClick={() => setDepartureAirportVisible(!departureAirportVisible)}
                                             >
                                                 {departureAirport.name === ""
@@ -466,6 +489,11 @@ const ScheduleUpdating: React.FC<FlightScheduleData> = ({
                                                 >
                                                     {airportData &&
                                                         airportData
+                                                            .filter(
+                                                                (airport) =>
+                                                                    airport._id !== departureAirport.id &&
+                                                                    airport._id !== arrivalAirport.id
+                                                            )
                                                             .filter((airport) => departureAirport.id !== airport._id)
                                                             .map((airport) => (
                                                                 <li
@@ -495,7 +523,7 @@ const ScheduleUpdating: React.FC<FlightScheduleData> = ({
                                                     arrivalAirportVisible
                                                         ? "rounded-tl-lg rounded-tr-lg border-primary"
                                                         : "rounded-lg"
-                                                }   flex justify-between items-center`}
+                                                }   flex justify-between items-center text-[13px]`}
                                                 onClick={() => setArrivalAirportVisible(!arrivalAirportVisible)}
                                             >
                                                 {arrivalAirport.name === "" ? "Choose an airport" : arrivalAirport.name}

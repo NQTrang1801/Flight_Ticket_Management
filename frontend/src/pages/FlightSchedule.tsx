@@ -237,8 +237,6 @@ function FlightSchedule() {
         })();
     }, [dispatch]);
 
-    console.log(data);
-
     return (
         <>
             <div className="flex justify-end items-center mb-6">
@@ -510,7 +508,7 @@ function FlightSchedule() {
                                                     departureAirportVisible
                                                         ? "rounded-tl-lg rounded-tr-lg border-primary"
                                                         : "rounded-lg"
-                                                }   flex justify-between items-center`}
+                                                }   flex justify-between items-center text-[13px]`}
                                                 onClick={() => setDepartureAirportVisible(!departureAirportVisible)}
                                             >
                                                 {departureAirport.name === ""
@@ -587,7 +585,7 @@ function FlightSchedule() {
                                                     arrivalAirportVisible
                                                         ? "rounded-tl-lg rounded-tr-lg border-primary"
                                                         : "rounded-lg"
-                                                }   flex justify-between items-center`}
+                                                }   flex justify-between items-center text-[13px]`}
                                                 onClick={() => setArrivalAirportVisible(!arrivalAirportVisible)}
                                             >
                                                 {arrivalAirport.name === "" ? "Choose an airport" : arrivalAirport.name}
@@ -885,6 +883,12 @@ function FlightSchedule() {
                                                                 >
                                                                     {airportData &&
                                                                         airportData
+                                                                            .filter(
+                                                                                (airport) =>
+                                                                                    airport._id !==
+                                                                                        departureAirport.id &&
+                                                                                    airport._id !== arrivalAirport.id
+                                                                            )
                                                                             .filter(filterAvailableAirports)
                                                                             .map((airport) => (
                                                                                 <li

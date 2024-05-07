@@ -126,6 +126,12 @@ interface FlightScheduleData {
             count: number;
             booked_seats: number;
             status: boolean;
+        },
+        {
+            class: string;
+            count: number;
+            booked_seats: number;
+            status: boolean;
         }
     ];
     booking_deadline: string;
