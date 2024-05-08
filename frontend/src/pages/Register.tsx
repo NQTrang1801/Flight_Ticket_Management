@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { login } from "~/actions/auth";
 import { useAppDispatch } from "~/hook";
-import logo from "~/assets/logo_removebg.png";
+import logo from "~/assets/logo.png";
 import { toast } from "react-toastify";
 import { startLoading, stopLoading } from "~/actions/loading";
 import { sendMessage } from "~/actions/message";

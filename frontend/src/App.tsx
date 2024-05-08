@@ -38,6 +38,8 @@ function App() {
     return (
         <Routes>
             <Route path="/administrator/login" element={<Login />} />
+
+            <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/" element={<Layout />}>
                 <Route path="/administrator" element={<AdministratorRoutes />}>

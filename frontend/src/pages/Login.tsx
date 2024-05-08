@@ -58,17 +58,19 @@ const Login: React.FC = () => {
     // }
 
     return (
-        <div className="w-full min-h-screen grid grid-cols-5">
-            <div className="col-span-3 bg-blue flex flex-col items-center justify-center">
+        <div className="w-full min-h-screen grid grid-cols-6">
+            <div className="col-span-4 flex flex-col items-center justify-center">
                 <div>
-                    <img src={background} className="rounded-2xl" />
+                    <img src={background} className="h-screen" />
                 </div>
             </div>
             <div className="flex flex-col gap-8 items-center justify-center col-span-2">
                 <div className="flex flex-col justify-center items-center text-black">
-                    <img src={logo} width={192} height={192} />
+                    <img src={logo} width={256} height={256} />
                     <div className="text-primary font-semibold text-3xl mt-8 mb-4">Flight Ticket Management</div>
-                    <div className="capitalize text-base font-medium text-hoverPrimary">{userType} site</div>
+                    <div className="capitalize text-xl font-medium text-blue">
+                        {userType ? userType + " site" : "Welcome back"}
+                    </div>
                 </div>
                 <form onSubmit={handleSubmit(onSubmit)} className="flex justify-center items-center flex-col gap-6">
                     <div className="flex flex-col gap-2">
@@ -123,13 +125,31 @@ const Login: React.FC = () => {
                             </button>
                         </div>
                         {errors.password && <span className="text-deepRed">{errors.password.message}</span>}
+                        {!userType && (
+                            <a href="/forgot-password" className="text-blue hover:text-primary underline text-end">
+                                Forgot password?
+                            </a>
+                        )}
                     </div>
                     <button
-                        className="py-3 w-[360px] px-8 mt-4 font-semibold rounded-lg bg-blue border-blue border hover:border-primary hover:bg-primary"
+                        className={`py-3 w-[360px] px-8 ${
+                            userType ? "mt-6" : ""
+                        } font-semibold rounded-lg bg-blue border-blue border hover:border-primary hover:bg-primary`}
                         type="submit"
                     >
                         Login now
                     </button>
+                    <div className="text-black">Or</div>
+                    <div className="text-black">
+                        {!userType && (
+                            <>
+                                Are you new?{" "}
+                                <a href="/register" className="text-blue hover:text-primary underline text-end">
+                                    Create an account.
+                                </a>
+                            </>
+                        )}
+                    </div>
                 </form>
             </div>
         </div>
