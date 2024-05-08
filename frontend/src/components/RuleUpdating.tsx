@@ -113,7 +113,7 @@ const RuleUpdating: React.FC<RuleProps> = ({ code, ruleName, detail, values, ind
 
     return (
         <>
-            <tr className="text-center hover:bg-hover cursor-pointer" onClick={() => show()}>
+            <tr className="text-center hover:bg-hoverPrimary cursor-pointer" onClick={() => show()}>
                 <td>{index}</td>
                 <td>{code}</td>
                 <td>{ruleName}</td>

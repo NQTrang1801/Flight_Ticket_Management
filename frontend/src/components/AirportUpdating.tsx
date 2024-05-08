@@ -178,7 +178,7 @@ const AirportUpdating: React.FC<AirportUpdatingProps> = ({
 
     return (
         <>
-            <tr className="text-center capitalize hover:bg-hover cursor-pointer" onClick={() => show()}>
+            <tr className="text-center capitalize hover:bg-hoverPrimary cursor-pointer" onClick={() => show()}>
                 <td>{code}</td>
                 <td>{name}</td>
                 <td>{country}</td>

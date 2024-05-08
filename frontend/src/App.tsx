@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import "./index.css";
 import Layout from "./layouts/Layout";
 import Login from "./pages/Login";
-import PrivateRoute from "./components/PrivateRoute";
+import AdministratorRoutes from "./components/AdministratorRoutes";
 import { useEffect } from "react";
 import { useAppSelector } from "./hook";
 import { toast } from "react-toastify";
@@ -37,18 +37,18 @@ function App() {
 
     return (
         <Routes>
-            <Route path="/login" element={<Login />} />
+            <Route path="/administrator/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/" element={<PrivateRoute />}>
-                <Route path="/" element={<Layout />}>
+            <Route path="/" element={<Layout />}>
+                <Route path="/administrator" element={<AdministratorRoutes />}>
                     <Route index element={<Dashboard />} />
-                    <Route path="/flight-schedule" element={<FlightSchedule />} />
-                    <Route path="/ticket-sales" element={<TicketSales />} />
-                    <Route path="/flight-booking" element={<FlightBooking />} />
-                    <Route path="/flight-lookup" element={<FlightLookup />} />
-                    <Route path="/airport" element={<Airports />} />
-                    <Route path="/regulations" element={<Regulations />} />
-                    <Route path="/flight-list" element={<FlightList />} />
+                    <Route path="/administrator/flight-schedule" element={<FlightSchedule />} />
+                    <Route path="/administrator/ticket-sales" element={<TicketSales />} />
+                    <Route path="/administrator/flight-booking" element={<FlightBooking />} />
+                    <Route path="/administrator/flight-lookup" element={<FlightLookup />} />
+                    <Route path="/administrator/airport" element={<Airports />} />
+                    <Route path="/administrator/regulations" element={<Regulations />} />
+                    <Route path="/administrator/flight-list" element={<FlightList />} />
                 </Route>
             </Route>
         </Routes>

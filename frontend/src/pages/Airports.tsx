@@ -391,7 +391,8 @@ function Airports() {
                                             interactive
                                             onClickOutside={() => setInternationalVisible(!internationalVisible)}
                                             visible={internationalVisible}
-                                            offset={[0, -149]}
+                                            offset={[0, 0]}
+                                            placement="bottom"
                                             render={(attrs) => (
                                                 <div
                                                     {...attrs}
@@ -471,7 +472,7 @@ function Airports() {
                                             render={(attrs) => (
                                                 <div
                                                     {...attrs}
-                                                    className={`flex w-[290px] text-white p-2 rounded-bl-lg rounded-br-lg flex-col bg-background outline-1 outline-border outline justify-center ${
+                                                    className={`flex w-[188px] text-white p-2 rounded-bl-lg rounded-br-lg flex-col bg-background outline-1 outline-border outline justify-center ${
                                                         timezoneVisible ? "outline-primary" : ""
                                                     }`}
                                                 >

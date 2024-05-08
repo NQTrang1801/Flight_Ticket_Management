@@ -19,6 +19,7 @@ export const theme = {
         disabled: "#7f7f8e",
         blue: "#53a6de",
         lightBlue: "#BBE1FA",
+        hoverPrimary: "#557e9a",
         placeholder: "#5674d01a",
         border: "#373845",
         block: "#262a38",

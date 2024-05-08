@@ -1,8 +1,9 @@
 import axios from "~/utils/axios";
 
-const login = (email: string, password: string) => {
+const login = (email: string, password: string, userType: string) => {
+    // console.log(`/user/${userType}login`);
     return axios
-        .post("/user/administrator-login", {
+        .post(`/user/${userType}login`, {
             email,
             password
         })

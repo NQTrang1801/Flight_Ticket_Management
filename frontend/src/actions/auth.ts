@@ -3,8 +3,8 @@ import { LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT } from "./types";
 import AuthService from "../services/auth.service";
 import { Dispatch } from "redux";
 
-export const login = (email: string, password: string) => (dispatch: Dispatch) => {
-    return AuthService.login(email, password).then(
+export const login = (email: string, password: string, userType: string) => (dispatch: Dispatch) => {
+    return AuthService.login(email, password, userType).then(
         (data) => {
             dispatch({
                 type: LOGIN_SUCCESS,

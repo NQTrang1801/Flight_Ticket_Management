@@ -1,10 +1,10 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAppSelector } from "~/hook";
 
-function PrivateRoute() {
+function AdministratorRoutes() {
     const { isLoggedIn } = useAppSelector((state) => state.auth!);
 
-    return isLoggedIn ? <Outlet /> : <Navigate to="/login" />;
+    return isLoggedIn ? <Outlet /> : <Navigate to="/administrator/login" />;
 }
 
-export default PrivateRoute;
+export default AdministratorRoutes;

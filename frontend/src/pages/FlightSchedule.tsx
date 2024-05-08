@@ -16,8 +16,8 @@ import ScheduleItem from "~/components/ScheduleItem";
 const schema = yup.object().shape({
     flightNumber: yup.string().required("Flight number is required."),
     flightCode: yup.string().required("Flight code is required."),
-    duration: yup.number().required("Duration is required.").typeError("Duration is required."),
-    ticketPrice: yup.number().required("Ticket price is required.").typeError("Ticket price is required."),
+    duration: yup.number().required("Duration is required.").typeError("Duration must be a number."),
+    ticketPrice: yup.number().required("Ticket price is required.").typeError("Ticket price must be a number."),
     departureDate: yup.date().required("Departure date is required.").typeError("Date is required."),
     departureTime: yup.string().required("Time is required.").typeError("Time is required."),
     bookingDeadline: yup.date().required("Booking deadline is required.").typeError("Booking deadline is required."),
@@ -25,15 +25,29 @@ const schema = yup.object().shape({
         .date()
         .required("Cancellation deadline is required.")
         .typeError("Cancellation deadline is required."),
-    firstClassCapacity: yup.number().required("Capacity is required.").typeError("Capacity is required."),
-    firstClassBookedSeats: yup.number().required("Booked seats is required.").typeError("Booked seats is required."),
+    firstClassCapacity: yup
+        .number()
+        .required("Seating capacity is required.")
+        .typeError("Seating capacity must be a number."),
+    firstClassBookedSeats: yup
+        .number()
+        .required("Booked seats is required.")
+        .typeError("Booked seats must be a number.")
+        .max(yup.ref("firstClassCapacity"), "Booked seats must be less than or equal to capacity."),
 
-    secondClassCapacity: yup.number().required("Capacity is required.").typeError("Capacity is required."),
-    secondClassBookedSeats: yup.number().required("Booked seats is required.").typeError("Booked seats is required."),
+    secondClassCapacity: yup
+        .number()
+        .required("Seating capacity is required.")
+        .typeError("Seating capacity must be a number."),
+    secondClassBookedSeats: yup
+        .number()
+        .required("Booked seats is required.")
+        .typeError("Booked seats must be a number.")
+        .max(yup.ref("secondClassCapacity"), "Booked seats must be less than or equal to capacity."),
 
     intermediateAirport: yup.array().of(
         yup.object().shape({
-            stopDuration: yup.number().required("Duration is required.").typeError("Duration is required."),
+            stopDuration: yup.number().required("Duration is required.").typeError("Stop duration must be a number."),
             note: yup.string()
         })
     )
@@ -69,7 +83,8 @@ function FlightSchedule() {
     const [arrivalAirportVisible, setArrivalAirportVisible] = useState(false);
 
     const { Portal, show, hide } = usePortal({
-        defaultShow: false
+        defaultShow: false,
+        clickOutsideToHide: true
     });
     const {
         control,
@@ -366,7 +381,7 @@ function FlightSchedule() {
                                             <IsRequired />
                                         </label>
                                         <input
-                                            type="number"
+                                            type="text"
                                             id="ticketPrice"
                                             {...register("ticketPrice")}
                                             placeholder="Ex: 1000"
@@ -417,7 +432,7 @@ function FlightSchedule() {
                                             <IsRequired />
                                         </label>
                                         <input
-                                            type="number"
+                                            type="text"
                                             id="duration"
                                             {...register("duration")}
                                             placeholder="Ex: 90"
@@ -627,7 +642,7 @@ function FlightSchedule() {
                                                 <IsRequired />
                                             </label>
                                             <input
-                                                type="number"
+                                                type="text"
                                                 id="firstClassCapacity"
                                                 placeholder="Ex: 20"
                                                 {...register("firstClassCapacity")}
@@ -645,7 +660,7 @@ function FlightSchedule() {
                                                 <IsRequired />
                                             </label>
                                             <input
-                                                type="number"
+                                                type="text"
                                                 id="firstClassBookedSeats"
                                                 placeholder="Ex: 10"
                                                 {...register("firstClassBookedSeats")}
@@ -738,7 +753,7 @@ function FlightSchedule() {
                                                 <IsRequired />
                                             </label>
                                             <input
-                                                type="number"
+                                                type="text"
                                                 id="secondClassCapacity"
                                                 placeholder="Ex: 80"
                                                 {...register("secondClassCapacity")}
@@ -760,7 +775,7 @@ function FlightSchedule() {
                                                 <IsRequired />
                                             </label>
                                             <input
-                                                type="number"
+                                                type="text"
                                                 id="secondClassBookedSeats"
                                                 placeholder="Ex: 60"
                                                 {...register("secondClassBookedSeats")}
@@ -964,7 +979,7 @@ function FlightSchedule() {
                                                     <IsRequired />
                                                 </label>
                                                 <input
-                                                    type="number"
+                                                    type="text"
                                                     id={`stop_duration_${index}`}
                                                     {...register(`intermediateAirport.${index}.stopDuration` as const)}
                                                     placeholder="Ex: 30"
