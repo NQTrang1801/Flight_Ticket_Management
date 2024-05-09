@@ -80,10 +80,6 @@ const Register: React.FC = () => {
         })();
     };
 
-    // if (isLoggedIn) {
-    //     return <Navigate to="/" />;
-    // }
-
     return (
         <div className="w-full min-h-screen grid grid-cols-6">
             <div className="col-span-4 flex flex-col items-center justify-center">

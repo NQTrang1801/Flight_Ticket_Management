@@ -15,6 +15,7 @@ import Regulations from "./pages/Regulations";
 import FlightList from "./pages/FlightList";
 import Register from "./pages/Register";
 import Airports from "./pages/Airports";
+import UserRoutes from "./components/UserRoutes";
 
 function App() {
     const root = document.querySelector("#root");
@@ -51,6 +52,16 @@ function App() {
                     <Route path="/administrator/airport" element={<Airports />} />
                     <Route path="/administrator/regulations" element={<Regulations />} />
                     <Route path="/administrator/flight-list" element={<FlightList />} />
+                </Route>
+                <Route path="" element={<UserRoutes />}>
+                    <Route index element={<Dashboard />} />
+                    <Route path="/flight-schedule" element={<FlightSchedule />} />
+                    <Route path="/ticket-sales" element={<TicketSales />} />
+                    <Route path="/flight-booking" element={<FlightBooking />} />
+                    <Route path="/flight-lookup" element={<FlightLookup />} />
+                    <Route path="/airport" element={<Airports />} />
+                    {/* <Route path="/regulations" element={<Regulations />} /> */}
+                    <Route path="/flight-list" element={<FlightList />} />
                 </Route>
             </Route>
         </Routes>

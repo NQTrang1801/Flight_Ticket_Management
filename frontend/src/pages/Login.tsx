@@ -15,11 +15,11 @@ const schema = yup.object().shape({
     email: yup.string().email("Invalid email address.").required("Email is required."),
     password: yup.string().required("Password is required.")
 });
+const userType = window.location.pathname.slice(1, -6);
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
 
-    const userType = window.location.pathname.slice(1, -6);
     const [visible, setVisible] = useState(false);
 
     const dispatch = useAppDispatch();
@@ -38,7 +38,7 @@ const Login: React.FC = () => {
         const type = userType ? userType + "-" : "";
 
         dispatch(login(email, password, type))
-            .then(() => {
+            .then((response) => {
                 dispatch(sendMessage("Logged in successfully!"));
                 const timer = setTimeout(() => {
                     navigate(`/${userType}`);

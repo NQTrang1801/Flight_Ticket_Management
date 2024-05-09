@@ -1,15 +1,20 @@
 import { NavLink } from "react-router-dom";
 import logo from "~/assets/logo.png";
 
+const userType = "administrator";
+
 function Sidebar() {
     return (
         <div className="w-[240px] bg-background z-20 fixed top-0 bottom-0 flex flex-col pb-10 pt-6 border-r-[1px] border-r-solid border-r-border px-5">
             <div className="flex items-center justify-center">
-                <img src={logo} className="w-32 mb-8" alt="logo" />
+                <img src={logo} className="w-64 mb-8" alt="logo" />
             </div>
-            <p className="pl-4 pb-3 text-blue">Admin tools</p>
+            {userType && <p className="pl-4 pb-3 text-blue">Admin site</p>}
             <div className="flex flex-col pb-[32px] gap-2">
-                <NavLink to="/" className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4">
+                <NavLink
+                    to={`${userType}`}
+                    className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
+                >
                     {({ isActive }) => (
                         <>
                             <i className="flex flex-start mr-2 w-[26px] items-center h-[26px]">
@@ -42,7 +47,7 @@ function Sidebar() {
                     )}
                 </NavLink>
                 <NavLink
-                    to="/flight-schedule"
+                    to={`${userType}/flight-schedule`}
                     className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
                 >
                     {({ isActive }) => (
@@ -93,7 +98,7 @@ function Sidebar() {
                     )}
                 </NavLink>
                 <NavLink
-                    to="/flight-list"
+                    to={`${userType}/flight-list`}
                     className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
                 >
                     {({ isActive }) => (
@@ -119,7 +124,7 @@ function Sidebar() {
                     )}
                 </NavLink>
                 <NavLink
-                    to="/ticket-sales"
+                    to={`${userType}/ticket-sales`}
                     className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
                 >
                     {({ isActive }) => (
@@ -151,7 +156,7 @@ function Sidebar() {
                     )}
                 </NavLink>
                 <NavLink
-                    to="/flight-booking"
+                    to={`${userType}/flight-booking`}
                     className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
                 >
                     {({ isActive }) => (
@@ -185,7 +190,7 @@ function Sidebar() {
                     )}
                 </NavLink>
                 <NavLink
-                    to="/flight-lookup"
+                    to={`${userType}/flight-lookup`}
                     className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
                 >
                     {({ isActive }) => (
@@ -221,7 +226,7 @@ function Sidebar() {
                     )}
                 </NavLink>
                 <NavLink
-                    to="/airport"
+                    to={`${userType}/airport`}
                     className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
                 >
                     {({ isActive }) => (
@@ -246,34 +251,36 @@ function Sidebar() {
                         </>
                     )}
                 </NavLink>
-                <NavLink
-                    to="/regulations"
-                    className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
-                >
-                    {({ isActive }) => (
-                        <>
-                            <i className="flex flex-start mr-2 w-[26px] items-center h-[26px]">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 20 20"
-                                    width={26}
-                                    height={26}
-                                    id="policy"
-                                >
-                                    <path
-                                        className={`${
-                                            isActive ? "fill-white" : "fill-disabled"
-                                        } group-hover:fill-white`}
-                                        d="M15.0112,4.731A22.0639,22.0639,0,0,1,10.7861,3.01a1.4989,1.4989,0,0,0-1.5722,0A22.0731,22.0731,0,0,1,4.9893,4.731,1.4992,1.4992,0,0,0,3.9424,6.209l.165,4.98c.3677,2.5019,2.9917,4.5884,4.5235,5.6089a2.4634,2.4634,0,0,0,2.7382,0c1.5318-1.0205,4.1558-3.107,4.5284-5.6656l.16-4.9228A1.4994,1.4994,0,0,0,15.0112,4.731Zm-.1079,6.312c-.3115,2.12-2.6953,3.9936-4.0888,4.9223a1.4636,1.4636,0,0,1-1.629,0C7.792,15.0366,5.4082,13.1626,5.1016,11.1l-.16-4.9228a.4988.4988,0,0,1,.3462-.4917A22.9391,22.9391,0,0,0,9.7363,3.8623a.49.49,0,0,1,.5274,0,22.93,22.93,0,0,0,4.4492,1.8228.4989.4989,0,0,1,.3457.4917Zm-4.019-1.8872a.8686.8686,0,0,1-.3843.7094v1.3614a.5.5,0,0,1-1,0V9.8652a.8686.8686,0,0,1-.3843-.7094.8843.8843,0,0,1,1.7686,0Z"
-                                    ></path>
-                                </svg>
-                            </i>
-                            Regulations
-                        </>
-                    )}
-                </NavLink>
+                {userType && (
+                    <NavLink
+                        to={`${userType}/regulations`}
+                        className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
+                    >
+                        {({ isActive }) => (
+                            <>
+                                <i className="flex flex-start mr-2 w-[26px] items-center h-[26px]">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 20 20"
+                                        width={26}
+                                        height={26}
+                                        id="policy"
+                                    >
+                                        <path
+                                            className={`${
+                                                isActive ? "fill-white" : "fill-disabled"
+                                            } group-hover:fill-white`}
+                                            d="M15.0112,4.731A22.0639,22.0639,0,0,1,10.7861,3.01a1.4989,1.4989,0,0,0-1.5722,0A22.0731,22.0731,0,0,1,4.9893,4.731,1.4992,1.4992,0,0,0,3.9424,6.209l.165,4.98c.3677,2.5019,2.9917,4.5884,4.5235,5.6089a2.4634,2.4634,0,0,0,2.7382,0c1.5318-1.0205,4.1558-3.107,4.5284-5.6656l.16-4.9228A1.4994,1.4994,0,0,0,15.0112,4.731Zm-.1079,6.312c-.3115,2.12-2.6953,3.9936-4.0888,4.9223a1.4636,1.4636,0,0,1-1.629,0C7.792,15.0366,5.4082,13.1626,5.1016,11.1l-.16-4.9228a.4988.4988,0,0,1,.3462-.4917A22.9391,22.9391,0,0,0,9.7363,3.8623a.49.49,0,0,1,.5274,0,22.93,22.93,0,0,0,4.4492,1.8228.4989.4989,0,0,1,.3457.4917Zm-4.019-1.8872a.8686.8686,0,0,1-.3843.7094v1.3614a.5.5,0,0,1-1,0V9.8652a.8686.8686,0,0,1-.3843-.7094.8843.8843,0,0,1,1.7686,0Z"
+                                        ></path>
+                                    </svg>
+                                </i>
+                                Regulations
+                            </>
+                        )}
+                    </NavLink>
+                )}
                 {/* <NavLink
-                    to="/users"
+                    to={`${userType}/users`}
                     className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
                 >
                     {({ isActive }) => (

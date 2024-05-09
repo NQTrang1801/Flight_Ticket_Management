@@ -49,8 +49,8 @@ const AirportUpdating: React.FC<AirportUpdatingProps> = ({
     isInternational,
     coordinates
 }) => {
-    const { Portal, show, hide } = usePortal({
-        defaultShow: false
+    const { Portal, hide } = usePortal({
+        defaultShow: true
     });
 
     const [apTimezone, setApTimezone] = useState(timezone);
@@ -178,18 +178,6 @@ const AirportUpdating: React.FC<AirportUpdatingProps> = ({
 
     return (
         <>
-            <tr className="text-center capitalize hover:bg-hoverPrimary cursor-pointer" onClick={() => show()}>
-                <td>{code}</td>
-                <td>{name}</td>
-                <td>{country}</td>
-                <td>{address}</td>
-                <td>{timezone}</td>
-                <td>{terminals}</td>
-                <td>{capacity}</td>
-                <td>{coordinates.coordinates.join(", ")}</td>
-                <td>{isInternational == false ? "False" : "True"}</td>
-                <td>{status === false ? "False" : "True"}</td>
-            </tr>
             <Portal>
                 <div className="fixed top-0 right-0 left-0 bottom-0 bg-[rgba(0,0,0,0.4)] z-50 flex items-center justify-center">
                     <div className="flex items-center justify-center">
