@@ -35,8 +35,9 @@ const Login: React.FC = () => {
     const onSubmit: SubmitHandler<{ email: string; password: string }> = (formData) => {
         const email = formData.email;
         const password = formData.password;
+        const type = userType ? userType + "-" : "";
 
-        dispatch(login(email, password, userType + "-"))
+        dispatch(login(email, password, type))
             .then(() => {
                 dispatch(sendMessage("Logged in successfully!"));
                 const timer = setTimeout(() => {
@@ -49,8 +50,6 @@ const Login: React.FC = () => {
                 dispatch(sendMessage("The email address or password is incorrect!"));
                 console.error(error);
             });
-
-        navigate("/");
     };
 
     // if (isLoggedIn) {
@@ -139,7 +138,13 @@ const Login: React.FC = () => {
                     >
                         Login now
                     </button>
-                    <div className="text-black">Or</div>
+                    {!userType && (
+                        <div className="text-black flex items-center justify-between w-[360px]">
+                            <div className="w-36 h-[1px] bg-disabled"></div>
+                            <div>Or</div>
+                            <div className="w-36 h-[1px] bg-disabled"></div>
+                        </div>
+                    )}
                     <div className="text-black">
                         {!userType && (
                             <>
