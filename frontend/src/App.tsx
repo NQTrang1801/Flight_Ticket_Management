@@ -51,7 +51,7 @@ function App() {
                     <Route path="/administrator/ticket-sales" element={<TicketSales />} />
                     <Route path="/administrator/flight-booking" element={<FlightBooking />} />
                     <Route path="/administrator/flight-lookup" element={<FlightLookup />} />
-                    <Route path="/administrator/airport" element={<Airports />} />
+                    <Route path="/administrator/airports" element={<Airports />} />
                     <Route path="/administrator/regulations" element={<Regulations />} />
                     <Route path="/administrator/flight-list" element={<FlightList />} />
                     <Route path="/administrator/users" element={<Users />} />

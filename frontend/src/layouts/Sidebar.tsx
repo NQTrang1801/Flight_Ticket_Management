@@ -229,7 +229,7 @@ function Sidebar() {
                     )}
                 </NavLink>
                 <NavLink
-                    to={`${userType}/airport`}
+                    to={`${userType}/airports`}
                     className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
                 >
                     {({ isActive }) => (
@@ -250,7 +250,7 @@ function Sidebar() {
                                     ></path>
                                 </svg>
                             </i>
-                            Airport
+                            Airports
                         </>
                     )}
                 </NavLink>

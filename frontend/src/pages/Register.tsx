@@ -10,14 +10,6 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import IsRequired from "~/icons/IsRequired";
 
-interface RegisterValidation {
-    name: string;
-    email: string;
-    password: string;
-    phoneNumber: number;
-    address: string;
-}
-
 const schema = yup.object().shape({
     name: yup.string().required("Name is required."),
     email: yup.string().email("Invalid email address.").required("Email is required."),

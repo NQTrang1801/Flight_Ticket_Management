@@ -58,6 +58,14 @@ interface YearlyRevenueProps {
     }[];
 }
 
+interface RegisterValidation {
+    name: string;
+    email: string;
+    password: string;
+    phoneNumber: number;
+    address: string;
+}
+
 interface AirportData {
     _id: string;
     code: string;
@@ -169,4 +177,14 @@ interface FlightScheduleValidation {
         stopDuration: number;
         note: string;
     }>;
+}
+
+interface UserData {
+    email: string;
+    fullname: string;
+    group_id: string;
+    isBlocked: boolean;
+    mobile: string;
+    // tickets: [];
+    _id: string;
 }
