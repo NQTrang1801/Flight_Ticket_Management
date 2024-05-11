@@ -41,7 +41,7 @@ const ScheduleItem: React.FC<FlightScheduleData> = ({
             .delete(`/flight/511627641/${selectedId}`, {
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).data.token}`
+                    Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).token}`
                 }
             })
             .then(() => {

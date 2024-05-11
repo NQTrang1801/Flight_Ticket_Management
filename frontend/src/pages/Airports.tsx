@@ -119,7 +119,7 @@ function Airports() {
                     {
                         headers: {
                             "Content-Type": "application/json",
-                            Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).data.token}`
+                            Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).token}`
                         }
                     }
                 );

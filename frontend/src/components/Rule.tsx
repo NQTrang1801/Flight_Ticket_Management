@@ -33,7 +33,7 @@ const Rule: React.FC<RuleProps> = ({ index, code, ruleName, ruleDetail, value, d
             .delete(`/rule/511627340/delete/${selectedId}`, {
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).data.token}`
+                    Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).token}`
                 }
             })
             .then(() => {

@@ -82,7 +82,7 @@ function Regulations() {
                     {
                         headers: {
                             "Content-Type": "application/json",
-                            Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).data.token}`
+                            Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).token}`
                         }
                     }
                 )
@@ -106,7 +106,7 @@ function Regulations() {
             try {
                 const showsResponse = await axios.get("rule/511320340/all", {
                     headers: {
-                        Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).data.token}`
+                        Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).token}`
                     }
                 });
                 setData(showsResponse.data);

@@ -52,7 +52,7 @@ const Airport: React.FC<AirportProps> = ({
             .delete(`/airport/511627675/${selectedId}`, {
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).data.token}`
+                    Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).token}`
                 }
             })
             .then(() => {

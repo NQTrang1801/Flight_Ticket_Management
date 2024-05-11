@@ -1,18 +1,19 @@
 import { NavLink } from "react-router-dom";
 import logo from "~/assets/logo.png";
 
-const userType = "administrator";
-
 function Sidebar() {
+    const userType = JSON.parse(localStorage.getItem("user")!)?.userType;
+
     return (
         <div className="w-[240px] bg-background z-20 fixed top-0 bottom-0 flex flex-col pb-10 pt-6 border-r-[1px] border-r-solid border-r-border px-5">
             <div className="flex items-center justify-center">
                 <img src={logo} className="w-64 mb-8" alt="logo" />
             </div>
-            {userType && <p className="pl-4 pb-3 text-blue">Admin site</p>}
+            {userType !== "user" && <p className="pl-4 pb-3 text-blue capitalize">{userType} site</p>}
             <div className="flex flex-col pb-[32px] gap-2">
                 <NavLink
                     to={`${userType}`}
+                    end
                     className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
                 >
                     {({ isActive }) => (
@@ -46,57 +47,59 @@ function Sidebar() {
                         </>
                     )}
                 </NavLink>
-                <NavLink
-                    to={`${userType}/flight-schedule`}
-                    className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
-                >
-                    {({ isActive }) => (
-                        <>
-                            <i className="flex flex-start mr-2 w-[26px] items-center h-[26px] justify-center">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    data-name="Layer 1"
-                                    viewBox="0 0 64 64"
-                                    width={26}
-                                    height={26}
-                                    id="schedule"
-                                >
-                                    <path
-                                        className={`${
-                                            isActive ? "fill-white" : "fill-disabled"
-                                        } group-hover:fill-white`}
-                                        d="M50 24H10a2 2 0 0 1-2-2V12a2 2 0 0 1 2-2h40a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2zm-38-4h36v-6H12z"
-                                    ></path>
-                                    <path
-                                        className={`${
-                                            isActive ? "fill-white" : "fill-disabled"
-                                        } group-hover:fill-white`}
-                                        d="M42 18a2 2 0 0 1-2-2V8a2 2 0 0 1 4 0v8a2 2 0 0 1-2 2zm-24 0a2 2 0 0 1-2-2V8a2 2 0 0 1 4 0v8a2 2 0 0 1-2 2z"
-                                    ></path>
-                                    <path
-                                        className={`${
-                                            isActive ? "fill-white" : "fill-disabled"
-                                        } group-hover:fill-white`}
-                                        d="M32 54H14a6 6 0 0 1-6-6V12a2 2 0 0 1 2-2h40a2 2 0 0 1 2 2v22a2 2 0 0 1-4 0V14H12v34a2 2 0 0 0 2 2h18a2 2 0 0 1 0 4z"
-                                    ></path>
-                                    <path
-                                        className={`${
-                                            isActive ? "fill-white" : "fill-disabled"
-                                        } group-hover:fill-white`}
-                                        d="M42 58a14 14 0 1 1 14-14 14 14 0 0 1-14 14zm0-24a10 10 0 1 0 10 10 10 10 0 0 0-10-10z"
-                                    ></path>
-                                    <path
-                                        className={`${
-                                            isActive ? "fill-white" : "fill-disabled"
-                                        } group-hover:fill-white`}
-                                        d="M48 46h-6a2 2 0 0 1-2-2v-8h4v6h4z"
-                                    ></path>
-                                </svg>
-                            </i>
-                            Flight schedule
-                        </>
-                    )}
-                </NavLink>
+                {userType !== "user" && (
+                    <NavLink
+                        to={`${userType}/flight-schedule`}
+                        className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
+                    >
+                        {({ isActive }) => (
+                            <>
+                                <i className="flex flex-start mr-2 w-[26px] items-center h-[26px] justify-center">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        data-name="Layer 1"
+                                        viewBox="0 0 64 64"
+                                        width={26}
+                                        height={26}
+                                        id="schedule"
+                                    >
+                                        <path
+                                            className={`${
+                                                isActive ? "fill-white" : "fill-disabled"
+                                            } group-hover:fill-white`}
+                                            d="M50 24H10a2 2 0 0 1-2-2V12a2 2 0 0 1 2-2h40a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2zm-38-4h36v-6H12z"
+                                        ></path>
+                                        <path
+                                            className={`${
+                                                isActive ? "fill-white" : "fill-disabled"
+                                            } group-hover:fill-white`}
+                                            d="M42 18a2 2 0 0 1-2-2V8a2 2 0 0 1 4 0v8a2 2 0 0 1-2 2zm-24 0a2 2 0 0 1-2-2V8a2 2 0 0 1 4 0v8a2 2 0 0 1-2 2z"
+                                        ></path>
+                                        <path
+                                            className={`${
+                                                isActive ? "fill-white" : "fill-disabled"
+                                            } group-hover:fill-white`}
+                                            d="M32 54H14a6 6 0 0 1-6-6V12a2 2 0 0 1 2-2h40a2 2 0 0 1 2 2v22a2 2 0 0 1-4 0V14H12v34a2 2 0 0 0 2 2h18a2 2 0 0 1 0 4z"
+                                        ></path>
+                                        <path
+                                            className={`${
+                                                isActive ? "fill-white" : "fill-disabled"
+                                            } group-hover:fill-white`}
+                                            d="M42 58a14 14 0 1 1 14-14 14 14 0 0 1-14 14zm0-24a10 10 0 1 0 10 10 10 10 0 0 0-10-10z"
+                                        ></path>
+                                        <path
+                                            className={`${
+                                                isActive ? "fill-white" : "fill-disabled"
+                                            } group-hover:fill-white`}
+                                            d="M48 46h-6a2 2 0 0 1-2-2v-8h4v6h4z"
+                                        ></path>
+                                    </svg>
+                                </i>
+                                Flight schedule
+                            </>
+                        )}
+                    </NavLink>
+                )}
                 <NavLink
                     to={`${userType}/flight-list`}
                     className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
@@ -251,7 +254,7 @@ function Sidebar() {
                         </>
                     )}
                 </NavLink>
-                {userType && (
+                {userType !== "user" && (
                     <NavLink
                         to={`${userType}/regulations`}
                         className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
@@ -279,49 +282,51 @@ function Sidebar() {
                         )}
                     </NavLink>
                 )}
-                {/* <NavLink
-                    to={`${userType}/users`}
-                    className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
-                >
-                    {({ isActive }) => (
-                        <>
-                            <i className="flex flex-start mr-2 w-[26px] items-center h-[26px]">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 256 256"
-                                    width={26}
-                                    height={26}
-                                    id="actors"
-                                >
-                                    <rect width="24" height="24" fill="none"></rect>
-                                    <circle
-                                        cx="88"
-                                        cy="108"
-                                        r="52"
-                                        fill="none"
-                                        className={`${
-                                            isActive ? "stroke-white" : "stroke-disabled"
-                                        } group-hover:stroke-white`}
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="12"
-                                    ></circle>
-                                    <path
-                                        fill="none"
-                                        className={`${
-                                            isActive ? "stroke-white" : "stroke-disabled"
-                                        } group-hover:stroke-white`}
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="12"
-                                        d="M155.41251 57.937A52.00595 52.00595 0 1 1 169.52209 160M15.99613 197.39669a88.01736 88.01736 0 0 1 144.00452-.00549M169.52209 160a87.89491 87.89491 0 0 1 72.00032 37.3912"
-                                    ></path>
-                                </svg>
-                            </i>
-                            Users
-                        </>
-                    )}
-                </NavLink> */}
+                {userType !== "user" && (
+                    <NavLink
+                        to={`${userType}/users`}
+                        className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
+                    >
+                        {({ isActive }) => (
+                            <>
+                                <i className="flex flex-start mr-2 w-[26px] items-center h-[26px]">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 256 256"
+                                        width={26}
+                                        height={26}
+                                        id="actors"
+                                    >
+                                        <rect width="24" height="24" fill="none"></rect>
+                                        <circle
+                                            cx="88"
+                                            cy="108"
+                                            r="52"
+                                            fill="none"
+                                            className={`${
+                                                isActive ? "stroke-white" : "stroke-disabled"
+                                            } group-hover:stroke-white`}
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="12"
+                                        ></circle>
+                                        <path
+                                            fill="none"
+                                            className={`${
+                                                isActive ? "stroke-white" : "stroke-disabled"
+                                            } group-hover:stroke-white`}
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="12"
+                                            d="M155.41251 57.937A52.00595 52.00595 0 1 1 169.52209 160M15.99613 197.39669a88.01736 88.01736 0 0 1 144.00452-.00549M169.52209 160a87.89491 87.89491 0 0 1 72.00032 37.3912"
+                                        ></path>
+                                    </svg>
+                                </i>
+                                Users
+                            </>
+                        )}
+                    </NavLink>
+                )}
             </div>
         </div>
     );

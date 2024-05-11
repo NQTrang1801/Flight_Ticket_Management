@@ -15,7 +15,8 @@ const schema = yup.object().shape({
     email: yup.string().email("Invalid email address.").required("Email is required."),
     password: yup.string().required("Password is required.")
 });
-const userType = window.location.pathname.slice(1, -6);
+
+const userType = window.location.pathname.split("/")[1];
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
@@ -35,9 +36,8 @@ const Login: React.FC = () => {
     const onSubmit: SubmitHandler<{ email: string; password: string }> = (formData) => {
         const email = formData.email;
         const password = formData.password;
-        const type = userType ? userType + "-" : "";
 
-        dispatch(login(email, password, type))
+        dispatch(login(email, password, userType))
             .then((response) => {
                 dispatch(sendMessage("Logged in successfully!"));
                 const timer = setTimeout(() => {
@@ -68,7 +68,7 @@ const Login: React.FC = () => {
                     <img src={logo} width={256} height={256} />
                     <div className="text-primary font-semibold text-3xl mt-8 mb-4">Flight Ticket Management</div>
                     <div className="capitalize text-xl font-medium text-blue">
-                        {userType ? userType + " site" : "Welcome back"}
+                        {userType !== "user" ? userType + " site" : "Welcome back"}
                     </div>
                 </div>
                 <form onSubmit={handleSubmit(onSubmit)} className="flex justify-center items-center flex-col gap-6">
@@ -124,7 +124,7 @@ const Login: React.FC = () => {
                             </button>
                         </div>
                         {errors.password && <span className="text-deepRed">{errors.password.message}</span>}
-                        {!userType && (
+                        {userType === "user" && (
                             <a href="/forgot-password" className="text-blue hover:text-primary underline text-end">
                                 Forgot password?
                             </a>
@@ -132,13 +132,13 @@ const Login: React.FC = () => {
                     </div>
                     <button
                         className={`py-3 w-[360px] px-8 ${
-                            userType ? "mt-6" : ""
+                            userType !== "user" ? "mt-6" : ""
                         } font-semibold rounded-lg bg-blue border-blue border hover:border-primary hover:bg-primary`}
                         type="submit"
                     >
                         Login now
                     </button>
-                    {!userType && (
+                    {userType == "user" && (
                         <div className="text-black flex items-center justify-between w-[360px]">
                             <div className="w-36 h-[1px] bg-disabled"></div>
                             <div>Or</div>
@@ -146,7 +146,7 @@ const Login: React.FC = () => {
                         </div>
                     )}
                     <div className="text-black">
-                        {!userType && (
+                        {userType === "user" && (
                             <>
                                 Are you new?{" "}
                                 <a href="/register" className="text-blue hover:text-primary underline text-end">

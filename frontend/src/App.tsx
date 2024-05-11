@@ -16,6 +16,8 @@ import FlightList from "./pages/FlightList";
 import Register from "./pages/Register";
 import Airports from "./pages/Airports";
 import UserRoutes from "./components/UserRoutes";
+import AdminRoutes from "./components/AdminRoutes";
+import Users from "./pages/Users";
 
 function App() {
     const root = document.querySelector("#root");
@@ -39,9 +41,9 @@ function App() {
     return (
         <Routes>
             <Route path="/administrator/login" element={<Login />} />
-
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route path="/admin/login" element={<Login />} />
+            <Route path="/user/login" element={<Login />} />
+            <Route path="/user/register" element={<Register />} />
             <Route path="/" element={<Layout />}>
                 <Route path="/administrator" element={<AdministratorRoutes />}>
                     <Route index element={<Dashboard />} />
@@ -52,16 +54,23 @@ function App() {
                     <Route path="/administrator/airport" element={<Airports />} />
                     <Route path="/administrator/regulations" element={<Regulations />} />
                     <Route path="/administrator/flight-list" element={<FlightList />} />
+                    <Route path="/administrator/users" element={<Users />} />
                 </Route>
-                <Route path="" element={<UserRoutes />}>
+                <Route path="/admin" element={<AdminRoutes />}>
                     <Route index element={<Dashboard />} />
-                    <Route path="/flight-schedule" element={<FlightSchedule />} />
-                    <Route path="/ticket-sales" element={<TicketSales />} />
-                    <Route path="/flight-booking" element={<FlightBooking />} />
-                    <Route path="/flight-lookup" element={<FlightLookup />} />
-                    <Route path="/airport" element={<Airports />} />
-                    {/* <Route path="/regulations" element={<Regulations />} /> */}
-                    <Route path="/flight-list" element={<FlightList />} />
+                    <Route path="/admin/ticket-sales" element={<TicketSales />} />
+                    <Route path="/admin/flight-booking" element={<FlightBooking />} />
+                    <Route path="/admin/flight-lookup" element={<FlightLookup />} />
+                    <Route path="/admin/airport" element={<Airports />} />
+                    <Route path="/admin/flight-list" element={<FlightList />} />
+                </Route>
+                <Route path="/user" element={<UserRoutes />}>
+                    <Route index element={<Dashboard />} />
+                    <Route path="/user/ticket-sales" element={<TicketSales />} />
+                    <Route path="/user/flight-booking" element={<FlightBooking />} />
+                    <Route path="/user/flight-lookup" element={<FlightLookup />} />
+                    <Route path="/user/airport" element={<Airports />} />
+                    <Route path="/user/flight-list" element={<FlightList />} />
                 </Route>
             </Route>
         </Routes>

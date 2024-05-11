@@ -1,15 +1,14 @@
 import axios from "~/utils/axios";
 
 const login = (email: string, password: string, userType: string) => {
-    // console.log(`/user/${userType}login`);
     return axios
-        .post(`/user/${userType}login`, {
+        .post(`/user/${userType !== "user" ? userType + "-" : ""}login`, {
             email,
             password
         })
         .then((response) => {
             if (response.data.token) {
-                localStorage.setItem("user", JSON.stringify(response));
+                localStorage.setItem("user", JSON.stringify(response.data).slice(0, -1) + `,"userType":"${userType}"}`);
             }
 
             return response;

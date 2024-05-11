@@ -37,7 +37,9 @@ function Header() {
         >
             <div className="flex items-center gap-6">
                 <div className="font-medium text-[22px] mr-2 capitalize">
-                    {location.pathname !== "/" ? location.pathname.split("/")[1].split("-").join(" ") : "dashboard"}
+                    {location.pathname.split("/").length === 3
+                        ? location.pathname.split("/").splice(-1)[0].replace("-", " ")
+                        : "dashboard"}
                 </div>
                 <i className="group">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" id="calendar">
@@ -162,9 +164,13 @@ function Header() {
                             <li className="flex gap-4 items-center p-2">
                                 <img src={adminLogo} alt="avatar" width={64} height={64} className="rounded-full" />
                                 <div className="">
-                                    <p className="mb">Anh Tran</p>
-                                    <p className="text-xs text-disabled mb-2">admin@gmail.com</p>
-                                    <div className="px-2 py-1 bg-primary inline rounded-full text-xs">Admin</div>
+                                    <p className="mb">{JSON.parse(localStorage.getItem("user")!)?.fullname}</p>
+                                    <p className="text-xs text-disabled mb-2 mt-1">
+                                        {JSON.parse(localStorage.getItem("user")!)?.email}
+                                    </p>
+                                    <div className="px-2 py-1 bg-primary inline rounded-full text-xs capitalize">
+                                        {JSON.parse(localStorage.getItem("user")!)?.userType}
+                                    </div>
                                 </div>
                             </li>
                             <li className="w-full border-b border-border mb-1"></li>
