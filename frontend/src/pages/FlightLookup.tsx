@@ -8,7 +8,6 @@ import IsRequired from "~/icons/IsRequired";
 import { useAppDispatch, useAppSelector } from "~/hook";
 import { startLoading, stopLoading } from "~/actions/loading";
 import { sendMessage } from "~/actions/message";
-import TheaterItem from "~/components/TheaterItem";
 
 const schema = yup.object().shape({
     name: yup.string().required("Name is required."),

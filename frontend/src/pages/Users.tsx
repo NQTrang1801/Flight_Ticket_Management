@@ -6,10 +6,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import IsRequired from "~/icons/IsRequired";
 import { useAppDispatch } from "~/hook";
-import { startLoading, stopLoading } from "~/actions/loading";
 import { sendMessage } from "~/actions/message";
-import Tippy from "@tippyjs/react/headless";
-import Airport from "~/components/Airport";
 import User from "~/components/User";
 
 const schema = yup.object().shape({
@@ -65,13 +62,13 @@ function Users() {
                     }
                 );
 
-                dispatch(sendMessage("Created successfully!"));
+                dispatch(sendMessage("Created successfully!", "success"));
                 const timer = setTimeout(() => {
                     window.location.reload();
                 }, 2000);
                 return () => clearTimeout(timer);
             } catch (error) {
-                dispatch(sendMessage("Created failed!"));
+                dispatch(sendMessage("Created failed!", "error"));
                 console.error(error);
             }
         })();

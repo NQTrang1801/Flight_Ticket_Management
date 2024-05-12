@@ -22,7 +22,7 @@ import Users from "./pages/Users";
 function App() {
     const root = document.querySelector("#root");
     const { isLoading } = useAppSelector((state) => state.loading!);
-    const { message } = useAppSelector((state) => state.message!);
+    const { message, type } = useAppSelector((state) => state.message!);
 
     useEffect(() => {
         if (isLoading) {
@@ -34,9 +34,25 @@ function App() {
 
     useEffect(() => {
         if (message !== "") {
-            toast(message);
+            switch (type) {
+                case "info":
+                    toast.info(message);
+                    break;
+                case "success":
+                    toast.success(message);
+                    break;
+                case "warning":
+                    toast.warning(message);
+                    break;
+                case "error":
+                    toast.error(message);
+                    break;
+                default:
+                    toast(message);
+                    break;
+            }
         }
-    }, [message]);
+    }, [message, type]);
 
     return (
         <Routes>

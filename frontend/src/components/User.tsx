@@ -3,7 +3,6 @@ import { useState, useRef, useEffect } from "react";
 import axios from "~/utils/axios";
 import usePortal from "react-cool-portal";
 import { useAppDispatch } from "~/hook";
-import { startLoading, stopLoading } from "~/actions/loading";
 import UserUpdating from "./UserUpdating";
 import { sendMessage } from "~/actions/message";
 
@@ -14,6 +13,7 @@ interface UserProps {
     isBlocked: boolean;
     mobile: string;
     // tickets: [];
+    // address: string;
     _id: string;
 }
 
@@ -35,15 +35,14 @@ const User: React.FC<UserProps> = ({ email, fullname, group_id, isBlocked, mobil
                 }
             })
             .then(() => {
-                dispatch(stopLoading());
-                dispatch(sendMessage("Blocked successfully!"));
+                dispatch(sendMessage("Blocked successfully!", "success"));
                 setTimeout(() => {
                     window.location.reload();
                 }, 2000);
             })
             .catch((error) => {
                 console.error(error);
-                dispatch(sendMessage("Blocked failed!"));
+                dispatch(sendMessage("Blocked failed!", "error"));
                 hide();
             });
     };
@@ -57,15 +56,14 @@ const User: React.FC<UserProps> = ({ email, fullname, group_id, isBlocked, mobil
                 }
             })
             .then(() => {
-                dispatch(stopLoading());
-                dispatch(sendMessage("Unblocked successfully!"));
+                dispatch(sendMessage("Unblocked successfully!", "success"));
                 setTimeout(() => {
                     window.location.reload();
                 }, 2000);
             })
             .catch((error) => {
                 console.error(error);
-                dispatch(sendMessage("Unblocked failed!"));
+                dispatch(sendMessage("Unblocked failed!", "error"));
                 hide();
             });
     };
@@ -136,7 +134,7 @@ const User: React.FC<UserProps> = ({ email, fullname, group_id, isBlocked, mobil
                         <span className="font-semibold">Full name</span>: {fullname}
                     </div>
                     <div>
-                        <span className="font-semibold">Phone number</span>: 0{mobile}
+                        <span className="font-semibold">Phone number</span>: {mobile}
                     </div>
                     <div>
                         <span className="font-semibold">Group id</span>: {group_id}

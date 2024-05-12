@@ -59,14 +59,14 @@ const Register: React.FC = () => {
                     }
                 );
 
-                dispatch(sendMessage("Signed up successfully!"));
+                dispatch(sendMessage("Signed up successfully!", "success"));
                 const timer = setTimeout(() => {
                     navigate("/login");
                     window.location.reload();
                 }, 2000);
                 return () => clearTimeout(timer);
             } catch (error) {
-                dispatch(sendMessage("Signed up failed!"));
+                dispatch(sendMessage("Signed up failed!", "error"));
                 console.error(error);
             }
         })();

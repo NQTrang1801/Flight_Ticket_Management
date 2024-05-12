@@ -196,11 +196,11 @@ function FlightSchedule() {
                     }
                 );
                 dispatch(stopLoading());
-                dispatch(sendMessage("Created successfully!"));
+                dispatch(sendMessage("Created successfully!", "success"));
                 setTimeout(() => window.location.reload(), 2000);
             } catch (error) {
                 dispatch(stopLoading());
-                dispatch(sendMessage("Created failed!"));
+                dispatch(sendMessage("Created failed!", "error"));
                 console.error(error);
             }
         })();

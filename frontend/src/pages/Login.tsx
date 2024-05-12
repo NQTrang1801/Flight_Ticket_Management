@@ -39,7 +39,7 @@ const Login: React.FC = () => {
 
         dispatch(login(email, password, userType))
             .then((response) => {
-                dispatch(sendMessage("Logged in successfully!"));
+                dispatch(sendMessage("Logged in successfully!", "success"));
                 const timer = setTimeout(() => {
                     navigate(`/${userType}`);
                     window.location.reload();
@@ -47,7 +47,7 @@ const Login: React.FC = () => {
                 return () => clearTimeout(timer);
             })
             .catch((error) => {
-                dispatch(sendMessage("The email address or password is incorrect!"));
+                dispatch(sendMessage("The email address or password is incorrect!", "error"));
                 console.error(error);
             });
     };
