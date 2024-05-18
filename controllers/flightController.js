@@ -36,7 +36,13 @@ const createFlight = asyncHandler(async (req, res) => {
 
 const getAllFlights = asyncHandler(async (req, res) => {
     try {
-        const flights = await Flight.find();
+        const flights = await Flight.find().populate('departure_airport', 'code name country address')
+                                           .populate('destination_airport', 'code name country address')
+                                           .populate('transit_airports.airport_id', 'code name country address')
+                                           .populate('rules.regulation_1.flight_time', 'values')
+                                           .populate('rules.regulation_1.intermediate', 'values')
+                                           .populate('rules.regulation_2.tickets', 'values')
+                                           .populate('rules.regulation_3.booking', 'values')
         res.status(200).json(flights);
     } catch (error) {
         res.status(500).json({ message: "Failed to fetch flights", error: error.message });
@@ -46,7 +52,13 @@ const getAllFlights = asyncHandler(async (req, res) => {
 const getFlightById = asyncHandler(async (req, res) => {
     const { id } = req.params;
     try {
-        const flight = await Flight.findById(id);
+        const flight = await Flight.findById(id).populate('departure_airport', 'code name country address')
+                                                .populate('destination_airport', 'code name country address')
+                                                .populate('transit_airports.airport_id', 'code name country address')
+                                                .populate('rules.regulation_1.flight_time', 'values')
+                                                .populate('rules.regulation_1.intermediate', 'values')
+                                                .populate('rules.regulation_2.tickets', 'values')
+                                                .populate('rules.regulation_3.booking', 'values')
         if (!flight) {
             return res.status(404).json({ message: "Flight not found" });
         }
@@ -113,6 +125,29 @@ const updateSeatCountById = asyncHandler(async (req, res) => {
         res.status(200).json(flight);
     } catch (error) {
         res.status(500).json({ message: "Failed to update seat count", error: error.message });
+    }
+});
+
+const bookingSeetById = asyncHandler(async (req, res) => {
+    const { flight_id, seat_id } = req.params;
+    const { booked_seats } = req.body;
+    try {
+        const flight = await Flight.findOne({ "_id": flight_id, "seats._id": seat_id });
+        if (!flight) {
+            return res.status(404).json({ message: "Flight or seat not found" });
+        }
+        const seat = flight.seats.find(s => s._id == seat_id);
+        if (!seat) {
+            return res.status(404).json({ message: "Seat not found in flight" });
+        }
+        if (booked_seats < 0 || booked_seats > seat.count) {
+            return res.status(400).json({ message: "Invalid booking seats" });
+        }
+        seat.booked_seats = booked_seats;
+        await flight.save();
+        res.status(200).json(flight);
+    } catch (error) {
+        res.status(500).json({ message: "Failed to booking", error: error.message });
     }
 });
 

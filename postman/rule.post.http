@@ -5,72 +5,25 @@
 # router.get('/511320340/:id', authMiddleware, hasPermission, ruleController.getRuleById);
 ### get all
 GET {{url_dev}}/511320340/all
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MzY0OWZiNjc2ODViOWIwNGFjYjY0ZSIsImlhdCI6MTcxNDgzMzk2NiwiZXhwIjoxNzE0OTIwMzY2fQ.9srC2zSiON5ftn5AJAFe_MKUOwz4n5Ue7TbcXQ64TTw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDgyNzBlMDgxMDIwYzRmNzM4NzA1NyIsImlhdCI6MTcxNjAwNDY1MywiZXhwIjoxNzE2MDkxMDUzfQ.sB2DP9eFhK25Z0fQi93ZhYsMPM02T1V5_C1c6TrhwP4
 
 ## delete rule
 DELETE {{url_dev}}/511627340/delete/6628b879e931f6502283b5c4
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhiODNmZTkzMWY2NTAyMjgzYjViNiIsImlhdCI6MTcxMzk0NDY0MSwiZXhwIjoxNzE0MDMxMDQxfQ.jGVcF-AEXTIUxTcL-c2Y1sGRqh9hYVCRgitNa6rVV94
 
-### add rule MaxAirport
 POST {{url_dev}}/511454340/add-update-rule
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MzY0OWZiNjc2ODViOWIwNGFjYjY0ZSIsImlhdCI6MTcxNDgzMzk2NiwiZXhwIjoxNzE0OTIwMzY2fQ.9srC2zSiON5ftn5AJAFe_MKUOwz4n5Ue7TbcXQ64TTw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDgyNzBlMDgxMDIwYzRmNzM4NzA1NyIsImlhdCI6MTcxNjAwNDY1MywiZXhwIjoxNzE2MDkxMDUzfQ.sB2DP9eFhK25Z0fQi93ZhYsMPM02T1V5_C1c6TrhwP4
 Content-Type: application/json
 {
-    "ruleName": "Regulation Airport",
-    "code": "R1-1",
-    "ruleDetails": "Rule to limit the maximum number of airports",
-    "values": {
-        "max_airports": 4
+    "ruleName": "Regulations booking", 
+    "code": "R3", 
+    "detail": "Only book tickets later 1 day before departure. On the date of departure, all votes will be canceled.",
+    "values": { 
+        "max_booking_days_before_departure": -1, 
+        "cancel_bookings_days_before_departure": -1
     }
 }
 
-### add rule a flight
-POST {{url_dev}}/511454340/add-update-rule
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzQ5NTIxNiwiZXhwIjoxNzEzNTgxNjE2fQ.VbJeqISlEBqABYHLw5Q2DCM49kG4UaQ1Sv5R1cLjmOs
-Content-Type: application/json
-{
-    "ruleName": "HAN - SGN",
-    "code": "QD1-2.3",
-    "ruleDetails": "Minimum flight time and the number of intermediaries",
-    "value": {
-        "min_duration": 30,
-        "max_transit_airport": 3
-    }
-}
+// 6648270e081020c4f738705d
 
-### add rule a flight
-POST {{url_dev}}/511454340/add-update-rule
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjkxMjU5ZTM3ZDhhYjQxZjVmYWYwNiIsImlhdCI6MTcxMzk2OTA4NSwiZXhwIjoxNzE0MDU1NDg1fQ.8_4hw5VamKpxovsv45vJVM0KM4SUrxFHXDF_aIKBaTs
-Content-Type: application/json
-{
-    "ruleName": "SGN - HAN",
-    "code": "QD1-2.3",
-    "ruleDetails": "Minimum flight time and the number of intermediaries",
-    "value": {
-        "min_duration": 35,
-        "max_transit_airport": 2
-    }
-}
-
-### add rule stop duration
-POST {{url_dev}}/511454340/add-update-rule
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjkxMjU5ZTM3ZDhhYjQxZjVmYWYwNiIsImlhdCI6MTcxMzk2OTA4NSwiZXhwIjoxNzE0MDU1NDg1fQ.8_4hw5VamKpxovsv45vJVM0KM4SUrxFHXDF_aIKBaTs
-Content-Type: application/json
-{
-    "ruleName": "stop duration: 10 - 20 minute",
-    "code": "QD1-4",
-    "ruleDetails": "rule to stop duration time in transit airport",
-    "value": { "min": "1", "max": "20"}
-}
-
-### add rule stop duration
-POST {{url_dev}}/511454340/add-update-rule
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzM2MjI5OCwiZXhwIjoxNzEzNDQ4Njk4fQ.ctM42P5c1b6mI95SDzoFWjwXuUx5TmQUl2wIGYROurU
-Content-Type: application/json
-{
-    "ruleName": "stop duration: 20 - 50 minute",
-    "code": "QD1-4",
-    "ruleDetails": "rule to stop duration time in transit airport",
-    "value": { "min": "20", "max": "50"}
-}
 

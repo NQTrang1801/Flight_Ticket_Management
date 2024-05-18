@@ -3,13 +3,13 @@
 ### Tạo một chuyến bay mới
 POST {{url_dev}}/511454641/create
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MzY0OWZiNjc2ODViOWIwNGFjYjY0ZSIsImlhdCI6MTcxNDgzMzk2NiwiZXhwIjoxNzE0OTIwMzY2fQ.9srC2zSiON5ftn5AJAFe_MKUOwz4n5Ue7TbcXQ64TTw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDgzOGNjNDE0NjkzODEzYWZlMTY2YSIsImlhdCI6MTcxNjAwOTE4NywiZXhwIjoxNzE2MDk1NTg3fQ.I9lBaGhcdi2RuWAHmBf38F-V_xoxmtlJYfMvAv8ArhY
 {
-    "flight_number": "MH370-BOEING777777",
-    "flight_code": "HAN-SGNNNN",
-    "departure_airport": "66364a9367685b9b04acb66e",
-    "destination_airport": "66364da2083d44d27ecaad97",
-    "departure_datetime": "2024-04-20T08:00:00.000Z",
+    "flight_number": "MH370-BOEING777",
+    "flight_code": "HAN-SGN",
+    "departure_airport": "664839c6414693813afe169a",
+    "destination_airport": "664839cd414693813afe16a1",
+    "departure_datetime": "2024-05-19",
     "duration": 30,
     "ticket_price": 1000,
     "seats": [
@@ -17,19 +17,19 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MzY0OWZiN
         {"class": "2", "count": 80, "booked_seats": 0, "status": true}
     ],
     "transit_airports": [
-        {"airport_id": "66364a9367685b9b04acb66e", "stop_duration": 10, "note": ""},
-        {"airport_id": "66364a9d67685b9b04acb675", "stop_duration": 15, "note": "delay 2 minutes"}
+        {"airport_id": "664839d4414693813afe16a8", "stop_duration": 10, "note": ""},
+        {"airport_id": "664839db414693813afe16af", "stop_duration": 15, "note": "delay 2 minutes"}
     ],
     "rules": {
         "regulation_1": {
-            "flight_time": "663649fb67685b9b04acb651",
-            "intermediate": "663649fb67685b9b04acb652"
+            "flight_time": "664838cc414693813afe166d",
+            "intermediate": "664838cc414693813afe166e"
         },
         "regulation_2": {
-            "tickets": "663649fb67685b9b04acb653"
+            "tickets": "664838cc414693813afe166f"
         },
         "regulation_3": {
-            "booking": "663649fb67685b9b04acb654"
+            "booking": "664838cc414693813afe1670"
         }
     }
 }
@@ -40,12 +40,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MzY0OWZiN
 GET {{url_dev}}/all
 
 ### Lấy thông tin của một chuyến bay dựa trên ID
-GET {{url_dev}}/{{flight_id_here}}
+GET {{url_dev}}/664805918c9ee2b93eae8cc3
 
 ### Cập nhật thông tin của một chuyến bay dựa trên ID
 PUT {{url_dev}}/511246641/6636501cdcfe20685a789256
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MzY0OWZiNjc2ODViOWIwNGFjYjY0ZSIsImlhdCI6MTcxNDgzMzk2NiwiZXhwIjoxNzE0OTIwMzY2fQ.9srC2zSiON5ftn5AJAFe_MKUOwz4n5Ue7TbcXQ64TTw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDdmYzNhODY0ZmNmYjA4ODMyZDgxOSIsImlhdCI6MTcxNTk5NDQ5OCwiZXhwIjoxNzE2MDgwODk4fQ.ZxebGkrkAVJZUij9ky-Z1Wx2PUlrXNr_2wkE7Gu_cHA
 {
     "flight_number": "MH370-BOEING777777",
     "flight_code": "HAN-SGNNNN",
@@ -77,11 +77,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MzY0OWZiN
 }
 
 ### Cập nhật thông tin ghế ngồi của một chuyến bay dựa trên ID
-PUT {{url_dev}}/6621dfe08fbf71902dbed73d/seats/6621dfe08fbf71902dbed73e
+PUT {{url_dev}}/511246641/6636501cdcfe20685a789256/seats/66365548c07195c78f168003
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MmRjODE0MWQyMjAzZDE4MDNiMCIsImlhdCI6MTcxMzQ5NTIxNiwiZXhwIjoxNzEzNTgxNjE2fQ.VbJeqISlEBqABYHLw5Q2DCM49kG4UaQ1Sv5R1cLjmOs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MzY0OWZiNjc2ODViOWIwNGFjYjY0ZSIsImlhdCI6MTcxNTM5NjExOCwiZXhwIjoxNzE1NDgyNTE4fQ.lV-MZhYOhzHS3YssXkHyUwcznIHwVkciWrvhK9nIzHI
 {
-    "count": 20
+    "count": 25
 }
 
 

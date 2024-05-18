@@ -56,6 +56,7 @@ const loginUSER = asyncHandler(async (req, res) => {
             fullname: account?.fullname,
             email: account?.email,
             mobile: account?.mobile,
+            userType: "USER",
             token: generateToken(account?._id),
         });
     } else {
@@ -70,11 +71,11 @@ const loginADMINISTRATOR = asyncHandler(async (req, res) => {
         group_id: account.group_id,
         functionality_id: (await Functionality.findOne({ functionalityCode: "999999999" }).select('_id'))
     });
-    
-    if (!per) { 
-        throw new Error("Not Authorised"); 
+
+    if (!per) {
+        throw new Error("Not Authorised");
     }
-    
+
     if (account && (await account.isPasswordMatched(password))) {
         const refreshToken = await generateRefreshToken(account?._id);
         const updateuser = await User.findByIdAndUpdate(
@@ -94,6 +95,7 @@ const loginADMINISTRATOR = asyncHandler(async (req, res) => {
             email: account?.email,
             mobile: account?.mobile,
             adress: account?.address,
+            userType: "ADMINISTRATOR",
             token: generateToken(account?._id),
         });
     } else {
@@ -108,11 +110,11 @@ const loginADMIN = asyncHandler(async (req, res) => {
         group_id: account.group_id,
         functionality_id: (await Functionality.findOne({ functionalityCode: "511000000" }).select('_id'))
     });
-    
-    if (!per) { 
-        throw new Error("Not Authorised"); 
+
+    if (!per) {
+        throw new Error("Not Authorised");
     }
-    
+
     if (account && (await account.isPasswordMatched(password))) {
         const refreshToken = await generateRefreshToken(account?._id);
         const updateuser = await User.findByIdAndUpdate(
@@ -132,6 +134,7 @@ const loginADMIN = asyncHandler(async (req, res) => {
             email: account?.email,
             mobile: account?.mobile,
             adress: account?.address,
+            userType: "ADMIN",
             token: generateToken(account?._id),
         });
     } else {
@@ -171,7 +174,7 @@ const logout = asyncHandler(async (req, res) => {
     }
     await User.findOneAndUpdate({ refreshToken: refreshToken }, {
         refreshToken: "",
-    });    
+    });
     res.clearCookie("refreshToken", {
         httpOnly: true,
         secure: true,
@@ -203,13 +206,30 @@ const updatedUser = asyncHandler(async (req, res) => {
 });
 
 
-// Get all users
 const getAllUsersWithAdmin = asyncHandler(async (req, res) => {
     try {
-        const users = await User.find();
-        res.json(users);
+        const uniqueGroupIds = await User.distinct('group_id');
+        const groupInfo = {};
+        for (const groupId of uniqueGroupIds) {
+            const group = await Group.findById(groupId);
+            if (group) {
+                groupInfo[groupId] = group.groupName;
+            }
+        }
+
+        const usersByGroup = {};
+
+        for (const [groupId, groupName] of Object.entries(groupInfo)) {
+            const users = await User.find({ group_id: groupId });
+            if (!usersByGroup[groupName]) {
+                usersByGroup[groupName] = [];
+            }
+            usersByGroup[groupName].push(...users);
+        }
+
+        res.json(usersByGroup);
     } catch (error) {
-        throw new Error(error);
+        res.status(500).json({ message: error.message });
     }
 });
 
@@ -219,7 +239,7 @@ const getUserWithAdmin = asyncHandler(async (req, res) => {
     validateMongoDbId(id);
 
     try {
-        const getaUser = await User.findById(id);
+        const getaUser = await User.findById(id).populate('group_id', 'groupName');
         res.json({
             getaUser,
         });
@@ -303,13 +323,24 @@ const updatePassword = asyncHandler(async (req, res) => {
     }
 });
 
+
 // Get list users
 const getAllUsers = asyncHandler(async (req, res) => {
     try {
-        const users = await User.find({}, 'id fullname email mobile role isBlocked tickets');
+        // Tìm group_id của nhóm "USER"
+        const userGroup = await Group.findOne({ groupName: 'USER' });
+        if (!userGroup) {
+            return res.status(404).json({ message: 'Not Found' });
+        }
+
+        const userGroupId = userGroup._id;
+
+        // Tìm tất cả người dùng có group_id là userGroupId
+        const users = await User.find({ group_id: userGroupId }, 'id fullname email mobile address isBlocked tickets').populate('group_id', 'groupName');
+
         res.json(users);
     } catch (error) {
-        throw new Error(error);
+        res.status(500).json({ message: error.message });
     }
 });
 

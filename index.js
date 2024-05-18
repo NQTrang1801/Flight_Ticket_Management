@@ -12,6 +12,7 @@ const airportRoute = require("./router/airportRoute")
 const flightRoute = require("./router/flightRoute")
 const permissionRoute = require("./router/permissionRoute")
 const groupRoute = require("./router/groupRoute")
+const requestReservationRoutes = require('./router/requestReservationRoute');
 
 const bodyParser = require('body-parser');
 const cookieParser = require("cookie-parser");
@@ -31,6 +32,7 @@ app.use("/api/user", authRoute)
 app.use("/api/rule", ruleRoute)
 app.use("/api/airport", airportRoute)
 app.use("/api/flight", flightRoute)
+app.use('/api/request-reservations', requestReservationRoutes);
 
 
 app.use(notFound);

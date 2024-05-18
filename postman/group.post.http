@@ -23,9 +23,9 @@ Content-Type: application/json
 
 ### create group
 POST {{url_dev}}/511454413/create
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjkxMjU5ZTM3ZDhhYjQxZjVmYWYwNiIsImlhdCI6MTcxMzk2ODExMCwiZXhwIjoxNzE0MDU0NTEwfQ.TMxh4gZ0dO6_BaWjIvFG5MogYo8JsMmvEN3X5apQ024
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDdmYzNhODY0ZmNmYjA4ODMyZDgxOSIsImlhdCI6MTcxNTk5NDQ5OCwiZXhwIjoxNzE2MDgwODk4fQ.ZxebGkrkAVJZUij9ky-Z1Wx2PUlrXNr_2wkE7Gu_cHA
 Content-Type: application/json
 {
     "groupCode": "001",
-    "groupName": "Write"
+    "groupName": "USER"
 }

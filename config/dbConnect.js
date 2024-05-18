@@ -4,6 +4,8 @@ const User = require('../models/userModel')
 const Group = require('../models/groupModel')
 const Permission = require('../models/permissionModel')
 const Rule = require('../models/ruleModel')
+const Flight = require('../models/flightModel')
+const RequestReservation = require('../models/requestReservationModel')
 
 const dbConnect = () => {
     try {
@@ -76,7 +78,7 @@ const dbConnect = () => {
                 if (countG === 0) {
                     await Group.create([
                         { groupCode: "511", groupName: "ADMIN" },
-                        { groupCode: "000", groupName: "NORMAL" },
+                        { groupCode: "000", groupName: "USER" },
                         { groupCode: "999", groupName: "ADMINISTRATOR" }
                     ]);
                     console.log('Inserted GROUP default documents successfully.');
@@ -166,8 +168,8 @@ const dbConnect = () => {
                             code: "R3", 
                             detail: "Only book tickets later 1 day before departure. On the date of departure, all votes will be canceled.",
                             values: { 
-                                max_booking_days_before_departure: 1, 
-                                cancel_bookings: "" 
+                                max_booking_days_before_departure: -1, 
+                                cancel_bookings_days_before_departure: 0,
                             }
                         }
                     ]);
@@ -179,10 +181,37 @@ const dbConnect = () => {
             }
         });
 
+        cancelRequestReservations();
     }
     catch (err) {
         throw new Error(err);
     }
 }
+
+function getDateWithoutTime(date) {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+const cancelRequestReservations = async () => {
+    try {
+        const flights = await Flight.find();
+
+        const today = new Date();
+        const todayWithoutTime = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        todayWithoutTime.setDate(todayWithoutTime.getDate() + 2);
+
+        for (const flight of flights) {
+            const cancelDays = flight.rules?.regulation_3?.booking?.values?.cancel_bookings_days_before_departure || 0;
+            const cancelDate = new Date(flight.departure_datetime);
+            cancelDate.setDate(cancelDate.getDate() + cancelDays);
+            if (todayWithoutTime == cancelDate) {
+                await RequestReservation.updateMany({ flight_id: flight._id }, { status: 'Cancelled' });
+                console.log(`Cancelled requestReservations for flight ${flight.flight_number}.`);
+            }
+        }
+    } catch (error) {
+        console.error('Error cancelling requestReservations:', error);
+    }
+};
 
 module.exports = dbConnect;
