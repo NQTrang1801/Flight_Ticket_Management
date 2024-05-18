@@ -22,7 +22,6 @@ const createRequestReservation = asyncHandler(async (req, res) => {
         const departureDate = new Date(flight.departure_datetime);
         const maxBookingDays = flight.rules?.regulation_3?.booking?.values?.max_booking_days_before_departure || 0; // Default value is 0 if max_booking_days_before_departure is not defined
         checkDate.setDate(departureDate.getDate() + maxBookingDays); 
-        console.log(checkDate);
 
         if (booking_date > checkDate) {
             return res.status(404).json({ message: 'Ticket booking deadline has expired' });
@@ -127,13 +126,24 @@ const updateRequestReservation = asyncHandler(async (req, res) => {
 const cancelRequestReservation = asyncHandler(async (req, res) => {
     try {
         const { request_id } = req.params;
-        const cancelledRequest = await RequestReservation.findByIdAndUpdate(request_id, { status: 'Cancelled' }, { new: true });
 
-        if (!cancelledRequest) {
+        const requestReservation = await RequestReservation.findById(request_id);
+
+        if (!requestReservation) {
             return res.status(404).json({ message: 'Request not found' });
         }
 
-        res.status(200).json(cancelledRequest);
+        if (requestReservation.status == 'Booked') {
+            const flight = await Flight.findById(requestReservation.flight_id);
+            const seatClass = flight.seats.find(seat => seat.class == requestReservation.seat_class);
+            seatClass.booked_seats -= 1;
+            await flight.save();
+        }
+
+        requestReservation.status = 'Cancelled';
+        await requestReservation.save();
+
+        res.status(200).json(requestReservation);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

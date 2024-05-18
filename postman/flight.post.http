@@ -40,7 +40,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDgzOGNjN
 GET {{url_dev}}/all
 
 ### Lấy thông tin của một chuyến bay dựa trên ID
-GET {{url_dev}}/664805918c9ee2b93eae8cc3
+GET {{url_dev}}/66484d46f85395a3e0b97935
 
 ### Cập nhật thông tin của một chuyến bay dựa trên ID
 PUT {{url_dev}}/511246641/6636501cdcfe20685a789256
@@ -55,7 +55,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDdmYzNhO
     "duration": 30,
     "ticket_price": 1000,
     "seats": [
-        {"class": "1", "count": 20, "booked_seats": 0, "status": true},
+        {"class": "1", "count": 1, "booked_seats": 0, "status": true},
         {"class": "2", "count": 80, "booked_seats": 0, "status": true}
     ],
     "transit_airports": [
@@ -77,11 +77,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDdmYzNhO
 }
 
 ### Cập nhật thông tin ghế ngồi của một chuyến bay dựa trên ID
-PUT {{url_dev}}/511246641/6636501cdcfe20685a789256/seats/66365548c07195c78f168003
+PUT {{url_dev}}/511246641/66484d46f85395a3e0b97935/seats/66484d46f85395a3e0b97936
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MzY0OWZiNjc2ODViOWIwNGFjYjY0ZSIsImlhdCI6MTcxNTM5NjExOCwiZXhwIjoxNzE1NDgyNTE4fQ.lV-MZhYOhzHS3YssXkHyUwcznIHwVkciWrvhK9nIzHI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDgzOGNjNDE0NjkzODEzYWZlMTY2YSIsImlhdCI6MTcxNjAwOTE4NywiZXhwIjoxNzE2MDk1NTg3fQ.I9lBaGhcdi2RuWAHmBf38F-V_xoxmtlJYfMvAv8ArhY
 {
-    "count": 25
+    "count": 2
 }
 
 

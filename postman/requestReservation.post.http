@@ -6,7 +6,7 @@ Content-Type: application/json
 {
     "user_id" : "664838f6414693813afe167c",
     "flight_id" : "66484d46f85395a3e0b97935",
-    "seat_class" : "1",
+    "seat_class" : "2",
     "full_name" : "Nguyen Van A",
     "CMND" : "6123179891287",
     "phone_number" : "0907722321"
@@ -19,4 +19,7 @@ GET {{url_dev}}/580320946/request-all
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDgzOGNjNDE0NjkzODEzYWZlMTY2YSIsImlhdCI6MTcxNjAwOTE4NywiZXhwIjoxNzE2MDk1NTg3fQ.I9lBaGhcdi2RuWAHmBf38F-V_xoxmtlJYfMvAv8ArhY
 ###
 PATCH {{url_dev}}/580457946/66484d801eb5d91bd85ee816/success
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDgzOGNjNDE0NjkzODEzYWZlMTY2YSIsImlhdCI6MTcxNjAwOTE4NywiZXhwIjoxNzE2MDk1NTg3fQ.I9lBaGhcdi2RuWAHmBf38F-V_xoxmtlJYfMvAv8ArhY
+###
+PATCH {{url_dev}}/6648540b9bfb863dde7bcb6a/cancel
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDgzOGNjNDE0NjkzODEzYWZlMTY2YSIsImlhdCI6MTcxNjAwOTE4NywiZXhwIjoxNzE2MDk1NTg3fQ.I9lBaGhcdi2RuWAHmBf38F-V_xoxmtlJYfMvAv8ArhY
