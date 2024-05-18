@@ -12,12 +12,12 @@ import Dashboard from "./pages/Dashboard";
 import FlightBooking from "./pages/FlightBooking";
 import FlightLookup from "./pages/FlightLookup";
 import Regulations from "./pages/Regulations";
-import FlightList from "./pages/FlightList";
 import Register from "./pages/Register";
 import Airports from "./pages/Airports";
 import UserRoutes from "./components/UserRoutes";
 import AdminRoutes from "./components/AdminRoutes";
 import Users from "./pages/Users";
+import BookingForms from "./pages/BookingForms";
 
 function App() {
     const root = document.querySelector("#root");
@@ -70,7 +70,7 @@ function App() {
                     <Route path="/administrator/flight-lookup" element={<FlightLookup />} />
                     <Route path="/administrator/airports" element={<Airports />} />
                     <Route path="/administrator/regulations" element={<Regulations />} />
-                    <Route path="/administrator/flight-list" element={<FlightList />} />
+                    <Route path="/administrator/booking-forms" element={<BookingForms />} />
                     <Route path="/administrator/users" element={<Users />} />
                 </Route>
                 <Route path="/admin" element={<AdminRoutes />}>
@@ -79,7 +79,7 @@ function App() {
                     <Route path="/admin/flight-booking" element={<FlightBooking />} />
                     <Route path="/admin/flight-lookup" element={<FlightLookup />} />
                     <Route path="/admin/airport" element={<Airports />} />
-                    <Route path="/admin/flight-list" element={<FlightList />} />
+                    <Route path="/admin/booking-forms" element={<BookingForms />} />
                 </Route>
                 <Route path="/user" element={<UserRoutes />}>
                     <Route index element={<Dashboard />} />
@@ -87,7 +87,7 @@ function App() {
                     <Route path="/user/flight-booking" element={<FlightBooking />} />
                     <Route path="/user/flight-lookup" element={<FlightLookup />} />
                     <Route path="/user/airport" element={<Airports />} />
-                    <Route path="/user/flight-list" element={<FlightList />} />
+                    <Route path="/user/booking-forms" element={<BookingForms />} />
                 </Route>
             </Route>
         </Routes>

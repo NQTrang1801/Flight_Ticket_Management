@@ -200,3 +200,21 @@ interface UserData {
     // tickets: [];
     _id: string;
 }
+
+enum BookingStatus {
+    "Booked",
+    "Cancelled",
+    "Paid"
+}
+
+interface BookingFormData {
+    user_id: object;
+    flight_id: object;
+    seat_class: string;
+    full_name: string;
+    CMND: string;
+    phone_number: string;
+    price: number;
+    booking_date: Date;
+    status: BookingStatus;
+}
