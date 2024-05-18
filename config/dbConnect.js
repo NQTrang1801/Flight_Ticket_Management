@@ -6,6 +6,8 @@ const Permission = require('../models/permissionModel')
 const Rule = require('../models/ruleModel')
 const Flight = require('../models/flightModel')
 const RequestReservation = require('../models/requestReservationModel')
+const Reservation = require('../models/reservationModel')
+const ONE_DAY = 24 * 60 * 60 * 1000;
 
 const dbConnect = () => {
     try {
@@ -182,36 +184,35 @@ const dbConnect = () => {
         });
 
         cancelRequestReservations();
+        setTimeout(cancelRequestReservations, ONE_DAY);
     }
     catch (err) {
         throw new Error(err);
     }
 }
 
-function getDateWithoutTime(date) {
-    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
-}
-
 const cancelRequestReservations = async () => {
     try {
-        const flights = await Flight.find();
+        const flights = await Flight.find().populate('rules.regulation_3.booking', 'values');
 
         const today = new Date();
         const todayWithoutTime = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-        todayWithoutTime.setDate(todayWithoutTime.getDate() + 2);
 
         for (const flight of flights) {
             const cancelDays = flight.rules?.regulation_3?.booking?.values?.cancel_bookings_days_before_departure || 0;
             const cancelDate = new Date(flight.departure_datetime);
             cancelDate.setDate(cancelDate.getDate() + cancelDays);
-            if (todayWithoutTime == cancelDate) {
+            const cancelDateWithoutTime = new Date(cancelDate.getFullYear(), cancelDate.getMonth(), cancelDate.getDate());
+            if (todayWithoutTime.getTime() == cancelDateWithoutTime.getTime()) {
                 await RequestReservation.updateMany({ flight_id: flight._id }, { status: 'Cancelled' });
-                console.log(`Cancelled requestReservations for flight ${flight.flight_number}.`);
+                await Reservation.updateMany({ flight_id: flight._id }, { status: 'Cancelled' });
+                console.log(`Cancelled requestReservations for flight ${flight.flight_code}.`);
             }
         }
     } catch (error) {
         console.error('Error cancelling requestReservations:', error);
     }
 };
+
 
 module.exports = dbConnect;
