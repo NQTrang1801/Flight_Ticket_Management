@@ -7,7 +7,7 @@ const transitAirportSchema = new mongoose.Schema({
 });
 
 const flightSchema = new mongoose.Schema({
-    flight_number: { type: String, required: true, unique: true },
+    flight_number: { type: String, required: true },
     flight_code: { type: String, required: true },
     departure_airport: { type: mongoose.Schema.Types.ObjectId, ref: 'Airport', required: true },
     destination_airport: { type: mongoose.Schema.Types.ObjectId, ref: 'Airport', required: true },

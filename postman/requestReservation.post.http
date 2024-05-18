@@ -5,7 +5,7 @@ POST {{url_dev}}/booking
 Content-Type: application/json
 {
     "user_id" : "664838f6414693813afe167c",
-    "flight_id" : "66483a7c414693813afe16b9",
+    "flight_id" : "66484d46f85395a3e0b97935",
     "seat_class" : "1",
     "full_name" : "Nguyen Van A",
     "CMND" : "6123179891287",
@@ -18,5 +18,5 @@ GET {{url_dev}}/request/6648293c081020c4f73870bb
 GET {{url_dev}}/580320946/request-all
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDgzOGNjNDE0NjkzODEzYWZlMTY2YSIsImlhdCI6MTcxNjAwOTE4NywiZXhwIjoxNzE2MDk1NTg3fQ.I9lBaGhcdi2RuWAHmBf38F-V_xoxmtlJYfMvAv8ArhY
 ###
-PATCH {{url_dev}}/580457946/66483b04ff57dbd6ac304c7a/success
+PATCH {{url_dev}}/580457946/66484d801eb5d91bd85ee816/success
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDgzOGNjNDE0NjkzODEzYWZlMTY2YSIsImlhdCI6MTcxNjAwOTE4NywiZXhwIjoxNzE2MDk1NTg3fQ.I9lBaGhcdi2RuWAHmBf38F-V_xoxmtlJYfMvAv8ArhY

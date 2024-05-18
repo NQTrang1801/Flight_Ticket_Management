@@ -1,6 +1,7 @@
 const Airport = require("../models/airportModel");
 const Flight = require("../models/flightModel");
 const Rule = require('../models/ruleModel');
+const Reservation = require('../models/reservationModel');
 const asyncHandler = require("express-async-handler");
 
 const createFlight = asyncHandler(async (req, res) => {

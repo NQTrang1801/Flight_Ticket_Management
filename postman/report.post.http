@@ -1,0 +1,16 @@
+@url_dev=http://localhost:5000/api/reservations
+
+GET {{url_dev}}/511320884/revenue-report-month-year
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDgzOGNjNDE0NjkzODEzYWZlMTY2YSIsImlhdCI6MTcxNjAwOTE4NywiZXhwIjoxNzE2MDk1NTg3fQ.I9lBaGhcdi2RuWAHmBf38F-V_xoxmtlJYfMvAv8ArhY
+Content-Type: application/json
+{
+    "month" : 5,
+    "year" : 2024
+}
+
+GET {{url_dev}}/511320884/revenue-report-year
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDgzOGNjNDE0NjkzODEzYWZlMTY2YSIsImlhdCI6MTcxNjAwOTE4NywiZXhwIjoxNzE2MDk1NTg3fQ.I9lBaGhcdi2RuWAHmBf38F-V_xoxmtlJYfMvAv8ArhY
+Content-Type: application/json
+{
+    "year" : 2024
+}

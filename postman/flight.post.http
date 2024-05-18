@@ -5,8 +5,8 @@ POST {{url_dev}}/511454641/create
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDgzOGNjNDE0NjkzODEzYWZlMTY2YSIsImlhdCI6MTcxNjAwOTE4NywiZXhwIjoxNzE2MDk1NTg3fQ.I9lBaGhcdi2RuWAHmBf38F-V_xoxmtlJYfMvAv8ArhY
 {
-    "flight_number": "MH370-BOEING777",
-    "flight_code": "HAN-SGN",
+    "flight_number": "MH370-BOEING77777",
+    "flight_code": "HAN-SGNN",
     "departure_airport": "664839c6414693813afe169a",
     "destination_airport": "664839cd414693813afe16a1",
     "departure_datetime": "2024-05-19",
