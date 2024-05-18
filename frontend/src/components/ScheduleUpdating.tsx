@@ -21,11 +21,6 @@ const schema = yup.object().shape({
     ticketPrice: yup.number().required("Ticket price is required.").typeError("Ticket price must be a number."),
     departureDate: yup.date().required("Departure date is required.").typeError("Date is required."),
     departureTime: yup.string().required("Time is required.").typeError("Time is required."),
-    bookingDeadline: yup.date().required("Booking deadline is required.").typeError("Booking deadline is required."),
-    cancellationDeadline: yup
-        .date()
-        .required("Cancellation deadline is required.")
-        .typeError("Cancellation deadline is required."),
     firstClassCapacity: yup
         .number()
         .required("Seating capacity is required.")
@@ -58,15 +53,11 @@ const ScheduleUpdating: React.FC<FlightScheduleData> = ({
     _id,
     flight_number,
     flight_code,
-    departure_airport,
-    departure_airport_name,
-    destination_airport,
-    destination_airport_name,
     departure_datetime,
+    departure_airport,
+    destination_airport,
     duration,
     seats,
-    booking_deadline,
-    cancellation_deadline,
     ticket_price,
     transit_airports,
     rules
@@ -76,12 +67,12 @@ const ScheduleUpdating: React.FC<FlightScheduleData> = ({
     const [formSubmitted, setFormSubmitted] = useState(false);
 
     const [departureAirport, setDepartureAirport] = useState({
-        id: departure_airport,
-        name: departure_airport_name
+        id: departure_airport._id,
+        name: departure_airport.name
     });
     const [arrivalAirport, setArrivalAirport] = useState({
-        id: destination_airport,
-        name: destination_airport_name
+        id: destination_airport._id,
+        name: destination_airport.name
     });
 
     const dispatch = useAppDispatch();
@@ -113,10 +104,8 @@ const ScheduleUpdating: React.FC<FlightScheduleData> = ({
             duration: duration,
             departureAirport: departure_airport,
             destinationAirport: destination_airport,
-            bookingDeadline: booking_deadline,
             departureDate: formatDate(getFormattedDateTime(departure_datetime).split(" ")[0]),
             departureTime: getFormattedDateTime(departure_datetime).split(" ")[1].slice(0, -3),
-            cancellationDeadline: cancellation_deadline,
             ticketPrice: ticket_price,
             firstClassBookedSeats: seats[0].booked_seats,
             firstClassCapacity: seats[0].count,
@@ -219,11 +208,11 @@ const ScheduleUpdating: React.FC<FlightScheduleData> = ({
                     }
                 );
                 dispatch(stopLoading());
-                dispatch(sendMessage("Updated successfully!"));
+                dispatch(sendMessage("Updated successfully!", "success"));
                 setTimeout(() => window.location.reload(), 2000);
             } catch (error) {
                 dispatch(stopLoading());
-                dispatch(sendMessage(`Updated failed!`));
+                dispatch(sendMessage(`Updated failed!`, "error"));
                 console.error(error);
             }
         })();
@@ -238,7 +227,7 @@ const ScheduleUpdating: React.FC<FlightScheduleData> = ({
                 setAirportData(airportResponse.data);
                 setSelectedAirports(
                     airportResponse.data.filter((airport: AirportData) =>
-                        transit_airports.some((transit_airport) => transit_airport.airport_id === airport._id)
+                        transit_airports.some((transit_airport) => transit_airport.airport_id._id === airport._id)
                     )
                 );
             } catch (error) {
@@ -246,6 +235,8 @@ const ScheduleUpdating: React.FC<FlightScheduleData> = ({
             }
         })();
     }, [transit_airports]);
+
+    console.log(selectedAirports);
 
     return (
         <>
@@ -370,36 +361,6 @@ const ScheduleUpdating: React.FC<FlightScheduleData> = ({
                                             className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                         />
                                         {<span className="text-deepRed">{errors.duration?.message}</span>}
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="flex gap-2 flex-col">
-                                        <label htmlFor="bookingDeadline" className="flex gap-1 mb-1 items-center">
-                                            Booking deadline
-                                            <IsRequired />
-                                        </label>
-                                        <input
-                                            type="date"
-                                            pattern="\d{4}-\d{2}-\d{2}"
-                                            id="bookingDeadline"
-                                            {...register("bookingDeadline")}
-                                            className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
-                                        />
-                                        {<span className="text-deepRed">{errors.bookingDeadline?.message}</span>}
-                                    </div>
-                                    <div className="flex gap-2 flex-col">
-                                        <label htmlFor="cancellationDeadline" className="flex gap-1 mb-1 items-center">
-                                            Cancellation deadline
-                                            <IsRequired />
-                                        </label>
-                                        <input
-                                            type="date"
-                                            pattern="\d{4}-\d{2}-\d{2}"
-                                            id="cancellationDeadline"
-                                            {...register("cancellationDeadline")}
-                                            className="bg-[rgba(141,124,221,0.1)] col-span-2 text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
-                                        />
-                                        {<span className="text-deepRed">{errors.cancellationDeadline?.message}</span>}
                                     </div>
                                 </div>
                                 <div className="grid grid-cols-2 gap-2">

@@ -17,12 +17,8 @@ const ScheduleItem: React.FC<FlightScheduleData> = ({
     departure_datetime,
     duration,
     seats,
-    booking_deadline,
-    cancellation_deadline,
     ticket_price,
     transit_airports,
-    departure_airport_name,
-    destination_airport_name,
     rules
 }) => {
     const [selectedId, setSelectedId] = useState("");
@@ -46,12 +42,12 @@ const ScheduleItem: React.FC<FlightScheduleData> = ({
             })
             .then(() => {
                 dispatch(stopLoading());
-                dispatch(sendMessage("Deleted successfully!"));
+                dispatch(sendMessage("Deleted successfully!", "success"));
                 setTimeout(() => window.location.reload(), 2000);
             })
             .catch((error) => {
                 dispatch(stopLoading());
-                dispatch(sendMessage("Deleted failed!"));
+                dispatch(sendMessage("Deleted failed!", "error"));
                 console.error(error);
             });
     };
@@ -119,10 +115,10 @@ const ScheduleItem: React.FC<FlightScheduleData> = ({
                             <span className="font-semibold">Flight number</span>: {flight_number}
                         </div>
                         <div>
-                            <span className="font-semibold">Departure airport</span>: {departure_airport_name}
+                            <span className="font-semibold">Departure airport</span>: {departure_airport.name}
                         </div>
                         <div>
-                            <span className="font-semibold">Arrival airport</span>: {destination_airport_name}
+                            <span className="font-semibold">Arrival airport</span>: {destination_airport.name}
                         </div>
 
                         <div>
@@ -138,12 +134,6 @@ const ScheduleItem: React.FC<FlightScheduleData> = ({
                         </div>
                         <div>
                             <span className="font-semibold">Flight duration</span>: {duration} minutes
-                        </div>
-                        <div>
-                            <span className="font-semibold">Booking deadline</span>: {booking_deadline}
-                        </div>
-                        <div>
-                            <span className="font-semibold">Cancellation deadline</span>: {cancellation_deadline}
                         </div>
                     </div>
                     <span className="font-semibold">Seats:</span>
@@ -182,9 +172,9 @@ const ScheduleItem: React.FC<FlightScheduleData> = ({
                             </thead>
                             <tbody>
                                 {transit_airports.map((airport, index) => (
-                                    <tr key={airport.airport_id} className="text-center">
+                                    <tr key={airport.airport_id._id} className="text-center">
                                         <td>{index + 1}</td>
-                                        <td>{airport.airport_name}</td>
+                                        <td>{airport.airport_id.name}</td>
                                         <td>{airport.stop_duration} minutes</td>
                                         <td>{airport.note}</td>
                                     </tr>
@@ -204,12 +194,8 @@ const ScheduleItem: React.FC<FlightScheduleData> = ({
                     departure_datetime={departure_datetime}
                     duration={duration}
                     seats={seats}
-                    booking_deadline={booking_deadline}
-                    cancellation_deadline={cancellation_deadline}
                     ticket_price={ticket_price}
                     transit_airports={transit_airports}
-                    departure_airport_name={departure_airport_name}
-                    destination_airport_name={destination_airport_name}
                     rules={rules}
                 />
             ) : (
@@ -220,6 +206,7 @@ const ScheduleItem: React.FC<FlightScheduleData> = ({
                                 <button
                                     onClick={() => {
                                         hide();
+                                        setSelectedId("");
                                         overlayRef.current?.classList.replace("flex", "hidden");
                                     }}
                                     className="absolute right-3 top-3 border border-blue rounded-full p-1 hover:border-primary hover:bg-primary"
@@ -250,6 +237,7 @@ const ScheduleItem: React.FC<FlightScheduleData> = ({
                                     <button
                                         onClick={() => {
                                             hide();
+                                            setSelectedId("");
                                             overlayRef.current?.classList.replace("flex", "hidden");
                                         }}
                                         className="px-5 py-2 border border-blue hover:border-primary hover:bg-primary rounded-lg"

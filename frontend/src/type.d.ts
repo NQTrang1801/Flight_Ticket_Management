@@ -85,9 +85,7 @@ interface AirportData {
 
 interface RuleValidation {
     ruleName: string;
-    code: string;
     detail: string;
-    values: { key: string; value: number }[];
 }
 
 interface ValueObject {
@@ -122,10 +120,20 @@ interface FlightScheduleData {
     _id: string;
     flight_number: string;
     flight_code: string;
-    departure_airport: string;
-    departure_airport_name: string;
-    destination_airport: string;
-    destination_airport_name: string;
+    departure_airport: {
+        address: string;
+        code: string;
+        country: string;
+        name: string;
+        _id: string;
+    };
+    destination_airport: {
+        address: string;
+        code: string;
+        country: string;
+        name: string;
+        _id: string;
+    };
     departure_datetime: string;
     duration: number;
     seats: [
@@ -142,11 +150,15 @@ interface FlightScheduleData {
             status: boolean;
         }
     ];
-    booking_deadline: string;
-    cancellation_deadline: string;
     ticket_price: number;
     transit_airports: {
-        airport_id: string;
+        airport_id: {
+            address: string;
+            code: string;
+            country: string;
+            name: string;
+            _id: string;
+        };
         airport_name: string;
         stop_duration: number;
         note: string;

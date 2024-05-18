@@ -27,10 +27,7 @@ const schema = yup.object().shape({
 
 function Regulations() {
     const [data, setData] = useState<RuleData[]>();
-    const [deletingMode, setDeletingMode] = useState(false);
-    const [updatingMode, setUpdatingMode] = useState(false);
-
-    const { Portal, show, hide } = usePortal({
+    const { Portal, hide } = usePortal({
         defaultShow: false
     });
 
@@ -116,115 +113,10 @@ function Regulations() {
         })();
     }, []);
 
-    console.log(data);
+    // console.log(data);
 
     return (
         <>
-            <div className="flex justify-between items-center mb-6">
-                <div className="flex gap-3 items-center">
-                    <button
-                        onClick={() => {
-                            setDeletingMode(false);
-                            setUpdatingMode(false);
-                            show();
-                        }}
-                        className="bg-block rounded-xl border-blue border hover:border-primary hover:bg-primary flex items-center justify-center p-3 w-[112px]"
-                    >
-                        <i className="mr-[3px]">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                id="add"
-                                x="0"
-                                y="0"
-                                version="1.1"
-                                viewBox="0 0 29 29"
-                                xmlSpace="preserve"
-                                width={20}
-                                height={20}
-                                className="translate-x-[-3px]"
-                            >
-                                <path
-                                    fill="none"
-                                    stroke="#fff"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeMiterlimit="10"
-                                    strokeWidth="2"
-                                    d="M14.5 22V7M7 14.5h15"
-                                ></path>
-                            </svg>
-                        </i>
-                        Create
-                    </button>
-
-                    <button
-                        onClick={() => {
-                            setDeletingMode(false);
-                            setUpdatingMode(!updatingMode);
-                        }}
-                        className={`bg-block hover:bg-primary hover:border-primary  rounded-xl border-blue border ${
-                            updatingMode ? "border-primary bg-primary" : ""
-                        } flex items-center justify-center p-3 w-[112px]`}
-                    >
-                        <i className="mr-1">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24"
-                                width={20}
-                                height={20}
-                                id="edit"
-                            >
-                                <g>
-                                    <path
-                                        fill="white"
-                                        d="M19.4 7.34 16.66 4.6A2 2 0 0 0 14 4.53l-9 9a2 2 0 0 0-.57 1.21L4 18.91a1 1 0 0 0 .29.8A1 1 0 0 0 5 20h.09l4.17-.38a2 2 0 0 0 1.21-.57l9-9a1.92 1.92 0 0 0-.07-2.71zM9.08 17.62l-3 .28.27-3L12 9.32l2.7 2.7zM16 10.68 13.32 8l1.95-2L18 8.73z"
-                                    ></path>
-                                </g>
-                            </svg>
-                        </i>
-                        Update
-                    </button>
-                </div>
-                <div className="flex gap-3 items-center">
-                    <button
-                        onClick={() => {
-                            setUpdatingMode(false);
-                            setDeletingMode(!deletingMode);
-                        }}
-                        className={`bg-block hover:bg-mdRed hover:border-mdRed  rounded-xl border-blue border ${
-                            deletingMode ? "border-mdRed bg-mdRed" : ""
-                        } flex items-center justify-center p-3 w-[112px]`}
-                    >
-                        <i className="mr-1">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 32 32"
-                                width={20}
-                                height={20}
-                                id="delete"
-                            >
-                                <path
-                                    className="fill-white"
-                                    d="M24.2,12.193,23.8,24.3a3.988,3.988,0,0,1-4,3.857H12.2a3.988,3.988,0,0,1-4-3.853L7.8,12.193a1,1,0,0,1,2-.066l.4,12.11a2,2,0,0,0,2,1.923h7.6a2,2,0,0,0,2-1.927l.4-12.106a1,1,0,0,1,2,.066Zm1.323-4.029a1,1,0,0,1-1,1H7.478a1,1,0,0,1,0-2h3.1a1.276,1.276,0,0,0,1.273-1.148,2.991,2.991,0,0,1,2.984-2.694h2.33a2.991,2.991,0,0,1,2.984,2.694,1.276,1.276,0,0,0,1.273,1.148h3.1A1,1,0,0,1,25.522,8.164Zm-11.936-1h4.828a3.3,3.3,0,0,1-.255-.944,1,1,0,0,0-.994-.9h-2.33a1,1,0,0,0-.994.9A3.3,3.3,0,0,1,13.586,7.164Zm1.007,15.151V13.8a1,1,0,0,0-2,0v8.519a1,1,0,0,0,2,0Zm4.814,0V13.8a1,1,0,0,0-2,0v8.519a1,1,0,0,0,2,0Z"
-                                ></path>
-                            </svg>
-                        </i>
-                        Delete
-                    </button>
-                </div>
-            </div>
-            {deletingMode && (
-                <div className="shadow-xl rounded-xl bg-block mb-6">
-                    <div className="bg-primary h-6 rounded-tr-xl rounded-tl-xl"></div>
-                    <div className="p-6 text-[15px]">Select a row below to delete.</div>
-                </div>
-            )}
-            {updatingMode && (
-                <div className="shadow-xl rounded-xl bg-block mb-6">
-                    <div className="bg-primary h-6 rounded-tr-xl rounded-tl-xl"></div>
-                    <div className="p-6 text-[15px]">Select a row below to update.</div>
-                </div>
-            )}
             <div className="bg-block p-6 rounded-3xl shadow-xl">
                 <div className="grid grid-cols-2 gap-6">
                     {data &&

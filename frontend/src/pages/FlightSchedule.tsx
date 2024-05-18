@@ -20,11 +20,6 @@ const schema = yup.object().shape({
     ticketPrice: yup.number().required("Ticket price is required.").typeError("Ticket price must be a number."),
     departureDate: yup.date().required("Departure date is required.").typeError("Date is required."),
     departureTime: yup.string().required("Time is required.").typeError("Time is required."),
-    bookingDeadline: yup.date().required("Booking deadline is required.").typeError("Booking deadline is required."),
-    cancellationDeadline: yup
-        .date()
-        .required("Cancellation deadline is required.")
-        .typeError("Cancellation deadline is required."),
     firstClassCapacity: yup
         .number()
         .required("Seating capacity is required.")
@@ -122,7 +117,6 @@ function FlightSchedule() {
     };
 
     const onSubmit: SubmitHandler<FlightScheduleValidation> = async (data) => {
-        hide();
         dispatch(startLoading());
 
         const flight_code = data.flightCode;
@@ -181,10 +175,10 @@ function FlightSchedule() {
                                 intermediate: ruleData?.find((rule) => rule.values.max_transit_airports)
                             },
                             regulation_2: {
-                                tickets: "663649fb67685b9b04acb653"
+                                tickets: ruleData?.find((rule) => rule.code === "R2")
                             },
                             regulation_3: {
-                                booking: "663649fb67685b9b04acb654"
+                                booking: ruleData?.find((rule) => rule.code === "R3")
                             }
                         }
                     },
@@ -215,10 +209,7 @@ function FlightSchedule() {
                     headers: { "Content-Type": "application/json" }
                 });
 
-                const airportResponse = await axios.get("/airport/all", {
-                    headers: { "Content-Type": "application/json" }
-                });
-                setAirportData(airportResponse.data);
+                setData(flightResponse.data);
 
                 const ruleResponse = await axios.get("rule/511320340/all", {
                     headers: {
@@ -227,23 +218,12 @@ function FlightSchedule() {
                 });
                 setRuleData(ruleResponse.data);
 
-                const data = flightResponse.data.map((flight: FlightScheduleData) => ({
-                    ...flight,
-                    departure_airport_name: airportResponse.data.find(
-                        (airport: AirportData) => airport._id === flight.departure_airport
-                    )?.name,
-                    destination_airport_name: airportResponse.data.find(
-                        (airport: AirportData) => airport._id === flight.destination_airport
-                    )?.name,
-                    transit_airports: flight.transit_airports.map((transit_airport) => ({
-                        ...transit_airport,
-                        airport_name: airportResponse.data.find(
-                            (airport: AirportData) => airport._id === transit_airport.airport_id
-                        )?.name
-                    }))
-                }));
-
-                setData(data);
+                const airportResponse = await axios.get("airport/all", {
+                    headers: {
+                        Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).token}`
+                    }
+                });
+                setAirportData(airportResponse.data);
 
                 dispatch(stopLoading());
             } catch (error) {
@@ -251,6 +231,8 @@ function FlightSchedule() {
             }
         })();
     }, [dispatch]);
+
+    console.log(data);
 
     return (
         <>
@@ -306,12 +288,8 @@ function FlightSchedule() {
                                     departure_datetime={schedule.departure_datetime}
                                     duration={schedule.duration}
                                     seats={schedule.seats}
-                                    booking_deadline={schedule.booking_deadline}
-                                    cancellation_deadline={schedule.cancellation_deadline}
                                     ticket_price={schedule.ticket_price}
                                     transit_airports={schedule.transit_airports}
-                                    departure_airport_name={schedule.departure_airport_name}
-                                    destination_airport_name={schedule.destination_airport_name}
                                     rules={schedule.rules}
                                 />
                             ))}
@@ -439,36 +417,6 @@ function FlightSchedule() {
                                             className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                         />
                                         {<span className="text-deepRed">{errors.duration?.message}</span>}
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="flex gap-2 flex-col">
-                                        <label htmlFor="bookingDeadline" className="flex gap-1 mb-1 items-center">
-                                            Booking deadline
-                                            <IsRequired />
-                                        </label>
-                                        <input
-                                            type="date"
-                                            pattern="\d{4}-\d{2}-\d{2}"
-                                            id="bookingDeadline"
-                                            {...register("bookingDeadline")}
-                                            className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
-                                        />
-                                        {<span className="text-deepRed">{errors.bookingDeadline?.message}</span>}
-                                    </div>
-                                    <div className="flex gap-2 flex-col">
-                                        <label htmlFor="cancellationDeadline" className="flex gap-1 mb-1 items-center">
-                                            Cancellation deadline
-                                            <IsRequired />
-                                        </label>
-                                        <input
-                                            type="date"
-                                            pattern="\d{4}-\d{2}-\d{2}"
-                                            id="cancellationDeadline"
-                                            {...register("cancellationDeadline")}
-                                            className="bg-[rgba(141,124,221,0.1)] col-span-2 text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
-                                        />
-                                        {<span className="text-deepRed">{errors.cancellationDeadline?.message}</span>}
                                     </div>
                                 </div>
                                 <div className="grid grid-cols-2 gap-2">
