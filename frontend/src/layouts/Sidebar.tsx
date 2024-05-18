@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import logo from "~/assets/logo.png";
 
 function Sidebar() {
-    const userType = JSON.parse(localStorage.getItem("user")!)?.userType;
+    const userType = JSON.parse(localStorage.getItem("user")!)?.userType.toLowerCase();
 
     return (
         <div className="w-[240px] bg-background z-20 fixed top-0 bottom-0 flex flex-col pb-10 pt-6 border-r-[1px] border-r-solid border-r-border px-5">

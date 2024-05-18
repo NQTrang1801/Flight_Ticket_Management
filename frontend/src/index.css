@@ -26,6 +26,10 @@
     @apply !bg-primary;
 }
 
+:root {
+    --toastify-toast-width: 460px !important;
+}
+
 td,
 th {
     border: 1px solid #ddd;

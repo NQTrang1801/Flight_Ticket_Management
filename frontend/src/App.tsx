@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import "./index.css";
 import Layout from "./layouts/Layout";
 import Login from "./pages/Login";
@@ -56,6 +56,7 @@ function App() {
 
     return (
         <Routes>
+            <Route path="/" element={<Navigate to="/user/login" replace />} />
             <Route path="/administrator/login" element={<Login />} />
             <Route path="/admin/login" element={<Login />} />
             <Route path="/user/login" element={<Login />} />

@@ -124,11 +124,11 @@ function Airports() {
                     }
                 );
                 dispatch(stopLoading());
-                dispatch(sendMessage("Created successfully!"));
+                dispatch(sendMessage("Created successfully!", "success"));
                 setTimeout(() => window.location.reload(), 2000);
             } catch (error) {
                 dispatch(stopLoading());
-                dispatch(sendMessage(`Created failed! ${error.response.data.message}`));
+                dispatch(sendMessage(`Created failed! ${error.response.data.message}`, "error"));
                 console.error(error);
             }
         })();
@@ -144,8 +144,6 @@ function Airports() {
                 .catch((err) => console.error(err));
         })();
     }, []);
-
-    console.log(data);
 
     return (
         <>

@@ -8,7 +8,7 @@ const login = (email: string, password: string, userType: string) => {
         })
         .then((response) => {
             if (response.data.token) {
-                localStorage.setItem("user", JSON.stringify(response.data).slice(0, -1) + `,"userType":"${userType}"}`);
+                localStorage.setItem("user", JSON.stringify(response.data));
             }
 
             return response;

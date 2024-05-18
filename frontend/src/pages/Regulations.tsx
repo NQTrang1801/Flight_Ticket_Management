@@ -88,14 +88,14 @@ function Regulations() {
                 )
                 .then(() => {
                     dispatch(stopLoading());
-                    dispatch(sendMessage("Created sucessfully!"));
+                    dispatch(sendMessage("Created sucessfully!", "success"));
                     setTimeout(() => {
                         window.location.reload();
                     }, 2000);
                 })
                 .catch((error) => {
                     dispatch(stopLoading());
-                    dispatch(sendMessage("Created failed!"));
+                    dispatch(sendMessage("Created failed!", "error"));
                     console.error(error);
                 });
         })();
@@ -115,6 +115,8 @@ function Regulations() {
             }
         })();
     }, []);
+
+    console.log(data);
 
     return (
         <>
@@ -223,37 +225,21 @@ function Regulations() {
                     <div className="p-6 text-[15px]">Select a row below to update.</div>
                 </div>
             )}
-            <div className="flex flex-col gap-10">
-                <div className="bg-block p-6 rounded-3xl shadow-xl">
-                    <table className="w-full bg-block">
-                        <thead>
-                            <tr className="text-center bg-primary">
-                                <th className="w-16">Index</th>
-                                <th className="">Code</th>
-                                <th className="">Rule name</th>
-                                <th className="">Rule detail</th>
-                                <th className="">Values</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {data &&
-                                data
-                                    // ?.filter((actor) => actor.fullName.toLowerCase().includes(query.toLowerCase()))
-                                    .map((rule, index) => (
-                                        <Rule
-                                            index={index + 1}
-                                            key={rule.code}
-                                            _id={rule._id}
-                                            code={rule.code}
-                                            ruleName={rule.ruleName}
-                                            ruleDetail={rule.detail}
-                                            value={rule.values}
-                                            deletingMode={deletingMode}
-                                            updatingMode={updatingMode}
-                                        />
-                                    ))}
-                        </tbody>
-                    </table>
+            <div className="bg-block p-6 rounded-3xl shadow-xl">
+                <div className="grid grid-cols-2 gap-6">
+                    {data &&
+                        data
+                            // ?.filter((actor) => actor.fullName.toLowerCase().includes(query.toLowerCase()))
+                            .map((rule) => (
+                                <Rule
+                                    key={rule.code}
+                                    _id={rule._id}
+                                    code={rule.code}
+                                    ruleName={rule.ruleName}
+                                    ruleDetail={rule.detail}
+                                    value={rule.values}
+                                />
+                            ))}
                 </div>
             </div>
             <Portal>

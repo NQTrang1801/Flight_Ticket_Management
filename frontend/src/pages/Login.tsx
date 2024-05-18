@@ -16,10 +16,9 @@ const schema = yup.object().shape({
     password: yup.string().required("Password is required.")
 });
 
-const userType = window.location.pathname.split("/")[1];
-
 const Login: React.FC = () => {
     const navigate = useNavigate();
+    const userType = window.location.pathname.split("/")[1];
 
     const [visible, setVisible] = useState(false);
 

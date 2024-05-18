@@ -163,14 +163,14 @@ const AirportUpdating: React.FC<AirportUpdatingProps> = ({
                 )
                 .then(() => {
                     dispatch(stopLoading());
-                    dispatch(sendMessage("Updated sucessfully!"));
+                    dispatch(sendMessage("Updated sucessfully!", "success"));
                     setTimeout(() => {
                         window.location.reload();
                     }, 2000);
                 })
                 .catch((error) => {
                     dispatch(stopLoading());
-                    dispatch(sendMessage("Updated failed!"));
+                    dispatch(sendMessage("Updated failed!", "error"));
                     console.error(error);
                 });
         })();
