@@ -1,7 +1,6 @@
 import React from "react";
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import axios from "~/utils/axios";
-import usePortal from "react-cool-portal";
 import { useAppDispatch } from "~/hook";
 import UserUpdating from "./UserUpdating";
 import { sendMessage } from "~/actions/message";
@@ -13,27 +12,27 @@ interface UserProps {
     isBlocked: boolean;
     mobile: string;
     // tickets: [];
-    // address: string;
+    address: string;
     _id: string;
 }
 
-const User: React.FC<UserProps> = ({ email, fullname, group_id, isBlocked, mobile, _id }) => {
-    const [selectedId, setSelectedId] = useState("");
+const User: React.FC<UserProps> = ({ email, fullname, group_id, isBlocked, mobile, _id, address }) => {
     const [updatingMode, setUpdatingMode] = useState(false);
-    const overlayRef = useRef<HTMLDivElement>(null);
-    const { Portal, hide, show } = usePortal({
-        defaultShow: false
-    });
+
     const dispatch = useAppDispatch();
 
-    const handleBlockUser = async () => {
+    const handleBlockUser = async (_id: string) => {
         await axios
-            .put(`/user/511246447/block-user/${selectedId}`, {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).token}`
+            .put(
+                `/user/511246447/block-user/${_id}`,
+                {},
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).token}`
+                    }
                 }
-            })
+            )
             .then(() => {
                 dispatch(sendMessage("Blocked successfully!", "success"));
                 setTimeout(() => {
@@ -43,18 +42,21 @@ const User: React.FC<UserProps> = ({ email, fullname, group_id, isBlocked, mobil
             .catch((error) => {
                 console.error(error);
                 dispatch(sendMessage("Blocked failed!", "error"));
-                hide();
             });
     };
 
-    const handleUnblockUser = async () => {
+    const handleUnblockUser = async (_id: string) => {
         await axios
-            .put(`/user/511246447/unblock-user/${selectedId}`, {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).token}`
+            .put(
+                `/user/511246447/unblock-user/${_id}`,
+                {},
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).token}`
+                    }
                 }
-            })
+            )
             .then(() => {
                 dispatch(sendMessage("Unblocked successfully!", "success"));
                 setTimeout(() => {
@@ -64,13 +66,8 @@ const User: React.FC<UserProps> = ({ email, fullname, group_id, isBlocked, mobil
             .catch((error) => {
                 console.error(error);
                 dispatch(sendMessage("Unblocked failed!", "error"));
-                hide();
             });
     };
-
-    useEffect(() => {
-        if (selectedId !== "" && !isBlocked) show();
-    }, [selectedId, show, isBlocked]);
 
     return (
         <>
@@ -102,8 +99,9 @@ const User: React.FC<UserProps> = ({ email, fullname, group_id, isBlocked, mobil
                     </button>
                     <button
                         onClick={() => {
-                            if (isBlocked) handleUnblockUser();
-                            else setSelectedId(_id);
+                            if (isBlocked) {
+                                handleUnblockUser(_id);
+                            } else handleBlockUser(_id);
                         }}
                         className={`${
                             isBlocked && "bg-mdRed border-mdRed hover:bg-blue hover:border-blue"
@@ -128,13 +126,16 @@ const User: React.FC<UserProps> = ({ email, fullname, group_id, isBlocked, mobil
                 </div>
                 <div className="grid grid-cols-2 gap-4 mt-8">
                     <div>
-                        <span className="font-semibold">Email</span>: {email}
-                    </div>
-                    <div>
                         <span className="font-semibold">Full name</span>: {fullname}
                     </div>
                     <div>
+                        <span className="font-semibold">Email</span>: {email}
+                    </div>
+                    <div>
                         <span className="font-semibold">Phone number</span>: {mobile}
+                    </div>
+                    <div>
+                        <span className="font-semibold">Address</span>: {address}
                     </div>
                     <div>
                         <span className="font-semibold">Group id</span>: {group_id}
@@ -144,7 +145,7 @@ const User: React.FC<UserProps> = ({ email, fullname, group_id, isBlocked, mobil
                     </div>
                 </div>
             </div>
-            {updatingMode ? (
+            {updatingMode && (
                 <UserUpdating
                     _id={_id}
                     email={email}
@@ -154,57 +155,6 @@ const User: React.FC<UserProps> = ({ email, fullname, group_id, isBlocked, mobil
                     mobile={mobile}
                     // tickets={tickets}
                 />
-            ) : (
-                <Portal>
-                    <div className="fixed top-0 right-0 left-0 bottom-0 bg-[rgba(0,0,0,0.4)] z-50 flex items-center justify-center">
-                        <div className="flex items-center justify-center">
-                            <div className="rounded-xl py-6 px-12 border border-primary bg-background flex flex-col items-center justify-center relative">
-                                <button
-                                    onClick={() => {
-                                        hide();
-                                        overlayRef.current?.classList.replace("flex", "hidden");
-                                    }}
-                                    className="absolute right-3 top-3 border border-blue rounded-full p-1 hover:border-primary hover:bg-primary"
-                                >
-                                    <i>
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 24 24"
-                                            width={14}
-                                            height={14}
-                                            id="close"
-                                        >
-                                            <path
-                                                className="fill-white"
-                                                d="M13.41,12l6.3-6.29a1,1,0,1,0-1.42-1.42L12,10.59,5.71,4.29A1,1,0,0,0,4.29,5.71L10.59,12l-6.3,6.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L12,13.41l6.29,6.3a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.42Z"
-                                            ></path>
-                                        </svg>
-                                    </i>
-                                </button>
-                                <p className="mb-4 mt-4 text-[15px]">
-                                    Block user <span className="text-blue">"{fullname}"</span>?
-                                </p>
-                                <div className="flex gap-6">
-                                    <button
-                                        className="px-5 py-2 border border-blue hover:border-mdRed hover:bg-mdRed rounded-lg"
-                                        onClick={() => handleBlockUser()}
-                                    >
-                                        Block
-                                    </button>
-                                    <button
-                                        onClick={() => {
-                                            hide();
-                                            overlayRef.current?.classList.replace("flex", "hidden");
-                                        }}
-                                        className="px-5 py-2 border border-blue hover:border-primary hover:bg-primary rounded-lg"
-                                    >
-                                        Cancel
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </Portal>
             )}
         </>
     );

@@ -126,8 +126,8 @@ function Sidebar() {
                         </>
                     )}
                 </NavLink>
-                <NavLink
-                    to={`${userType}/ticket-sales`}
+                {/* <NavLink
+                    to={`${userType}/reservation`}
                     className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
                 >
                     {({ isActive }) => (
@@ -154,10 +154,10 @@ function Sidebar() {
                                     ></path>
                                 </svg>
                             </i>
-                            Ticket sales
+                            Reservation
                         </>
                     )}
-                </NavLink>
+                </NavLink> */}
                 <NavLink
                     to={`${userType}/flight-booking`}
                     className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"

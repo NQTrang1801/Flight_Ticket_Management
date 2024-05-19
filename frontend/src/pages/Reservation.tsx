@@ -21,55 +21,7 @@ const schema = yup.object().shape({
     nationality: yup.string().required("Nationality is required.")
 });
 
-const flightTickets = [
-    {
-        bookingCode: "BM201",
-        flightNumber: "VN123",
-        passengerName: "John Doe",
-        idNumber: "123456789",
-        phoneNumber: "0123456789",
-        ticketClass: "Economy",
-        ticketPrice: 100
-    },
-    {
-        bookingCode: "BM202",
-        flightNumber: "VN456",
-        passengerName: "Jane Smith",
-        idNumber: "987654321",
-        phoneNumber: "0987654321",
-        ticketClass: "Business",
-        ticketPrice: 150
-    },
-    {
-        bookingCode: "BM203",
-        flightNumber: "VN789",
-        passengerName: "Alice Johnson",
-        idNumber: "456789123",
-        phoneNumber: "0456789123",
-        ticketClass: "Economy",
-        ticketPrice: 120
-    },
-    {
-        bookingCode: "BM204",
-        flightNumber: "VN246",
-        passengerName: "Bob Brown",
-        idNumber: "789123456",
-        phoneNumber: "0789123456",
-        ticketClass: "Economy",
-        ticketPrice: 110
-    },
-    {
-        bookingCode: "BM205",
-        flightNumber: "VN135",
-        passengerName: "Emily Davis",
-        idNumber: "321654987",
-        phoneNumber: "0321654987",
-        ticketClass: "Business",
-        ticketPrice: 180
-    }
-];
-
-function TicketSales() {
+function Reservation() {
     const [data, setData] = useState(flightTickets);
     const [loading, setLoading] = useState(false);
     const [deletingMode, setDeletingMode] = useState(false);
@@ -402,4 +354,4 @@ function TicketSales() {
     );
 }
 
-export default TicketSales;
+export default Reservation;

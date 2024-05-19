@@ -23,6 +23,7 @@ const schema = yup.object().shape({
 
 function Users() {
     const [data, setData] = useState<UserData[]>();
+
     const { Portal, hide, show } = usePortal({
         defaultShow: false
     });
@@ -83,7 +84,7 @@ function Users() {
                     }
                 })
                 .then((response) => {
-                    setData(response.data);
+                    setData(response.data.USER);
                 })
                 .catch((err) => console.error(err));
         })();
@@ -142,6 +143,7 @@ function Users() {
                                     group_id={user.group_id}
                                     isBlocked={user.isBlocked}
                                     mobile={user.mobile}
+                                    address={user.address}
                                     // tickets={user.tickets}
                                 />
                             ))}

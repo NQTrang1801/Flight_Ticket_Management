@@ -7,7 +7,6 @@ import { useEffect } from "react";
 import { useAppSelector } from "./hook";
 import { toast } from "react-toastify";
 import FlightSchedule from "./pages/FlightSchedule";
-import TicketSales from "./pages/TicketSales";
 import Dashboard from "./pages/Dashboard";
 import FlightBooking from "./pages/FlightBooking";
 import FlightLookup from "./pages/FlightLookup";
@@ -18,6 +17,7 @@ import UserRoutes from "./components/UserRoutes";
 import AdminRoutes from "./components/AdminRoutes";
 import Users from "./pages/Users";
 import BookingForms from "./pages/BookingForms";
+// import Reservation from "./pages/Reservation";
 
 function App() {
     const root = document.querySelector("#root");
@@ -65,7 +65,7 @@ function App() {
                 <Route path="/administrator" element={<AdministratorRoutes />}>
                     <Route index element={<Dashboard />} />
                     <Route path="/administrator/flight-schedule" element={<FlightSchedule />} />
-                    <Route path="/administrator/ticket-sales" element={<TicketSales />} />
+                    {/* <Route path="/administrator/reservation" element={<Reservation />} /> */}
                     <Route path="/administrator/flight-booking" element={<FlightBooking />} />
                     <Route path="/administrator/flight-lookup" element={<FlightLookup />} />
                     <Route path="/administrator/airports" element={<Airports />} />
@@ -75,7 +75,7 @@ function App() {
                 </Route>
                 <Route path="/admin" element={<AdminRoutes />}>
                     <Route index element={<Dashboard />} />
-                    <Route path="/admin/ticket-sales" element={<TicketSales />} />
+                    {/* <Route path="/admin/reservation" element={<Reservation />} /> */}
                     <Route path="/admin/flight-booking" element={<FlightBooking />} />
                     <Route path="/admin/flight-lookup" element={<FlightLookup />} />
                     <Route path="/admin/airport" element={<Airports />} />
@@ -83,7 +83,7 @@ function App() {
                 </Route>
                 <Route path="/user" element={<UserRoutes />}>
                     <Route index element={<Dashboard />} />
-                    <Route path="/user/ticket-sales" element={<TicketSales />} />
+                    {/* <Route path="/user/reservation" element={<Reservation />} /> */}
                     <Route path="/user/flight-booking" element={<FlightBooking />} />
                     <Route path="/user/flight-lookup" element={<FlightLookup />} />
                     <Route path="/user/airport" element={<Airports />} />

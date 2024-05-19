@@ -49,12 +49,11 @@ interface MonthlyRevenueProps {
 
 interface YearlyRevenueProps {
     year: number;
-    monthlyRevenue: {
-        stt: number;
-        month: string;
-        flightCount: number;
-        revenue: number;
-        rate: string;
+    report: {
+        flightCode: string;
+        numberOfTickets: number;
+        percentage: string;
+        totalRevenue: number;
     }[];
 }
 
@@ -194,6 +193,7 @@ interface UserData {
     group_id: string;
     isBlocked: boolean;
     mobile: string;
+    address: string;
     // tickets: [];
     _id: string;
 }
