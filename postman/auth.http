@@ -62,6 +62,9 @@ GET {{url_dev}}/logout
 ### get all user
 GET {{url_dev}}/all-users
 
+### get all tickets
+GET {{url_dev}}/6649877d578a6d778d59e17a/tickets
+
 ### patch update password
 PATCH {{url_dev}}/password
 Content-Type: application/json
@@ -91,8 +94,8 @@ Content-Type: application/json
 
 # ADMIN
 ### get user
-GET {{url_dev}}/511320447/info/6628a0640f03a5640fd6f6de
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhhMDY0MGYwM2E1NjQwZmQ2ZjZkZSIsImlhdCI6MTcxMzk0MTY0NywiZXhwIjoxNzE0MDI4MDQ3fQ.U5gW6snUzF-RziPKLJ9V5ZCjjaOdOvUC7r9zeKdhmIk
+GET {{url_dev}}/511320447/info/6649877d578a6d778d59e17a
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDk4Njk4NTc4YTZkNzc4ZDU5ZTEzZCIsImlhdCI6MTcxNjA5NjcwNCwiZXhwIjoxNzE2MTgzMTA0fQ.4NScp2ucgXWRAlgdtsTMtEUtSYn5pGShckpXpC-FmY4
 
 ### get all user
 GET {{url_dev}}/511320447/admin/all-users

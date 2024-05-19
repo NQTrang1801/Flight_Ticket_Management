@@ -1,5 +1,5 @@
 const express = require("express");
-const { createUser, loginUSER, loginADMIN, updatedUser, updateGroupUser, updatePassword, handleRefreshToken, logout, blockUser, unblockUser, getAllUsersWithAdmin, getUserWithAdmin, getAllUsers, loginADMINISTRATOR } = require("../controllers/userController");
+const { createUser, loginUSER, loginADMIN, updatedUser, updateGroupUser, updatePassword, handleRefreshToken, logout, blockUser, unblockUser, getAllUsersWithAdmin, getTicketsByUserId, getUserWithAdmin, getAllUsers, loginADMINISTRATOR } = require("../controllers/userController");
 const { authMiddleware, hasPermission } = require("../middlewares/authMiddleware");
 
 const router = express.Router();
@@ -19,6 +19,7 @@ router.patch("/999457447/update-group/:id", authMiddleware, hasPermission, updat
 router.get("/refresh", handleRefreshToken);
 router.get("/logout", logout);
 router.get("/all-users", getAllUsers);
+router.get("/:user_id/tickets", getTicketsByUserId);
 
 router.get("/511320447/admin/all-users", authMiddleware, hasPermission, getAllUsersWithAdmin);
 router.get("/511320447/info/:id", authMiddleware, hasPermission, getUserWithAdmin);

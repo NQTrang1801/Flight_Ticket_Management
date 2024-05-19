@@ -9,7 +9,7 @@ const validateMongoDbId = require("../utils/validateMongoDbId");
 const Group = require("../models/groupModel");
 const Functionality = require("../models/functionalityModel");
 const Permission = require("../models/permissionModel");
-
+const RequestReservation = require("../models/requestReservationModel");
 // register a user
 const createUser = asyncHandler(async (req, res) => {
     const email = req.body.email;
@@ -361,6 +361,26 @@ const updateGroupUser = asyncHandler(async (req, res) => {
     }
 });
 
+const getTicketsByUserId = asyncHandler(async (req, res) => {
+    try {
+        const { user_id } = req.params;
+
+        const user = await User.findById(user_id);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const userTicketIds = user.tickets;
+
+        const userTickets = await RequestReservation.find({ _id: { $in: userTicketIds } });
+
+        res.status(200).json(userTickets);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 module.exports = {
     createUser,
     loginUSER,
@@ -375,6 +395,7 @@ module.exports = {
     unblockUser,
     deleteUser,
     getAllUsers,
+    getTicketsByUserId,
     getUserWithAdmin,
     getAllUsersWithAdmin
 };

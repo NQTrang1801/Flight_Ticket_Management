@@ -4,6 +4,7 @@ const User = require('../models/userModel');
 const Flight = require('../models/flightModel');
 const Rule = require('../models/ruleModel')
 const Reservation = require('../models/reservationModel')
+
 const createRequestReservation = asyncHandler(async (req, res) => {
     try {
         const { user_id, flight_id, seat_class, full_name, CMND, phone_number } = req.body;
@@ -21,7 +22,7 @@ const createRequestReservation = asyncHandler(async (req, res) => {
         const checkDate = new Date();
         const departureDate = new Date(flight.departure_datetime);
         const maxBookingDays = flight.rules?.regulation_3?.booking?.values?.max_booking_days_before_departure || 0; // Default value is 0 if max_booking_days_before_departure is not defined
-        checkDate.setDate(departureDate.getDate() + maxBookingDays); 
+        checkDate.setDate(departureDate.getDate() + maxBookingDays);
 
         if (booking_date > checkDate) {
             return res.status(404).json({ message: 'Ticket booking deadline has expired' });
@@ -73,7 +74,11 @@ const createRequestReservation = asyncHandler(async (req, res) => {
             booking_date
         });
 
-        
+        const user = await User.findById(user_id);
+
+        user.tickets.push(newRequest._id); 
+
+        await user.save();
 
         res.status(201).json(newRequest);
     } catch (error) {

@@ -6,7 +6,7 @@ Content-Type: application/json
 {
     "user_id" : "6649877d578a6d778d59e17a",
     "flight_id" : "66498755578a6d778d59e171",
-    "seat_class" : "1",
+    "seat_class" : "2",
     "full_name" : "Nguyen Van A",
     "CMND" : "6123179891287",
     "phone_number" : "0907722321"
