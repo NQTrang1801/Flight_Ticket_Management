@@ -8,7 +8,7 @@ const router = express.Router();
 router.post('/booking', createRequestReservation);
 
 // Xem danh sách request trên từng chuyến bay
-router.get('/request/:flight_id', getRequestsByFlight);
+router.get('/580320946/request/:flight_id', authMiddleware, hasPermission, getRequestsByFlight);
 
 router.get('/580320946/request-all', authMiddleware, hasPermission, getAllRequests);
 
