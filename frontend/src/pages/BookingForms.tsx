@@ -10,140 +10,130 @@ import { startLoading, stopLoading } from "~/actions/loading";
 import { sendMessage } from "~/actions/message";
 import Tippy from "@tippyjs/react/headless";
 import BookingForm from "~/components/BookingForm";
+import formatDateTime from "~/utils/formatDateTime";
 
 const schema = yup.object().shape({
-    name: yup.string().required("Name is required."),
-    address: yup.string().required("Address is required."),
-    country: yup.string().required("Country is required."),
-    code: yup.string().required("Code is required."),
-    terminals: yup.number().default(1),
-    capacity: yup.number().default(2000)
+    fullName: yup.string().required("Full name is required."),
+    identificationNumber: yup
+        .number()
+        .required("Identification number is required.")
+        .typeError("Identification number must be a number"),
+    phoneNumber: yup
+        .number()
+        .required("Phone number is required.")
+        .typeError("Phone number must be a number.")
+        .min(10, "Phone number must be exactly 10 digits")
 });
 
 function BookingForms() {
     const [data, setData] = useState<AirportData[]>();
+    const [flightData, setFlightData] = useState<FlightScheduleData[]>();
+    const [userData, setUserData] = useState<UserData[]>();
+
+    const [selectedFlight, setSelectedFlight] = useState<FlightScheduleData>({});
+    const [flightVisible, setFlightVisible] = useState(false);
+
+    const [selectedUser, setSelectedUser] = useState<UserData>({});
+    const [userVisible, setUserVisible] = useState(false);
+
+    const [ticketClass, setTicketClass] = useState("First class");
+    const [ticketClassVisible, setTicketClassVisible] = useState(Object.keys(selectedFlight).length > 0);
+
+    const [formSubmitted, setFormSubmitted] = useState(false);
+
     const { Portal, show, hide } = usePortal({
         defaultShow: false
     });
-    const [timezone, setTimezone] = useState("GMT+7");
-    const [timezoneVisible, setTimezoneVisible] = useState(false);
-    const [latitude, setLatitude] = useState(0.0);
-    const [longitude, setLongitude] = useState(0.0);
-
-    const timezones = [
-        "GMT-12",
-        "GMT-11",
-        "GMT-10",
-        "GMT-9",
-        "GMT-8",
-        "GMT-7",
-        "GMT-6",
-        "GMT-5",
-        "GMT-4",
-        "GMT-3",
-        "GMT-2",
-        "GMT-1",
-        "GMT+0",
-        "GMT+1",
-        "GMT+2",
-        "GMT+3",
-        "GMT+4",
-        "GMT+5",
-        "GMT+6",
-        "GMT+7",
-        "GMT+8",
-        "GMT+9",
-        "GMT+10",
-        "GMT+11",
-        "GMT+12"
-    ];
-
-    const handleSelectTimezone = (value: string) => {
-        setTimezone(value);
-        setTimezoneVisible(false);
-    };
-    const onChangeLatitude = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        setLatitude(value);
-    };
-    const onChangeLongitude = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        setLongitude(value);
-    };
 
     const dispatch = useAppDispatch();
-    const [international, setInternational] = useState(false);
-    const [internationalVisible, setInternationalVisible] = useState(false);
-
-    const [status, setStatus] = useState(true);
-    const [statusVisible, setStatusVisible] = useState(false);
 
     const {
         register,
         handleSubmit,
         formState: { errors }
-    } = useForm<AirportData>({
+    } = useForm<BookingFormValidation>({
         resolver: yupResolver(schema)
     });
 
-    const onSubmit: SubmitHandler<AirportData> = async (data) => {
-        hide();
+    const onSubmit: SubmitHandler<BookingFormValidation> = async (formData) => {
         dispatch(startLoading());
-        const name = data.name;
-        const country = data.country;
-        const code = data.code;
-        const terminals = data.terminals;
-        const capacity = data.capacity;
-        const address = data.address;
+        const full_name = formData.fullName;
+        const CMND = formData.identificationNumber;
+        const phone_number = formData.phoneNumber;
 
-        (async () => {
-            try {
-                await axios.post(
-                    "/request-reservations/booking",
-                    {
-                        name,
-                        country,
-                        code,
-                        terminals,
-                        capacity,
-                        address,
-                        timezone,
-                        isInternational: international,
-                        coordinates: {
-                            type: "Point",
-                            coordinates: [latitude, longitude]
+        if (formSubmitted) {
+            (async () => {
+                try {
+                    await axios.post(
+                        "/request-reservations/booking",
+                        {
+                            full_name,
+                            CMND,
+                            phone_number,
+                            flight_id: selectedFlight._id,
+                            user_id: selectedUser._id,
+                            seat_class: ticketClass === "First class" ? 1 : 2
                         },
-                        status,
-                        rule: []
-                    },
-                    {
-                        headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).token}`
+                        {
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).token}`
+                            }
                         }
-                    }
-                );
-                dispatch(stopLoading());
-                dispatch(sendMessage("Created successfully!", "success"));
-                setTimeout(() => window.location.reload(), 2000);
-            } catch (error) {
-                dispatch(stopLoading());
-                dispatch(sendMessage(`Created failed! ${error.response.data.message}`, "error"));
-                console.error(error);
-            }
-        })();
+                    );
+                    dispatch(stopLoading());
+                    dispatch(sendMessage("Created successfully!", "success"));
+                    setTimeout(() => window.location.reload(), 2000);
+                } catch (error) {
+                    dispatch(stopLoading());
+                    dispatch(sendMessage(`Created failed! ${error.response.data.message}`, "error"));
+                    console.error(error);
+                }
+            })();
+        }
     };
 
     useEffect(() => {
         (async () => {
             await axios
-                .get("/airport/all", { headers: { "Content-Type": "application/json" } })
+                .get("/request-reservations/580320946/request-all", {
+                    headers: {
+                        Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).token}`
+                    }
+                })
                 .then((response) => {
                     setData(response.data);
                 })
                 .catch((err) => console.error(err));
         })();
+        (async () => {
+            await axios
+                .get("/flight/all", { headers: { "Content-Type": "application/json" } })
+                .then((response) => {
+                    setFlightData(response.data);
+                })
+                .catch((err) => console.error(err));
+        })();
+
+        (async () => {
+            await axios
+                .get("/user/511320447/admin/all-users", {
+                    headers: {
+                        Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).token}`
+                    }
+                })
+                .then((response) => {
+                    setUserData(response.data.USER);
+                })
+                .catch((err) => console.error(err));
+        })();
     }, []);
+
+    useEffect(() => {
+        if (Object.keys(selectedFlight).length > 0 && Object.keys(selectedUser).length > 0) setFormSubmitted(false);
+    }, [selectedFlight, selectedUser]);
+
+    console.log(data);
 
     return (
         <>
@@ -184,7 +174,7 @@ function BookingForms() {
 
             <div className="bg-block p-6 rounded-3xl shadow-xl">
                 <div className="grid grid-cols-2 gap-6">
-                    {data &&
+                    {/* {data &&
                         data
                             // ?.filter((actor) => actor.fullName.toLowerCase().includes(query.toLowerCase()))
                             .map((airport) => (
@@ -202,7 +192,7 @@ function BookingForms() {
                                     coordinates={airport.coordinates}
                                     status={airport.status}
                                 />
-                            ))}
+                            ))} */}
                 </div>
             </div>
             <Portal>
@@ -229,336 +219,247 @@ function BookingForms() {
                                 </i>
                             </button>
                             <div className="flex justify-center mb-8">
-                                <div className="text-white font-semibold text-xl">Create new airport</div>
+                                <div className="text-white font-semibold text-xl">Create new booking form</div>
                             </div>
                             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
+                                <div className="flex gap-2 flex-col">
+                                    <label htmlFor="fullName" className="flex gap-1 mb-1 items-center">
+                                        Full name
+                                        <IsRequired />
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="fullName"
+                                        placeholder="Full name . . ."
+                                        {...register("fullName")}
+                                        className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
+                                    />
+                                    {<span className="text-deepRed">{errors.fullName?.message}</span>}
+                                </div>
+
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="flex gap-2 flex-col">
-                                        <label htmlFor="name" className="flex gap-1 mb-1 items-center">
-                                            Name
+                                        <label htmlFor="identificationNumber" className="flex gap-1 mb-1 items-center">
+                                            Identification number
                                             <IsRequired />
                                         </label>
                                         <input
                                             type="text"
-                                            id="name"
-                                            placeholder="Name . . ."
-                                            {...register("name")}
+                                            id="identificationNumber"
+                                            placeholder="Identification number . . ."
+                                            {...register("identificationNumber")}
                                             className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
                                         />
-                                        {<span className="text-deepRed">{errors.name?.message}</span>}
+                                        {<span className="text-deepRed">{errors.identificationNumber?.message}</span>}
                                     </div>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="flex gap-2 flex-col">
-                                            <label htmlFor="code" className="flex gap-1 mb-1 items-center">
-                                                Code
-                                                <IsRequired />
-                                            </label>
-                                            <input
-                                                type="text"
-                                                id="code"
-                                                placeholder="Code . . ."
-                                                {...register("code")}
-                                                className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
-                                            />
-                                            {<span className="text-deepRed">{errors.code?.message}</span>}
-                                        </div>
-                                        <div className="flex gap-2 flex-col">
-                                            <label htmlFor="country" className="flex gap-1 mb-1 items-center">
-                                                Country
-                                                <IsRequired />
-                                            </label>
-                                            <input
-                                                type="text"
-                                                id="country"
-                                                placeholder="Country . . ."
-                                                {...register("country")}
-                                                className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
-                                            />
-                                            {<span className="text-deepRed">{errors.country?.message}</span>}
-                                        </div>
+                                    <div className="flex gap-2 flex-col">
+                                        <label htmlFor="phoneNumber" className="flex gap-1 mb-1 items-center">
+                                            Phone number
+                                            <IsRequired />
+                                        </label>
+                                        <input
+                                            type="text"
+                                            id="phoneNumber"
+                                            placeholder="Phone number . . ."
+                                            {...register("phoneNumber")}
+                                            className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
+                                        />
+                                        {<span className="text-deepRed">{errors.phoneNumber?.message}</span>}
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="flex gap-2 flex-col">
-                                        <label htmlFor="address" className="flex gap-1 mb-1 items-center">
-                                            Address
-                                            <IsRequired />
-                                        </label>
-                                        <input
-                                            type="text"
-                                            id="address"
-                                            placeholder="Address . . ."
-                                            {...register("address")}
-                                            className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
-                                        />
-                                        {<span className="text-deepRed">{errors.address?.message}</span>}
-                                    </div>
-                                    <div className="flex gap-2 flex-col">
-                                        <label htmlFor="active" className="flex gap-1 mb-1 items-center">
-                                            International airport
-                                        </label>
-                                        <Tippy
-                                            interactive
-                                            onClickOutside={() => setInternationalVisible(!internationalVisible)}
-                                            visible={internationalVisible}
-                                            offset={[0, 0]}
-                                            placement="bottom"
-                                            render={(attrs) => (
-                                                <div
-                                                    {...attrs}
-                                                    className={`flex w-[290px] text-white p-2 rounded-bl-lg rounded-br-lg flex-col bg-background outline-1 outline-border outline justify-center ${
-                                                        internationalVisible ? "outline-primary" : ""
-                                                    }`}
-                                                >
-                                                    <div
-                                                        onClick={() => {
-                                                            setInternational(false);
-                                                            setInternationalVisible(false);
-                                                        }}
-                                                        className={`cursor-pointer py-3 px-4 hover:bg-primary text-left rounded-lg ${
-                                                            international === false
-                                                                ? "text-blue pointer-events-none"
-                                                                : ""
-                                                        }`}
-                                                    >
-                                                        False
-                                                    </div>
-                                                    <div
-                                                        onClick={() => {
-                                                            setInternational(true);
-                                                            setInternationalVisible(false);
-                                                        }}
-                                                        className={`cursor-pointer py-3 px-4 hover:bg-primary text-left rounded-lg ${
-                                                            international === true
-                                                                ? "text-blue pointer-events-none"
-                                                                : ""
-                                                        }`}
-                                                    >
-                                                        True
-                                                    </div>
-                                                </div>
-                                            )}
-                                        >
-                                            <div
-                                                tabIndex={-1}
-                                                onClick={() => setInternationalVisible(!internationalVisible)}
-                                                className={`hover:outline-primary py-3 px-4 outline-blue outline-1 outline bg-[rgba(141,124,221,0.1)] cursor-pointer ${
-                                                    internationalVisible
-                                                        ? "rounded-tl-lg rounded-tr-lg outline-primary"
-                                                        : "rounded-lg"
-                                                }   flex justify-between items-center`}
+                                <div className="flex gap-2 flex-col">
+                                    <label htmlFor="user" className="flex gap-1 mb-1 items-center">
+                                        User
+                                        <IsRequired />
+                                    </label>
+                                    <Tippy
+                                        visible={userVisible}
+                                        interactive
+                                        onClickOutside={() => setUserVisible(false)}
+                                        offset={[0, 0]}
+                                        placement="bottom"
+                                        render={(attrs) => (
+                                            <ul
+                                                className={`border border-primary rounded-lg p-2 max-h-[300px] w-[440px] overflow-y-scroll no-scrollbar bg-background ${
+                                                    userVisible ? "border-t-0 rounded-tl-none rounded-tr-none" : ""
+                                                }`}
+                                                {...attrs}
                                             >
-                                                {international === false ? "False" : "True"}
-                                                <i className={`${internationalVisible ? "rotate-180" : ""}`}>
-                                                    <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        width="20"
-                                                        height="20"
-                                                        viewBox="0 0 16 16"
-                                                        id="chevron-down"
-                                                    >
-                                                        <path
-                                                            fill="#fff"
-                                                            d="M4.14645,5.64645 C4.34171,5.45118 4.65829,5.45118 4.85355,5.64645 L7.9999975,8.79289 L11.1464,5.64645 C11.3417,5.45118 11.6583,5.45118 11.8536,5.64645 C12.0488,5.84171 12.0488,6.15829 11.8536,6.35355 L8.35355,9.85355 C8.15829,10.0488 7.84171,10.0488 7.64645,9.85355 L4.14645,6.35355 C3.95118,6.15829 3.95118,5.84171 4.14645,5.64645 Z"
-                                                        ></path>
-                                                    </svg>
-                                                </i>
-                                            </div>
-                                        </Tippy>
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-3 gap-4">
-                                    <div className="flex gap-2 flex-col">
-                                        <label htmlFor="timezone" className="flex gap-1 mb-1 items-center">
-                                            Time zone
-                                            <IsRequired />
-                                        </label>
-                                        <Tippy
-                                            interactive
-                                            onClickOutside={() => setTimezoneVisible(!timezoneVisible)}
-                                            visible={timezoneVisible}
-                                            offset={[0, 0]}
-                                            placement="bottom"
-                                            render={(attrs) => (
-                                                <div
-                                                    {...attrs}
-                                                    className={`flex w-[188px] text-white p-2 rounded-bl-lg rounded-br-lg flex-col bg-background outline-1 outline-border outline justify-center ${
-                                                        timezoneVisible ? "outline-primary" : ""
-                                                    }`}
-                                                >
-                                                    {timezones.map((tz) => (
-                                                        <div
-                                                            key={tz}
-                                                            onClick={() => handleSelectTimezone(tz)}
-                                                            className={`cursor-pointer py-3 px-4 hover:bg-primary text-left rounded-lg ${
-                                                                timezone === tz ? "text-blue pointer-events-none" : ""
+                                                {userData &&
+                                                    userData.map((user) => (
+                                                        <li
+                                                            onClick={() => {
+                                                                setSelectedUser(user);
+                                                                setUserVisible(false);
+                                                            }}
+                                                            key={user._id}
+                                                            className={`cursor-pointer py-2 px-4 hover:bg-primary text-left rounded-lg flex items-center p-2 ${
+                                                                user._id === selectedUser?._id
+                                                                    ? "text-blue pointer-events-none"
+                                                                    : ""
                                                             }`}
                                                         >
-                                                            {tz}
-                                                        </div>
+                                                            {user.email} - {user.fullname}
+                                                        </li>
                                                     ))}
-                                                </div>
-                                            )}
+                                            </ul>
+                                        )}
+                                    >
+                                        <div
+                                            className={`hover:border-primary py-3 px-4 border-blue border bg-background cursor-pointer w-[440px] mt-1 ${
+                                                userVisible
+                                                    ? "rounded-tl-lg rounded-tr-lg border-primary"
+                                                    : "rounded-lg"
+                                            }   flex justify-between items-center`}
+                                            onClick={() => setUserVisible(!userVisible)}
                                         >
-                                            <div
-                                                tabIndex={-1}
-                                                onClick={() => setTimezoneVisible(!timezoneVisible)}
-                                                className={`hover:outline-primary py-3 px-4 outline-blue outline-1 outline bg-[rgba(141,124,221,0.1)] cursor-pointer ${
-                                                    timezoneVisible
-                                                        ? "rounded-tl-lg rounded-tr-lg outline-primary"
-                                                        : "rounded-lg"
-                                                }   flex justify-between items-center`}
-                                            >
-                                                {timezone}
-                                                <i className={`${timezoneVisible ? "rotate-180" : ""}`}>
-                                                    <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        width="20"
-                                                        height="20"
-                                                        viewBox="0 0 16 16"
-                                                        id="chevron-down"
-                                                    >
-                                                        <path
-                                                            fill="#fff"
-                                                            d="M4.14645,5.64645 C4.34171,5.45118 4.65829,5.45118 4.85355,5.64645 L7.9999975,8.79289 L11.1464,5.64645 C11.3417,5.45118 11.6583,5.45118 11.8536,5.64645 C12.0488,5.84171 12.0488,6.15829 11.8536,6.35355 L8.35355,9.85355 C8.15829,10.0488 7.84171,10.0488 7.64645,9.85355 L4.14645,6.35355 C3.95118,6.15829 3.95118,5.84171 4.14645,5.64645 Z"
-                                                        ></path>
-                                                    </svg>
-                                                </i>
-                                            </div>
-                                        </Tippy>
-                                    </div>
-                                    <div className="flex gap-2 flex-col">
-                                        <label htmlFor="active" className="flex gap-1 mb-1 items-center">
-                                            Status
-                                        </label>
-                                        <Tippy
-                                            interactive
-                                            onClickOutside={() => setStatusVisible(!statusVisible)}
-                                            visible={statusVisible}
-                                            offset={[0, 0]}
-                                            placement="bottom"
-                                            render={(attrs) => (
-                                                <div
-                                                    {...attrs}
-                                                    className={`flex w-[188px] text-white p-2 rounded-bl-lg rounded-br-lg flex-col bg-background outline-1 outline-border outline justify-center ${
-                                                        statusVisible ? "outline-primary" : ""
-                                                    }`}
+                                            {Object.keys(selectedUser).length === 0
+                                                ? "Choose an user"
+                                                : `${selectedUser.email} -
+                                                            ${selectedUser.fullname}`}
+                                            <i className={`${userVisible ? "rotate-180" : ""}`}>
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="20"
+                                                    height="20"
+                                                    viewBox="0 0 16 16"
+                                                    id="chevron-down"
                                                 >
-                                                    <div
-                                                        onClick={() => {
-                                                            setStatus(false);
-                                                            setStatusVisible(false);
-                                                        }}
-                                                        className={`cursor-pointer py-3 px-4 hover:bg-primary text-left rounded-lg ${
-                                                            status === false ? "text-blue pointer-events-none" : ""
-                                                        }`}
-                                                    >
-                                                        False
-                                                    </div>
-                                                    <div
-                                                        onClick={() => {
-                                                            setStatus(true);
-                                                            setStatusVisible(false);
-                                                        }}
-                                                        className={`cursor-pointer py-3 px-4 hover:bg-primary text-left rounded-lg ${
-                                                            status === true ? "text-blue pointer-events-none" : ""
-                                                        }`}
-                                                    >
-                                                        True
-                                                    </div>
-                                                </div>
-                                            )}
+                                                    <path
+                                                        fill="#fff"
+                                                        d="M4.14645,5.64645 C4.34171,5.45118 4.65829,5.45118 4.85355,5.64645 L7.9999975,8.79289 L11.1464,5.64645 C11.3417,5.45118 11.6583,5.45118 11.8536,5.64645 C12.0488,5.84171 12.0488,6.15829 11.8536,6.35355 L8.35355,9.85355 C8.15829,10.0488 7.84171,10.0488 7.64645,9.85355 L4.14645,6.35355 C3.95118,6.15829 3.95118,5.84171 4.14645,5.64645 Z"
+                                                    ></path>
+                                                </svg>
+                                            </i>
+                                        </div>
+                                    </Tippy>
+                                    {
+                                        <span className="text-deepRed">
+                                            {formSubmitted &&
+                                                Object.keys(selectedUser).length === 0 &&
+                                                "User is required."}
+                                        </span>
+                                    }
+                                </div>
+                                <div className="flex gap-2 flex-col">
+                                    <label htmlFor="flight" className="flex gap-1 mb-1 items-center">
+                                        Flight
+                                        <IsRequired />
+                                    </label>
+                                    <Tippy
+                                        visible={flightVisible}
+                                        interactive
+                                        onClickOutside={() => setFlightVisible(false)}
+                                        offset={[0, 0]}
+                                        placement="bottom"
+                                        render={(attrs) => (
+                                            <ul
+                                                className={`border border-primary rounded-lg p-2 max-h-[300px] w-[440px] overflow-y-scroll no-scrollbar bg-background ${
+                                                    flightVisible ? "border-t-0 rounded-tl-none rounded-tr-none" : ""
+                                                }`}
+                                                {...attrs}
+                                            >
+                                                {flightData &&
+                                                    flightData.map((flight) => (
+                                                        <li
+                                                            onClick={() => {
+                                                                setSelectedFlight(flight);
+                                                                setFlightVisible(false);
+                                                            }}
+                                                            key={flight._id}
+                                                            className={`cursor-pointer py-2 px-4 hover:bg-primary text-left rounded-lg flex items-center p-2 ${
+                                                                flight._id === selectedFlight?._id
+                                                                    ? "text-blue pointer-events-none"
+                                                                    : ""
+                                                            }`}
+                                                        >
+                                                            {flight.departure_airport.address} -{" "}
+                                                            {flight.destination_airport.address} (
+                                                            {formatDateTime(flight.departure_datetime)})
+                                                        </li>
+                                                    ))}
+                                            </ul>
+                                        )}
+                                    >
+                                        <div
+                                            className={`hover:border-primary py-3 px-4 border-blue border bg-background cursor-pointer w-[440px] mt-1 ${
+                                                flightVisible
+                                                    ? "rounded-tl-lg rounded-tr-lg border-primary"
+                                                    : "rounded-lg"
+                                            }   flex justify-between items-center`}
+                                            onClick={() => setFlightVisible(!flightVisible)}
                                         >
-                                            <div
-                                                tabIndex={-1}
-                                                onClick={() => setStatusVisible(!statusVisible)}
-                                                className={`hover:outline-primary py-3 px-4 outline-blue outline-1 outline bg-[rgba(141,124,221,0.1)] cursor-pointer ${
-                                                    statusVisible
-                                                        ? "rounded-tl-lg rounded-tr-lg outline-primary"
-                                                        : "rounded-lg"
+                                            {Object.keys(selectedFlight).length === 0
+                                                ? "Choose a flight"
+                                                : `${selectedFlight.departure_airport.address} -
+                                                            ${selectedFlight.destination_airport.address} (
+                                                                ${formatDateTime(selectedFlight.departure_datetime)})`}
+                                            <i className={`${flightVisible ? "rotate-180" : ""}`}>
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="20"
+                                                    height="20"
+                                                    viewBox="0 0 16 16"
+                                                    id="chevron-down"
+                                                >
+                                                    <path
+                                                        fill="#fff"
+                                                        d="M4.14645,5.64645 C4.34171,5.45118 4.65829,5.45118 4.85355,5.64645 L7.9999975,8.79289 L11.1464,5.64645 C11.3417,5.45118 11.6583,5.45118 11.8536,5.64645 C12.0488,5.84171 12.0488,6.15829 11.8536,6.35355 L8.35355,9.85355 C8.15829,10.0488 7.84171,10.0488 7.64645,9.85355 L4.14645,6.35355 C3.95118,6.15829 3.95118,5.84171 4.14645,5.64645 Z"
+                                                    ></path>
+                                                </svg>
+                                            </i>
+                                        </div>
+                                    </Tippy>
+                                    {
+                                        <span className="text-deepRed">
+                                            {formSubmitted &&
+                                                Object.keys(selectedFlight).length === 0 &&
+                                                "Flight is required."}
+                                        </span>
+                                    }
+                                </div>
+
+                                {Object.keys(selectedFlight).length > 0 && (
+                                    <div className="flex gap-2 flex-col">
+                                        <label htmlFor="ticketClass" className="flex gap-1 mb-1 items-center">
+                                            Ticket class
+                                            <IsRequired />
+                                        </label>
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <button
+                                                type="button"
+                                                disabled={!selectedFlight.seats[0].status}
+                                                onClick={() => setTicketClass("First class")}
+                                                className={`py-3 px-4 border-blue border cursor-pointer rounded-lg mt-1 hover:border-primary ${
+                                                    ticketClass === "First class" && "bg-primary border-primary"
                                                 }   flex justify-between items-center`}
                                             >
-                                                {status === false ? "False" : "True"}
-                                                <i className={`${statusVisible ? "rotate-180" : ""}`}>
-                                                    <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        width="20"
-                                                        height="20"
-                                                        viewBox="0 0 16 16"
-                                                        id="chevron-down"
-                                                    >
-                                                        <path
-                                                            fill="#fff"
-                                                            d="M4.14645,5.64645 C4.34171,5.45118 4.65829,5.45118 4.85355,5.64645 L7.9999975,8.79289 L11.1464,5.64645 C11.3417,5.45118 11.6583,5.45118 11.8536,5.64645 C12.0488,5.84171 12.0488,6.15829 11.8536,6.35355 L8.35355,9.85355 C8.15829,10.0488 7.84171,10.0488 7.64645,9.85355 L4.14645,6.35355 C3.95118,6.15829 3.95118,5.84171 4.14645,5.64645 Z"
-                                                        ></path>
-                                                    </svg>
-                                                </i>
-                                            </div>
-                                        </Tippy>
-                                    </div>
-                                    <div className="flex gap-2 flex-col">
-                                        <label htmlFor="terminals" className="flex gap-1 mb-1 items-center">
-                                            Terminals
-                                            <IsRequired />
-                                        </label>
-                                        <input
-                                            type="number"
-                                            id="terminals"
-                                            {...register("terminals")}
-                                            defaultValue={schema.getDefault().terminals}
-                                            className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
-                                        />
-                                        {<span className="text-deepRed">{errors.terminals?.message}</span>}
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="flex gap-2 flex-col">
-                                        <label htmlFor="capacity" className="flex gap-1 mb-1 items-center">
-                                            Capacity
-                                            <IsRequired />
-                                        </label>
-                                        <input
-                                            type="number"
-                                            id="capacity"
-                                            {...register("capacity")}
-                                            defaultValue={schema.getDefault().capacity}
-                                            className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
-                                        />
-                                        {<span className="text-deepRed">{errors.capacity?.message}</span>}
-                                    </div>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="flex flex-col gap-2">
-                                            <label htmlFor="latitude" className="flex gap-1 mb-1 items-center">
-                                                Latitude
-                                                <IsRequired />
-                                            </label>
-                                            <input
-                                                type="text"
-                                                id="latitude"
-                                                value={latitude}
-                                                onChange={onChangeLatitude}
-                                                className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
-                                            />
-                                        </div>
-                                        <div className="flex flex-col gap-2">
-                                            <label htmlFor="longitude" className="flex gap-1 mb-1 items-center">
-                                                Longitude
-                                                <IsRequired />
-                                            </label>
-                                            <input
-                                                type="text"
-                                                id="longitude"
-                                                value={longitude}
-                                                onChange={onChangeLongitude}
-                                                className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
-                                            />
+                                                First class (
+                                                {selectedFlight.seats[0].count - selectedFlight.seats[0].booked_seats}{" "}
+                                                seats)
+                                            </button>
+                                            <button
+                                                type="button"
+                                                disabled={!selectedFlight.seats[1].status}
+                                                onClick={() => setTicketClass("Second class")}
+                                                className={`py-3 px-4 border-blue border cursor-pointer rounded-lg hover:border-primary mt-1 ${
+                                                    ticketClass === "Second class" && "bg-primary border-primary"
+                                                }   flex justify-between items-center`}
+                                            >
+                                                Second class (
+                                                {selectedFlight.seats[1].count - selectedFlight.seats[1].booked_seats}{" "}
+                                                seats)
+                                            </button>
                                         </div>
                                     </div>
-                                </div>
+                                )}
 
                                 <button
                                     className="py-3 px-8 mt-3 text-base font-semibold rounded-lg border-blue border hover:border-primary hover:bg-primary"
                                     type="submit"
+                                    onClick={() => {
+                                        setFormSubmitted(true);
+                                    }}
                                 >
                                     Create booking form
                                 </button>

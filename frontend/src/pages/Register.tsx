@@ -47,7 +47,7 @@ const Register: React.FC = () => {
                     "/user/register",
                     {
                         fullname: name,
-                        mobile: phoneNumber,
+                        mobile: "0" + phoneNumber,
                         email,
                         password,
                         address
@@ -61,7 +61,7 @@ const Register: React.FC = () => {
 
                 dispatch(sendMessage("Signed up successfully!", "success"));
                 const timer = setTimeout(() => {
-                    navigate("/login");
+                    navigate("/user/login");
                     window.location.reload();
                 }, 2000);
                 return () => clearTimeout(timer);
@@ -107,7 +107,7 @@ const Register: React.FC = () => {
                             </label>
                             <input
                                 id="phoneNumber"
-                                type="number"
+                                type="text"
                                 placeholder="Your phone number . . ."
                                 {...register("phoneNumber")}
                                 className="bg-placeholder focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-black px-4 py-3 rounded-lg  placeholder:text-disabled"

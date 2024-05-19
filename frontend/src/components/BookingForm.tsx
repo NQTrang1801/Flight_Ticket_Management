@@ -76,12 +76,8 @@ const BookingForm: React.FC<AirportProps> = ({
     return (
         <>
             <div className="p-6 rounded-xl overflow-hidden shadow-xl border border-primary bg-background relative">
-                <div
-                    className={`${
-                        isInternational ? "bg-primary" : "bg-blue"
-                    } absolute top-0 left-0 right-0 p-2 text-center font-semibold text-base`}
-                >
-                    {name}
+                <div className={`bg-primary absolute top-0 left-0 right-0 p-2 text-center font-semibold text-base`}>
+                    Booking Form
                 </div>
                 <div className="absolute top-14 right-6 flex gap-2">
                     <button

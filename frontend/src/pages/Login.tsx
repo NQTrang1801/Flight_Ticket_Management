@@ -148,7 +148,7 @@ const Login: React.FC = () => {
                         {userType === "user" && (
                             <>
                                 Are you new?{" "}
-                                <a href="/register" className="text-blue hover:text-primary underline text-end">
+                                <a href="/user/register" className="text-blue hover:text-primary underline text-end">
                                     Create an account.
                                 </a>
                             </>

@@ -180,10 +180,7 @@ interface FlightScheduleValidation {
     cancellationDeadline: Date;
 
     firstClassCapacity: number;
-    firstClassBookedSeats: number;
-
     secondClassCapacity: number;
-    secondClassBookedSeats: number;
 
     intermediateAirport: Array<{
         stopDuration: number;
@@ -217,4 +214,10 @@ interface BookingFormData {
     price: number;
     booking_date: Date;
     status: BookingStatus;
+}
+
+interface BookingFormValidation {
+    fullName: string;
+    phoneNumber: number;
+    identificationNumber: number;
 }
