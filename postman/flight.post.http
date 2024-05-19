@@ -3,33 +3,33 @@
 ### Tạo một chuyến bay mới
 POST {{url_dev}}/511454641/create
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDgzOGNjNDE0NjkzODEzYWZlMTY2YSIsImlhdCI6MTcxNjAwOTE4NywiZXhwIjoxNzE2MDk1NTg3fQ.I9lBaGhcdi2RuWAHmBf38F-V_xoxmtlJYfMvAv8ArhY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDk4Njk4NTc4YTZkNzc4ZDU5ZTEzZCIsImlhdCI6MTcxNjA5NDYyOCwiZXhwIjoxNzE2MTgxMDI4fQ.AHhZdW60hMhCQ0IkojY4q3bR8f14HJeoWwVvfACTK2c
 {
-    "flight_number": "MH370-BOEING7777787",
-    "flight_code": "HAN-SGNNN8",
-    "departure_airport": "664839c6414693813afe169a",
-    "destination_airport": "664839cd414693813afe16a1",
+    "flight_number": "MH370-BOEING7778",
+    "flight_code": "HAN-SGN",
+    "departure_airport": "664986bb578a6d778d59e152",
+    "destination_airport": "664986bb578a6d778d59e152",
     "departure_datetime": "2024-05-20",
     "duration": 30,
     "ticket_price": 1000,
     "seats": [
-        {"class": "1", "count": 20},
+        {"class": "1", "count": 1},
         {"class": "2", "count": 80}
     ],
     "transit_airports": [
-        {"airport_id": "664839d4414693813afe16a8", "stop_duration": 10, "note": ""},
-        {"airport_id": "664839db414693813afe16af", "stop_duration": 15, "note": "delay 2 minutes"}
+        {"airport_id": "664986c8578a6d778d59e160", "stop_duration": 10, "note": ""},
+        {"airport_id": "664986cf578a6d778d59e167", "stop_duration": 15, "note": "delay 2 minutes"}
     ],
     "rules": {
         "regulation_1": {
-            "flight_time": "664838cc414693813afe166d",
-            "intermediate": "664838cc414693813afe166e"
+            "flight_time": "66498698578a6d778d59e140",
+            "intermediate": "66498698578a6d778d59e141"
         },
         "regulation_2": {
-            "tickets": "664838cc414693813afe166f"
+            "tickets": "66498698578a6d778d59e142"
         },
         "regulation_3": {
-            "booking": "664838cc414693813afe1670"
+            "booking": "66498698578a6d778d59e143"
         }
     }
 }

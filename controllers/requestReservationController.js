@@ -54,6 +54,10 @@ const createRequestReservation = asyncHandler(async (req, res) => {
         // Tăng số lượng chỗ ngồi đã đặt lên
         seatClass.booked_seats += 1;
 
+        if (seatClass.booked_seats == seatClass.count) {
+            seatClass.status = false;
+        }
+
         // Lưu lại sự thay đổi trong flight
         await flight.save();
 
@@ -69,9 +73,7 @@ const createRequestReservation = asyncHandler(async (req, res) => {
             booking_date
         });
 
-        if (seatClass.booked_seats >= seatClass.count) {
-            return res.status(400).json({ message: 'No available seats in this class' });
-        }
+        
 
         res.status(201).json(newRequest);
     } catch (error) {
