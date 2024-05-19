@@ -5,16 +5,16 @@ POST {{url_dev}}/511454641/create
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDgzOGNjNDE0NjkzODEzYWZlMTY2YSIsImlhdCI6MTcxNjAwOTE4NywiZXhwIjoxNzE2MDk1NTg3fQ.I9lBaGhcdi2RuWAHmBf38F-V_xoxmtlJYfMvAv8ArhY
 {
-    "flight_number": "MH370-BOEING77777",
-    "flight_code": "HAN-SGNN",
+    "flight_number": "MH370-BOEING7777787",
+    "flight_code": "HAN-SGNNN8",
     "departure_airport": "664839c6414693813afe169a",
     "destination_airport": "664839cd414693813afe16a1",
-    "departure_datetime": "2024-05-19",
+    "departure_datetime": "2024-05-20",
     "duration": 30,
     "ticket_price": 1000,
     "seats": [
-        {"class": "1", "count": 20, "booked_seats": 0, "status": true},
-        {"class": "2", "count": 80, "booked_seats": 0, "status": true}
+        {"class": "1", "count": 20},
+        {"class": "2", "count": 80}
     ],
     "transit_airports": [
         {"airport_id": "664839d4414693813afe16a8", "stop_duration": 10, "note": ""},

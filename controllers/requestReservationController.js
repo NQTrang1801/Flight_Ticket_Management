@@ -69,6 +69,10 @@ const createRequestReservation = asyncHandler(async (req, res) => {
             booking_date
         });
 
+        if (seatClass.booked_seats >= seatClass.count) {
+            return res.status(400).json({ message: 'No available seats in this class' });
+        }
+
         res.status(201).json(newRequest);
     } catch (error) {
         res.status(500).json({ message: error.message });

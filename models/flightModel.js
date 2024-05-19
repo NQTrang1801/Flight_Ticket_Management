@@ -18,7 +18,7 @@ const flightSchema = new mongoose.Schema({
             class: { type: String, required: true}, 
             count: { type: Number, required: true, default: 0 },
             booked_seats: { type: Number, default: 0 },
-            status: { type: Boolean, default: false },
+            status: { type: Boolean, default: true },
         }
     ],
     ticket_price: { type: Object, required: true },
