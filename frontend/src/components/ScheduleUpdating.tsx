@@ -14,41 +14,6 @@ import convertDate from "~/utils/convertDate";
 import getFormattedDateTime from "~/utils/getFormattedDateTime";
 import formatDate from "~/utils/formatDate";
 
-const schema = yup.object().shape({
-    flightNumber: yup.string().required("Flight number is required."),
-    flightCode: yup.string().required("Flight code is required."),
-    duration: yup.number().required("Duration is required.").typeError("Duration must be a number."),
-    ticketPrice: yup.number().required("Ticket price is required.").typeError("Ticket price must be a number."),
-    departureDate: yup.date().required("Departure date is required.").typeError("Date is required."),
-    departureTime: yup.string().required("Time is required.").typeError("Time is required."),
-    firstClassCapacity: yup
-        .number()
-        .required("Seating capacity is required.")
-        .typeError("Seating capacity must be a number."),
-    firstClassBookedSeats: yup
-        .number()
-        .required("Booked seats is required.")
-        .typeError("Booked seats must be a number.")
-        .max(yup.ref("firstClassCapacity"), "Booked seats must be less than or equal to capacity."),
-
-    secondClassCapacity: yup
-        .number()
-        .required("Seating capacity is required.")
-        .typeError("Seating capacity must be a number."),
-    secondClassBookedSeats: yup
-        .number()
-        .required("Booked seats is required.")
-        .typeError("Booked seats must be a number.")
-        .max(yup.ref("secondClassCapacity"), "Booked seats must be less than or equal to capacity."),
-
-    intermediateAirport: yup.array().of(
-        yup.object().shape({
-            stopDuration: yup.number().required("Duration is required.").typeError("Stop duration must be a number."),
-            note: yup.string()
-        })
-    )
-});
-
 const ScheduleUpdating: React.FC<FlightScheduleData> = ({
     _id,
     flight_number,
@@ -62,6 +27,33 @@ const ScheduleUpdating: React.FC<FlightScheduleData> = ({
     transit_airports,
     rules
 }) => {
+    const schema = yup.object().shape({
+        flightNumber: yup.string().required("Flight number is required."),
+        flightCode: yup.string().required("Flight code is required."),
+        duration: yup.number().required("Duration is required.").typeError("Duration must be a number."),
+        ticketPrice: yup.number().required("Ticket price is required.").typeError("Ticket price must be a number."),
+        departureDate: yup.date().required("Departure date is required.").typeError("Date is required."),
+        departureTime: yup.string().required("Time is required.").typeError("Time is required."),
+        firstClassCapacity: yup
+            .number()
+            .required("Seating capacity is required.")
+            .typeError("Seating capacity must be a number.")
+            .min(seats[0].booked_seats, "Seating capacity must equal or greater than booked seats"),
+        secondClassCapacity: yup
+            .number()
+            .required("Seating capacity is required.")
+            .typeError("Seating capacity must be a number.")
+            .min(seats[1].booked_seats, "Seating capacity must equal or greater than booked seats"),
+        intermediateAirport: yup.array().of(
+            yup.object().shape({
+                stopDuration: yup
+                    .number()
+                    .required("Duration is required.")
+                    .typeError("Stop duration must be a number."),
+                note: yup.string()
+            })
+        )
+    });
     const [airportData, setAirportData] = useState<AirportData[]>();
 
     const [formSubmitted, setFormSubmitted] = useState(false);
@@ -76,12 +68,6 @@ const ScheduleUpdating: React.FC<FlightScheduleData> = ({
     });
 
     const dispatch = useAppDispatch();
-
-    const [status1, setStatus1] = useState(seats[0].status);
-    const [status1Visible, setStatus1Visible] = useState(false);
-
-    const [status2, setStatus2] = useState(seats[1].status);
-    const [status2Visible, setStatus2Visible] = useState(false);
 
     const [time, setTime] = useState(getFormattedDateTime(departure_datetime).split(" ")[1].slice(0, -3));
 
@@ -107,9 +93,7 @@ const ScheduleUpdating: React.FC<FlightScheduleData> = ({
             departureDate: formatDate(getFormattedDateTime(departure_datetime).split(" ")[0]),
             departureTime: getFormattedDateTime(departure_datetime).split(" ")[1].slice(0, -3),
             ticketPrice: ticket_price,
-            firstClassBookedSeats: seats[0].booked_seats,
             firstClassCapacity: seats[0].count,
-            secondClassBookedSeats: seats[1].booked_seats,
             secondClassCapacity: seats[1].count,
             intermediateAirport: transit_airports.map((airport) => ({
                 ...airport,
@@ -157,9 +141,7 @@ const ScheduleUpdating: React.FC<FlightScheduleData> = ({
         const departure_datetime = `${convertDate(data.departureDate)} ${data.departureTime}:00`;
 
         const firstClassCapacity = data.firstClassCapacity;
-        const firstClassBookedSeats = data.firstClassBookedSeats;
         const secondClassCapacity = data.secondClassCapacity;
-        const secondClassBookedSeats = data.secondClassBookedSeats;
 
         const airport_ids = selectedAirports.map((selectedAirport) => selectedAirport._id);
         const stopDurations = data.intermediateAirport.map((airport) => airport.stopDuration);
@@ -187,14 +169,14 @@ const ScheduleUpdating: React.FC<FlightScheduleData> = ({
                             {
                                 class: "1",
                                 count: firstClassCapacity,
-                                booked_seats: firstClassBookedSeats,
-                                status: status1
+                                booked_seats: seats[0].booked_seats,
+                                status: firstClassCapacity === 0 ? false : seats[0].status
                             },
                             {
                                 class: "2",
                                 count: secondClassCapacity,
-                                booked_seats: secondClassBookedSeats,
-                                status: status2
+                                booked_seats: seats[1].booked_seats,
+                                status: secondClassCapacity === 0 ? false : seats[1].status
                             }
                         ],
                         transit_airports,
@@ -236,7 +218,7 @@ const ScheduleUpdating: React.FC<FlightScheduleData> = ({
         })();
     }, [transit_airports]);
 
-    console.log(selectedAirports);
+    console.log(seats);
 
     return (
         <>
@@ -526,16 +508,14 @@ const ScheduleUpdating: React.FC<FlightScheduleData> = ({
                                         }
                                     </div>
                                 </div>
-                                <div className="outline outline-1 outline-border my-2"></div>
-                                <div className="text-blue text-[15px]">First class seats</div>
-                                <div className="flex gap-2 flex-col">
-                                    <div className="grid grid-cols-3 gap-4">
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="flex gap-2 flex-col">
                                         <div className="flex gap-2 flex-col">
                                             <label
                                                 htmlFor="firstClassCapacity"
                                                 className="flex gap-1 mb-1 items-center"
                                             >
-                                                Seating capacity
+                                                First class seats
                                                 <IsRequired />
                                             </label>
                                             <input
@@ -547,106 +527,15 @@ const ScheduleUpdating: React.FC<FlightScheduleData> = ({
                                             />
                                             {<span className="text-deepRed">{errors.firstClassCapacity?.message}</span>}
                                         </div>
-
-                                        <div className="flex gap-2 flex-col">
-                                            <label
-                                                htmlFor="firstClassBookedSeats"
-                                                className="flex gap-1 mb-1 items-center"
-                                            >
-                                                Booked seats
-                                                <IsRequired />
-                                            </label>
-                                            <input
-                                                type="text"
-                                                id="firstClassBookedSeats"
-                                                placeholder="Ex: 10"
-                                                {...register("firstClassBookedSeats")}
-                                                className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
-                                            />
-                                            {
-                                                <span className="text-deepRed">
-                                                    {errors.firstClassBookedSeats?.message}
-                                                </span>
-                                            }
-                                        </div>
-                                        <div className="flex gap-2 flex-col">
-                                            <label className="flex gap-1 mb-1 items-center">Status</label>
-                                            <Tippy
-                                                interactive
-                                                onClickOutside={() => setStatus1Visible(!status1Visible)}
-                                                visible={status1Visible}
-                                                offset={[0, 0]}
-                                                placement="bottom"
-                                                render={(attrs) => (
-                                                    <div
-                                                        {...attrs}
-                                                        className={`flex w-[188px] text-white p-2 rounded-bl-lg rounded-br-lg flex-col bg-background outline-1 outline-border outline justify-center ${
-                                                            status1Visible ? "outline-primary" : ""
-                                                        }`}
-                                                    >
-                                                        <div
-                                                            onClick={() => {
-                                                                setStatus1(false);
-                                                                setStatus1Visible(false);
-                                                            }}
-                                                            className={`cursor-pointer py-3 px-4 hover:bg-primary text-left rounded-lg ${
-                                                                status1 === false ? "text-blue pointer-events-none" : ""
-                                                            }`}
-                                                        >
-                                                            False
-                                                        </div>
-                                                        <div
-                                                            onClick={() => {
-                                                                setStatus1(true);
-                                                                setStatus1Visible(false);
-                                                            }}
-                                                            className={`cursor-pointer py-3 px-4 hover:bg-primary text-left rounded-lg ${
-                                                                status1 === true ? "text-blue pointer-events-none" : ""
-                                                            }`}
-                                                        >
-                                                            True
-                                                        </div>
-                                                    </div>
-                                                )}
-                                            >
-                                                <div
-                                                    tabIndex={-1}
-                                                    onClick={() => setStatus1Visible(!status1Visible)}
-                                                    className={`hover:outline-primary py-3 px-4 outline-blue outline-1 outline bg-[rgba(141,124,221,0.1)] cursor-pointer ${
-                                                        status1Visible
-                                                            ? "rounded-tl-lg rounded-tr-lg outline-primary"
-                                                            : "rounded-lg"
-                                                    }   flex justify-between items-center`}
-                                                >
-                                                    {status1 === false ? "False" : "True"}
-                                                    <i className={`${status1Visible ? "rotate-180" : ""}`}>
-                                                        <svg
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            width="20"
-                                                            height="20"
-                                                            viewBox="0 0 16 16"
-                                                            id="chevron-down"
-                                                        >
-                                                            <path
-                                                                fill="#fff"
-                                                                d="M4.14645,5.64645 C4.34171,5.45118 4.65829,5.45118 4.85355,5.64645 L7.9999975,8.79289 L11.1464,5.64645 C11.3417,5.45118 11.6583,5.45118 11.8536,5.64645 C12.0488,5.84171 12.0488,6.15829 11.8536,6.35355 L8.35355,9.85355 C8.15829,10.0488 7.84171,10.0488 7.64645,9.85355 L4.14645,6.35355 C3.95118,6.15829 3.95118,5.84171 4.14645,5.64645 Z"
-                                                            ></path>
-                                                        </svg>
-                                                    </i>
-                                                </div>
-                                            </Tippy>
-                                        </div>
                                     </div>
-                                </div>
-                                <div className="text-blue text-[15px]">Second class seats</div>
-                                <div className="flex gap-2 flex-col">
-                                    <div className="grid grid-cols-3 gap-4">
+
+                                    <div className="flex gap-2 flex-col">
                                         <div className="flex gap-2 flex-col">
                                             <label
                                                 htmlFor="secondClassCapacity"
                                                 className="flex gap-1 mb-1 items-center"
                                             >
-                                                Seating capacity
+                                                Second class seats
                                                 <IsRequired />
                                             </label>
                                             <input
@@ -661,95 +550,6 @@ const ScheduleUpdating: React.FC<FlightScheduleData> = ({
                                                     {errors.secondClassCapacity?.message}
                                                 </span>
                                             }
-                                        </div>
-
-                                        <div className="flex gap-2 flex-col">
-                                            <label
-                                                htmlFor="secondClassBookedSeats"
-                                                className="flex gap-1 mb-1 items-center"
-                                            >
-                                                Booked seats
-                                                <IsRequired />
-                                            </label>
-                                            <input
-                                                type="text"
-                                                id="secondClassBookedSeats"
-                                                placeholder="Ex: 60"
-                                                {...register("secondClassBookedSeats")}
-                                                className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
-                                            />
-                                            {
-                                                <span className="text-deepRed">
-                                                    {errors.secondClassBookedSeats?.message}
-                                                </span>
-                                            }
-                                        </div>
-                                        <div className="flex gap-2 flex-col">
-                                            <label className="flex gap-1 mb-1 items-center">Status</label>
-                                            <Tippy
-                                                interactive
-                                                onClickOutside={() => setStatus2Visible(!status2Visible)}
-                                                visible={status2Visible}
-                                                offset={[0, 0]}
-                                                placement="bottom"
-                                                render={(attrs) => (
-                                                    <div
-                                                        {...attrs}
-                                                        className={`flex w-[188px] text-white p-2 rounded-bl-lg rounded-br-lg flex-col bg-background outline-1 outline-border outline justify-center ${
-                                                            status2Visible ? "outline-primary" : ""
-                                                        }`}
-                                                    >
-                                                        <div
-                                                            onClick={() => {
-                                                                setStatus2(false);
-                                                                setStatus2Visible(false);
-                                                            }}
-                                                            className={`cursor-pointer py-3 px-4 hover:bg-primary text-left rounded-lg ${
-                                                                status2 === false ? "text-blue pointer-events-none" : ""
-                                                            }`}
-                                                        >
-                                                            False
-                                                        </div>
-                                                        <div
-                                                            onClick={() => {
-                                                                setStatus2(true);
-                                                                setStatus2Visible(false);
-                                                            }}
-                                                            className={`cursor-pointer py-3 px-4 hover:bg-primary text-left rounded-lg ${
-                                                                status2 === true ? "text-blue pointer-events-none" : ""
-                                                            }`}
-                                                        >
-                                                            True
-                                                        </div>
-                                                    </div>
-                                                )}
-                                            >
-                                                <div
-                                                    tabIndex={-1}
-                                                    onClick={() => setStatus2Visible(!status2Visible)}
-                                                    className={`hover:outline-primary py-3 px-4 outline-blue outline-1 outline bg-[rgba(141,124,221,0.1)] cursor-pointer ${
-                                                        status2Visible
-                                                            ? "rounded-tl-lg rounded-tr-lg outline-primary"
-                                                            : "rounded-lg"
-                                                    }   flex justify-between items-center`}
-                                                >
-                                                    {status2 === false ? "False" : "True"}
-                                                    <i className={`${status2Visible ? "rotate-180" : ""}`}>
-                                                        <svg
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            width="20"
-                                                            height="20"
-                                                            viewBox="0 0 16 16"
-                                                            id="chevron-down"
-                                                        >
-                                                            <path
-                                                                fill="#fff"
-                                                                d="M4.14645,5.64645 C4.34171,5.45118 4.65829,5.45118 4.85355,5.64645 L7.9999975,8.79289 L11.1464,5.64645 C11.3417,5.45118 11.6583,5.45118 11.8536,5.64645 C12.0488,5.84171 12.0488,6.15829 11.8536,6.35355 L8.35355,9.85355 C8.15829,10.0488 7.84171,10.0488 7.64645,9.85355 L4.14645,6.35355 C3.95118,6.15829 3.95118,5.84171 4.14645,5.64645 Z"
-                                                            ></path>
-                                                        </svg>
-                                                    </i>
-                                                </div>
-                                            </Tippy>
                                         </div>
                                     </div>
                                 </div>

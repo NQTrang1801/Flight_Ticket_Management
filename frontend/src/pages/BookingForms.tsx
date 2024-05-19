@@ -26,7 +26,7 @@ const schema = yup.object().shape({
 });
 
 function BookingForms() {
-    const [data, setData] = useState<AirportData[]>();
+    const [data, setData] = useState<BookingFormData[]>();
     const [flightData, setFlightData] = useState<FlightScheduleData[]>();
     const [userData, setUserData] = useState<UserData[]>();
 
@@ -37,7 +37,6 @@ function BookingForms() {
     const [userVisible, setUserVisible] = useState(false);
 
     const [ticketClass, setTicketClass] = useState("First class");
-    const [ticketClassVisible, setTicketClassVisible] = useState(Object.keys(selectedFlight).length > 0);
 
     const [formSubmitted, setFormSubmitted] = useState(false);
 
@@ -59,7 +58,7 @@ function BookingForms() {
         dispatch(startLoading());
         const full_name = formData.fullName;
         const CMND = formData.identificationNumber;
-        const phone_number = formData.phoneNumber;
+        const phone_number = "0" + formData.phoneNumber;
 
         if (formSubmitted) {
             (async () => {
@@ -133,8 +132,6 @@ function BookingForms() {
         if (Object.keys(selectedFlight).length > 0 && Object.keys(selectedUser).length > 0) setFormSubmitted(false);
     }, [selectedFlight, selectedUser]);
 
-    console.log(data);
-
     return (
         <>
             <div className="flex justify-end items-center mb-6">
@@ -173,26 +170,25 @@ function BookingForms() {
             </div>
 
             <div className="bg-block p-6 rounded-3xl shadow-xl">
-                <div className="grid grid-cols-2 gap-6">
-                    {/* {data &&
+                <div className="grid grid-cols-1 gap-6">
+                    {data &&
                         data
                             // ?.filter((actor) => actor.fullName.toLowerCase().includes(query.toLowerCase()))
-                            .map((airport) => (
+                            .map((bookingForm) => (
                                 <BookingForm
-                                    _id={airport._id}
-                                    code={airport.code}
-                                    key={airport.code}
-                                    name={airport.name}
-                                    country={airport.country}
-                                    address={airport.address}
-                                    timezone={airport.timezone}
-                                    terminals={airport.terminals}
-                                    capacity={airport.capacity}
-                                    isInternational={airport.isInternational}
-                                    coordinates={airport.coordinates}
-                                    status={airport.status}
+                                    key={bookingForm._id}
+                                    CMND={bookingForm.CMND}
+                                    booking_date={bookingForm.booking_date}
+                                    flight_id={bookingForm.flight_id}
+                                    full_name={bookingForm.full_name}
+                                    phone_number={bookingForm.phone_number}
+                                    price={bookingForm.price}
+                                    seat_class={bookingForm.seat_class}
+                                    status={bookingForm.status}
+                                    user_id={bookingForm.user_id}
+                                    _id={bookingForm._id}
                                 />
-                            ))} */}
+                            ))}
                 </div>
             </div>
             <Portal>

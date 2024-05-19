@@ -144,7 +144,7 @@ const ScheduleItem: React.FC<FlightScheduleData> = ({
                                 <th className="w-72">Seating type</th>
                                 <th className="w-72">Seating capacity</th>
                                 <th>Booked seats</th>
-                                <th>Status</th>
+                                <th>Available</th>
                             </tr>
                         </thead>
                         <tbody>

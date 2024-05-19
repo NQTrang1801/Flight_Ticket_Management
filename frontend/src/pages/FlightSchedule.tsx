@@ -142,13 +142,13 @@ function FlightSchedule() {
                                 class: "1",
                                 count: firstClassCapacity,
                                 booked_seats: 0,
-                                status: true
+                                status: firstClassCapacity === 0 ? false : true
                             },
                             {
                                 class: "2",
                                 count: secondClassCapacity,
                                 booked_seats: 0,
-                                status: true
+                                status: secondClassCapacity === 0 ? false : true
                             }
                         ],
                         transit_airports,

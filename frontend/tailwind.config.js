@@ -18,6 +18,7 @@ export const theme = {
         primary_10: "rgba(141,124,221,0.1)",
         disabled: "#7f7f8e",
         blue: "#53a6de",
+        green: "#65b663",
         lightBlue: "#BBE1FA",
         hoverPrimary: "#557e9a",
         placeholder: "#5674d01a",

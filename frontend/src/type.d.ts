@@ -198,22 +198,17 @@ interface UserData {
     _id: string;
 }
 
-enum BookingStatus {
-    "Booked",
-    "Cancelled",
-    "Paid"
-}
-
 interface BookingFormData {
-    user_id: object;
-    flight_id: object;
-    seat_class: string;
-    full_name: string;
     CMND: string;
+    booking_date: string;
+    flight_id: { _id: string; flight_code: string; flight_number: string; departure_datetime: string };
+    full_name: string;
     phone_number: string;
     price: number;
-    booking_date: Date;
-    status: BookingStatus;
+    seat_class: string;
+    status: string;
+    user_id: { email: string; fullname: string; _id: string };
+    _id: string;
 }
 
 interface BookingFormValidation {
