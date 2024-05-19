@@ -3,7 +3,7 @@
 ### Tạo một chuyến bay mới
 POST {{url_dev}}/511454641/create
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDk4Njk4NTc4YTZkNzc4ZDU5ZTEzZCIsImlhdCI6MTcxNjA5NDYyOCwiZXhwIjoxNzE2MTgxMDI4fQ.AHhZdW60hMhCQ0IkojY4q3bR8f14HJeoWwVvfACTK2c
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDlmZTNkYTUzMTgwNGU4MmMzZGYwNiIsImlhdCI6MTcxNjEyNTc2OSwiZXhwIjoxNzE2MjEyMTY5fQ.E4ZWa81EErNWvMNTjJe8CsmNYIg_0O1tGCpa3Je9f9g
 {
     "flight_number": "MH370-BOEING7778",
     "flight_code": "HAN-SGN",
@@ -77,9 +77,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDdmYzNhO
 }
 
 ### Cập nhật thông tin ghế ngồi của một chuyến bay dựa trên ID
-PUT {{url_dev}}/511246641/66484d46f85395a3e0b97935/seats/66484d46f85395a3e0b97936
+PUT {{url_dev}}/511246641/664a007187aa319027fc674f/seats/664a007187aa319027fc6750
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDgzOGNjNDE0NjkzODEzYWZlMTY2YSIsImlhdCI6MTcxNjAwOTE4NywiZXhwIjoxNzE2MDk1NTg3fQ.I9lBaGhcdi2RuWAHmBf38F-V_xoxmtlJYfMvAv8ArhY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDlmZTNkYTUzMTgwNGU4MmMzZGYwNiIsImlhdCI6MTcxNjEyNTc2OSwiZXhwIjoxNzE2MjEyMTY5fQ.E4ZWa81EErNWvMNTjJe8CsmNYIg_0O1tGCpa3Je9f9g
 {
     "count": 2
 }

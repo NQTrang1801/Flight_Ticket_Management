@@ -105,7 +105,7 @@ const getRequestsByFlight = asyncHandler(async (req, res) => {
 
 const getAllRequests = asyncHandler(async (req, res) => {
     try {
-        const requests = await RequestReservation.find().populate('user_id', 'fullname email').populate('flight_id', 'flight_code');
+        const requests = await RequestReservation.find().populate('user_id', 'fullname email').populate('flight_id', 'flight_code flight_number departure_datetime duration seats');
 
         if (!requests.length) {
             return res.status(404).json({ message: 'No request reservations found' });

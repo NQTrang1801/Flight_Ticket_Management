@@ -16,7 +16,7 @@ router.get('/580320946/request-all', authMiddleware, hasPermission, getAllReques
 router.put('/:request_id', updateRequestReservation);
 
 // Hủy request
-router.patch('/:request_id/cancel', cancelRequestReservation);
+router.patch('/:request_id/cancel', authMiddleware, cancelRequestReservation);
 
 router.patch('/580457946/:request_id/success', authMiddleware, hasPermission, requestSuccess);
 

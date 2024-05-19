@@ -98,6 +98,17 @@ const updateFlight = asyncHandler(async (req, res) => {
                 }
             }
         }
+        
+        if (flightData.seats) {
+            flightData.seats = flightData.seats.map(seat => {
+                if (seat.count > seat.booked_seats) {
+                    seat.status = true;
+                } else {
+                    seat.status = false;
+                }
+                return seat;
+            });
+        }
 
         const updatedFlight = await Flight.findByIdAndUpdate(id, flightData, { new: true });
         res.status(200).json(updatedFlight);
@@ -122,6 +133,13 @@ const updateSeatCountById = asyncHandler(async (req, res) => {
             return res.status(400).json({ message: "Invalid seat count" });
         }
         seat.count = count;
+
+        if (count > seat.booked_seats) {
+            seat.status = true;
+        } else {
+            seat.status = false;
+        }
+        
         await flight.save();
         res.status(200).json(flight);
     } catch (error) {

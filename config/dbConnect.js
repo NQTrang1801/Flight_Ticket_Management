@@ -85,8 +85,10 @@ const dbConnect = () => {
                     ]);
                     console.log('Inserted GROUP default documents successfully.');
                 }
+
+                const gr999 = await Group.findOne({ groupCode: "999" });
+
                 if (countP === 0) {
-                    const gr999 = await Group.findOne({ groupCode: "999" });
                     const functionalities = await Functionality.find({}, '_id');
                     const functionalityIds = functionalities.map(func => func._id);
                     const permissions = functionalityIds.map(functionalityId => ({
@@ -109,19 +111,20 @@ const dbConnect = () => {
                     await Permission.create(permissionsClient);
 
                     console.log('Inserted PERMISSION default documents successfully.');
-                    const countU = await User.countDocuments();
-                    if (countU === 0) {
-                        await User.create([
-                            {
-                                fullname: "ADMINISTRATOR",
-                                email: "ADMINISTRATOR@gmail.com",
-                                mobile: "0000000000",
-                                password: "ADMINISTRATOR999",
-                                group_id: gr999._id
-                            }
-                        ]);
-                        console.log('Inserted ADMINISTRATOR default documents successfully.');
-                    }
+                }
+
+                const countU = await User.countDocuments();
+                if (countU === 0) {
+                    await User.create([
+                        {
+                            fullname: "ADMINISTRATOR",
+                            email: "ADMINISTRATOR@gmail.com",
+                            mobile: "0000000000",
+                            password: "ADMINISTRATOR999",
+                            group_id: gr999._id
+                        }
+                    ]);
+                    console.log('Inserted ADMINISTRATOR default documents successfully.');
                 }
 
                 if (countR == 0) {
