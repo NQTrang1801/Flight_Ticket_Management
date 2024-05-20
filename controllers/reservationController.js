@@ -6,7 +6,7 @@ const Reservation = require('../models/reservationModel')
 
 const revenueReportByMonthYear = asyncHandler(async (req, res) => {
     try {
-        const { month, year } = req.body;
+        const { month, year } = req.query;
         const targetMonth = month ? parseInt(month) : new Date().getMonth() + 1;
         const targetYear = year ? parseInt(year) : new Date().getFullYear();
 
@@ -78,7 +78,7 @@ const revenueReportByMonthYear = asyncHandler(async (req, res) => {
 
 const revenueReportByYear = asyncHandler(async (req, res) => {
     try {
-        const { year } = req.body;
+        const { year } = req.query;
         const targetYear = year ? parseInt(year) : new Date().getFullYear();
 
         const report = [];
@@ -124,7 +124,7 @@ const revenueReportByYear = asyncHandler(async (req, res) => {
         // Tạo báo cáo cho những tháng có chuyến bay
         for (let i = 0; i < 12; i++) {
             const numberOfFlights = monthlyFlightCounts[i];
-            
+
             if (numberOfFlights > 0) {
                 const monthRevenue = monthlyRevenue[i];
                 const percentage = totalRevenueForYear ? ((monthRevenue / totalRevenueForYear) * 100).toFixed(2) : 0;

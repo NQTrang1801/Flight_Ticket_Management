@@ -5,12 +5,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDlmZTNkY
 Content-Type: application/json
 {
     "month" : 6,
-    "year" : 2024
+    "year": 2024
 }
 
 GET {{url_dev}}/511320884/revenue-report-year
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDlmZTNkYTUzMTgwNGU4MmMzZGYwNiIsImlhdCI6MTcxNjEyNTc2OSwiZXhwIjoxNzE2MjEyMTY5fQ.E4ZWa81EErNWvMNTjJe8CsmNYIg_0O1tGCpa3Je9f9g
 Content-Type: application/json
 {
-    "year" : 2024
+    "year" : 2023
 }
