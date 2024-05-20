@@ -14,7 +14,7 @@ function formatDateTime(isoString: string): string {
     const formattedDate = `${day}-${month}-${year}`;
     const formattedTime = `${hours}:${minutes}`;
 
-    return `${formattedTime} ${formattedDate}`;
+    return `${formattedDate} ${formattedTime}`;
 }
 
 export default formatDateTime;
