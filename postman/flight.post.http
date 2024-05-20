@@ -5,11 +5,11 @@ POST {{url_dev}}/511454641/create
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDlmZTNkYTUzMTgwNGU4MmMzZGYwNiIsImlhdCI6MTcxNjEyNTc2OSwiZXhwIjoxNzE2MjEyMTY5fQ.E4ZWa81EErNWvMNTjJe8CsmNYIg_0O1tGCpa3Je9f9g
 {
-    "flight_number": "MH370-BOEING7778",
+    "flight_number": "MH370-BOEING777889",
     "flight_code": "HAN-SGN",
     "departure_airport": "664986bb578a6d778d59e152",
     "destination_airport": "664986bb578a6d778d59e152",
-    "departure_datetime": "2024-05-20",
+    "departure_datetime": "2024-06-21",
     "duration": 30,
     "ticket_price": 1000,
     "seats": [

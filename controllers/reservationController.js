@@ -91,54 +91,51 @@ const revenueReportByYear = asyncHandler(async (req, res) => {
             }
         });
 
-        // Nhóm các chuyến bay theo flight_code
-        const flightGroups = flights.reduce((groups, flight) => {
-            const flightCode = flight.flight_code;
-            if (!groups[flightCode]) {
-                groups[flightCode] = [];
+        // Nhóm các chuyến bay theo tháng
+        const monthGroups = flights.reduce((groups, flight) => {
+            const month = flight.departure_datetime.getMonth();
+            if (!groups[month]) {
+                groups[month] = [];
             }
-            groups[flightCode].push(flight);
+            groups[month].push(flight);
             return groups;
         }, {});
 
         // Tính tổng doanh thu của tất cả các chuyến bay trong năm cụ thể
         let totalRevenueForYear = 0;
+        const monthlyRevenue = new Array(12).fill(0);
+        const monthlyFlightCounts = new Array(12).fill(0);
 
-        for (const flightCode in flightGroups) {
-            const flightsInGroup = flightGroups[flightCode];
-            let groupRevenue = 0;
+        for (const month in monthGroups) {
+            const flightsInMonth = monthGroups[month];
+            let monthRevenue = 0;
 
-            for (const flight of flightsInGroup) {
+            for (const flight of flightsInMonth) {
                 const reservations = await Reservation.find({ flight_id: flight._id });
-
                 const totalRevenue = reservations.reduce((acc, curr) => acc + curr.price, 0);
-                groupRevenue += totalRevenue;
+                monthRevenue += totalRevenue;
             }
 
-            totalRevenueForYear += groupRevenue;
+            monthlyRevenue[month] = monthRevenue;
+            monthlyFlightCounts[month] = flightsInMonth.length;
+            totalRevenueForYear += monthRevenue;
         }
 
-        // Duyệt qua từng nhóm chuyến bay để tính toán số vé, doanh thu và tỷ lệ phần trăm
-        for (const flightCode in flightGroups) {
-            const flightsInGroup = flightGroups[flightCode];
-            let numberOfTickets = 0;
-            let groupRevenue = 0;
+        // Tạo báo cáo cho những tháng có chuyến bay
+        for (let i = 0; i < 12; i++) {
+            const numberOfFlights = monthlyFlightCounts[i];
+            
+            if (numberOfFlights > 0) {
+                const monthRevenue = monthlyRevenue[i];
+                const percentage = totalRevenueForYear ? ((monthRevenue / totalRevenueForYear) * 100).toFixed(2) : 0;
 
-            for (const flight of flightsInGroup) {
-                const reservations = await Reservation.find({ flight_id: flight._id });
-
-                numberOfTickets += reservations.length;
-                groupRevenue += reservations.reduce((acc, curr) => acc + curr.price, 0);
+                report.push({
+                    month: i + 1,
+                    numberOfFlights,
+                    totalRevenue: monthRevenue,
+                    percentage
+                });
             }
-
-            const percentage = totalRevenueForYear ? ((groupRevenue / totalRevenueForYear) * 100).toFixed(2) : 0;
-
-            report.push({
-                flightCode,
-                numberOfTickets,
-                totalRevenue: groupRevenue,
-                percentage
-            });
         }
 
         res.status(200).json({ year: targetYear, report });
@@ -146,6 +143,7 @@ const revenueReportByYear = asyncHandler(async (req, res) => {
         res.status(500).json({ message: 'Failed to generate revenue report', error: error.message });
     }
 });
+
 
 
 
