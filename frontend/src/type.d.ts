@@ -170,13 +170,10 @@ interface FlightScheduleData {
 
 interface FlightScheduleValidation {
     flightNumber: string;
-    flightCode: string;
     duration: number;
     ticketPrice: number;
     departureDate: Date;
     departureTime: string;
-    bookingDeadline: Date;
-    cancellationDeadline: Date;
 
     firstClassCapacity: number;
     secondClassCapacity: number;

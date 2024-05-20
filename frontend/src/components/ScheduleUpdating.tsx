@@ -29,7 +29,6 @@ const ScheduleUpdating: React.FC<FlightScheduleData> = ({
 }) => {
     const schema = yup.object().shape({
         flightNumber: yup.string().required("Flight number is required."),
-        flightCode: yup.string().required("Flight code is required."),
         duration: yup.number().required("Duration is required.").typeError("Duration must be a number."),
         ticketPrice: yup.number().required("Ticket price is required.").typeError("Ticket price must be a number."),
         departureDate: yup.date().required("Departure date is required.").typeError("Date is required."),
@@ -85,7 +84,6 @@ const ScheduleUpdating: React.FC<FlightScheduleData> = ({
     } = useForm<FlightScheduleValidation>({
         resolver: yupResolver(schema),
         defaultValues: {
-            flightCode: flight_code,
             flightNumber: flight_number,
             duration: duration,
             departureAirport: departure_airport,
@@ -132,7 +130,6 @@ const ScheduleUpdating: React.FC<FlightScheduleData> = ({
         hide();
         dispatch(startLoading());
 
-        const flight_code = data.flightCode;
         const flight_number = data.flightNumber;
         const ticket_price = data.ticketPrice;
         const departure_airport = departureAirport.id;
@@ -158,7 +155,7 @@ const ScheduleUpdating: React.FC<FlightScheduleData> = ({
                 await axios.put(
                     `/flight/511246641/${_id}`,
                     {
-                        flight_code,
+                        flight_code: flight_code,
                         flight_number,
                         ticket_price,
                         departure_airport,
@@ -250,7 +247,7 @@ const ScheduleUpdating: React.FC<FlightScheduleData> = ({
                             </div>
                             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
                                 <div className="text-blue text-[15px]">Flight Information</div>
-                                <div className="grid grid-cols-3 gap-4">
+                                <div className="grid grid-cols-2 gap-4">
                                     <div className="flex gap-2 flex-col">
                                         <label htmlFor="flightNumber" className="flex gap-1 mb-1 items-center">
                                             Flight number
@@ -265,20 +262,7 @@ const ScheduleUpdating: React.FC<FlightScheduleData> = ({
                                         />
                                         {<span className="text-deepRed">{errors.flightNumber?.message}</span>}
                                     </div>
-                                    <div className="flex gap-2 flex-col">
-                                        <label htmlFor="flightCode" className="flex gap-1 mb-1 items-center">
-                                            Flight code
-                                            <IsRequired />
-                                        </label>
-                                        <input
-                                            type="text"
-                                            id="flightCode"
-                                            {...register("flightCode")}
-                                            placeholder="Ex: HAN-SGN"
-                                            className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
-                                        />
-                                        {<span className="text-deepRed">{errors.flightCode?.message}</span>}
-                                    </div>
+
                                     <div className="flex gap-2 flex-col">
                                         <label htmlFor="ticketPrice" className="flex gap-1 mb-1 items-center">
                                             Ticket price (USD)
