@@ -3,10 +3,13 @@ import { useState, useEffect } from "react";
 import formatDateTime from "~/utils/formatDateTime";
 import Tippy from "@tippyjs/react/headless";
 import shortenAirportName from "~/utils/shortenAirportName";
+import { useAppSelector } from "~/hook";
 
 function FlightLookup() {
     const [flightData, setFlightData] = useState<FlightScheduleData[]>();
     const [airportData, setAirportData] = useState<AirportData[]>();
+
+    const { query } = useAppSelector((state) => state.searching!);
 
     const [departureAirport, setDepartureAirport] = useState<{
         address: string;
@@ -202,6 +205,9 @@ function FlightLookup() {
                         <tbody>
                             {flightData &&
                                 flightData
+                                    .filter((flight) =>
+                                        flight.flight_number.toLowerCase().includes(query.toLowerCase())
+                                    )
                                     .filter((flight) => {
                                         const departureMatch = departureAirport._id
                                             ? flight.departure_airport._id === departureAirport._id

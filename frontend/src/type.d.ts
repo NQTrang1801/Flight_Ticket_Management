@@ -15,14 +15,17 @@ interface FlightDataProps {
     }>;
 }
 
-interface TicketProps {
-    bookingCode: string;
-    flightNumber: string;
-    passengerName: string;
-    idNumber: string;
-    phoneNumber: string;
-    ticketClass: string;
-    ticketPrice: number;
+interface TicketData {
+    CMND: string;
+    booking_date: string;
+    flight_id: string;
+    full_name: string;
+    phone_number: string;
+    price: number;
+    seat_class: string;
+    status: string;
+    user_id: string;
+    _id: string;
 }
 
 interface FlightProps {

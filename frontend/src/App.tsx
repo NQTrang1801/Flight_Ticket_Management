@@ -8,7 +8,6 @@ import { useAppSelector } from "./hook";
 import { toast } from "react-toastify";
 import FlightSchedule from "./pages/FlightSchedule";
 import Dashboard from "./pages/Dashboard";
-import FlightBooking from "./pages/FlightBooking";
 import FlightLookup from "./pages/FlightLookup";
 import Regulations from "./pages/Regulations";
 import Register from "./pages/Register";
@@ -17,7 +16,6 @@ import UserRoutes from "./components/UserRoutes";
 import AdminRoutes from "./components/AdminRoutes";
 import Users from "./pages/Users";
 import BookingForms from "./pages/BookingForms";
-// import Reservation from "./pages/Reservation";
 
 function App() {
     const root = document.querySelector("#root");

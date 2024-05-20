@@ -29,6 +29,28 @@ function Header() {
         };
     }, []);
 
+    let searchingPlaceholder;
+
+    switch (location.pathname.split("/").splice(-1)[0]) {
+        case "airports":
+            searchingPlaceholder = "airport name";
+            break;
+        case "booking-forms":
+            searchingPlaceholder = "identification number";
+            break;
+        case "flight-schedule":
+            searchingPlaceholder = "flight number";
+            break;
+        case "users":
+            searchingPlaceholder = "user email";
+            break;
+        case "flight-lookup":
+            searchingPlaceholder = "flight number";
+            break;
+        default:
+            searchingPlaceholder = "something";
+    }
+
     return (
         <header
             className={`bg-background_80 ${
@@ -111,11 +133,8 @@ function Header() {
                 </i>
                 <input
                     className="bg-[rgba(141,124,221,0.1)] text-[13px] focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white pl-[40px] py-[10px] rounded-3xl w-[360px] placeholder:text-disabled"
-                    placeholder={`${
-                        location.pathname.split("/").splice(-1)[0] === "airports"
-                            ? "Search for airport name . . ."
-                            : "Search for something . . ."
-                    }`}
+                    placeholder={`Search for ${searchingPlaceholder} . . .`}
+                    disabled={searchingPlaceholder === "something"}
                     onChange={(e) => dispatch(search(e.target.value))}
                 />
             </form>

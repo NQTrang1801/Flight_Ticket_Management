@@ -5,7 +5,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import IsRequired from "~/icons/IsRequired";
-import { useAppDispatch } from "~/hook";
+import { useAppDispatch, useAppSelector } from "~/hook";
 import { sendMessage } from "~/actions/message";
 import User from "~/components/User";
 
@@ -23,6 +23,7 @@ const schema = yup.object().shape({
 
 function Users() {
     const [data, setData] = useState<UserData[]>();
+    const { query } = useAppSelector((state) => state.searching!);
 
     const { Portal, hide, show } = usePortal({
         defaultShow: false
@@ -133,7 +134,7 @@ function Users() {
                 <div className="grid grid-cols-1 gap-6">
                     {data &&
                         data
-                            // ?.filter((actor) => actor.fullName.toLowerCase().includes(query.toLowerCase()))
+                            ?.filter((user) => user.email.toLowerCase().includes(query.toLowerCase()))
                             .map((user) => (
                                 <User
                                     key={user._id}

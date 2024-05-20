@@ -5,7 +5,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import IsRequired from "~/icons/IsRequired";
-import { useAppDispatch } from "~/hook";
+import { useAppDispatch, useAppSelector } from "~/hook";
 import { startLoading, stopLoading } from "~/actions/loading";
 import { sendMessage } from "~/actions/message";
 import Tippy from "@tippyjs/react/headless";
@@ -29,6 +29,7 @@ function BookingForms() {
     const [data, setData] = useState<BookingFormData[]>();
     const [flightData, setFlightData] = useState<FlightScheduleData[]>();
     const [userData, setUserData] = useState<UserData[]>();
+    const { query } = useAppSelector((state) => state.searching!);
 
     const [filteredStatus, setFilteredStatus] = useState("All");
     const [filteredStatusVisible, setFilteredStatusVisible] = useState(false);
@@ -262,6 +263,7 @@ function BookingForms() {
                 <div className="grid grid-cols-1 gap-6">
                     {data &&
                         data
+                            .filter((bookingForm) => bookingForm.CMND.toLowerCase().includes(query.toLowerCase()))
                             .filter((bookingForm) => {
                                 if (filteredStatus === "All") return bookingForm;
                                 return bookingForm.status === filteredStatus;

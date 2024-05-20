@@ -7,7 +7,7 @@ import axios from "~/utils/axios";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import IsRequired from "~/icons/IsRequired";
-import { useAppDispatch } from "~/hook";
+import { useAppDispatch, useAppSelector } from "~/hook";
 import { startLoading, stopLoading } from "~/actions/loading";
 import { sendMessage } from "~/actions/message";
 import convertDate from "~/utils/convertDate";
@@ -42,6 +42,7 @@ function FlightSchedule() {
     const [data, setData] = useState<FlightScheduleData[]>();
     const [airportData, setAirportData] = useState<AirportData[]>();
     const [ruleData, setRuleData] = useState<RuleData[]>();
+    const { query } = useAppSelector((state) => state.searching!);
 
     const [formSubmitted, setFormSubmitted] = useState(false);
 
@@ -446,6 +447,7 @@ function FlightSchedule() {
                     <ul className="w-full grid grid-cols-1 gap-8">
                         {data &&
                             data
+                                .filter((flight) => flight.flight_number.toLowerCase().includes(query.toLowerCase()))
                                 .filter((flight) => {
                                     const departureMatch = filteredDepartureAirport._id
                                         ? flight.departure_airport._id === filteredDepartureAirport._id

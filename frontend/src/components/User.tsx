@@ -4,6 +4,8 @@ import axios from "~/utils/axios";
 import { useAppDispatch } from "~/hook";
 import UserUpdating from "./UserUpdating";
 import { sendMessage } from "~/actions/message";
+import { startLoading, stopLoading } from "~/actions/loading";
+import shortenAirportName from "~/utils/shortenAirportName";
 
 interface UserProps {
     email: string;
@@ -18,7 +20,8 @@ interface UserProps {
 
 const User: React.FC<UserProps> = ({ email, fullname, group_id, isBlocked, mobile, _id, address }) => {
     const [updatingMode, setUpdatingMode] = useState(false);
-    const [ticketData, setTicketData] = useState();
+    const [ticketData, setTicketData] = useState<TicketData[]>();
+    const [flightData, setFlightData] = useState<FlightScheduleData[]>();
 
     const dispatch = useAppDispatch();
 
@@ -71,15 +74,35 @@ const User: React.FC<UserProps> = ({ email, fullname, group_id, isBlocked, mobil
     };
 
     useEffect(() => {
-        (async () => {
-            await axios
-                .get(`/user/${_id}/tickets`)
-                .then((response) => {
-                    setTicketData(response.data);
-                })
-                .catch((err) => console.error(err));
-        })();
-    }, [_id]);
+        const fetchData = async () => {
+            try {
+                dispatch(startLoading());
+
+                const ticketResponse = await axios.get(`/user/${_id}/tickets`);
+                setTicketData(ticketResponse.data);
+
+                const flightPromises = ticketResponse.data.map((ticket: TicketData) =>
+                    axios.get(`/flight/${ticket.flight_id}`, {
+                        headers: {
+                            Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).token}`
+                        }
+                    })
+                );
+
+                const flightResponses = await Promise.all(flightPromises);
+
+                const allFlightData = flightResponses.map((response) => response.data);
+
+                setFlightData(allFlightData);
+
+                dispatch(stopLoading());
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchData();
+    }, [_id, dispatch]);
 
     console.log(ticketData);
 
@@ -165,6 +188,51 @@ const User: React.FC<UserProps> = ({ email, fullname, group_id, isBlocked, mobil
                     <div>
                         <span className="font-semibold">Blocked</span>: {isBlocked === false ? "False" : "True"}
                     </div>
+                </div>
+                <div className="mt-4">
+                    <span className="font-semibold">Purchase:</span>
+                    <table className="w-full bg-block mt-4">
+                        <thead>
+                            <tr className="text-center bg-primary">
+                                <th className="">Index</th>
+                                <th className="">Passenger name</th>
+                                <th className="">Phone number</th>
+                                <th className="">Flight number</th>
+                                <th className="">Departure</th>
+                                <th className="">Arrival</th>
+                                <th className="">Seating type</th>
+                                <th className="">Price</th>
+                                <th className="">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {ticketData &&
+                                flightData?.map((flight, index) => (
+                                    <tr key={flight._id} className="text-center">
+                                        <td>{index + 1}</td>
+                                        <td>
+                                            {ticketData.find((ticket) => ticket.flight_id === flight._id)?.full_name}
+                                        </td>
+                                        <td>
+                                            {ticketData.find((ticket) => ticket.flight_id === flight._id)?.phone_number}
+                                        </td>
+                                        <td>{flight.flight_number}</td>
+                                        <td>{shortenAirportName(flight.departure_airport.name)}</td>
+                                        <td>{shortenAirportName(flight.destination_airport.name)}</td>
+                                        <td>
+                                            {ticketData.find((ticket) => ticket.flight_id === flight._id)
+                                                ?.seat_class === "1"
+                                                ? "First class"
+                                                : "Second class"}
+                                        </td>
+                                        <td>
+                                            {ticketData.find((ticket) => ticket.flight_id === flight._id)?.price} USD
+                                        </td>
+                                        <td>{ticketData.find((ticket) => ticket.flight_id === flight._id)?.status}</td>
+                                    </tr>
+                                ))}
+                        </tbody>
+                    </table>
                 </div>
             </div>
             {updatingMode && (
