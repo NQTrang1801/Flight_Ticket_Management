@@ -38,20 +38,20 @@ interface FlightProps {
 
 interface MonthlyRevenueProps {
     month: string;
-    ticketSales: {
-        stt: number;
-        flightNumber: string;
-        ticketCount: number;
-        revenue: number;
-        rate: string;
+    year: string;
+    report: {
+        flightCode: string;
+        numberOfTickets: number;
+        percentage: string;
+        totalRevenue: number;
     }[];
 }
 
 interface YearlyRevenueProps {
     year: number;
     report: {
-        flightCode: string;
-        numberOfTickets: number;
+        month: number;
+        numberOfFlights: number;
         percentage: string;
         totalRevenue: number;
     }[];

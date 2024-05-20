@@ -33,14 +33,14 @@ const BookingForm: React.FC<BookingFormData> = ({
             )
             .then(() => {
                 dispatch(stopLoading());
-                dispatch(sendMessage("Confirm reservation successfully!", "success"));
+                dispatch(sendMessage("Confirmed reservation successfully!", "success"));
                 setTimeout(() => {
                     window.location.reload();
                 }, 2000);
             })
             .catch((error) => {
                 console.error(error);
-                dispatch(sendMessage("Confirm reservation failed!", "error"));
+                dispatch(sendMessage("Confirmed reservation failed!", "error"));
             });
     };
 
@@ -58,14 +58,14 @@ const BookingForm: React.FC<BookingFormData> = ({
             )
             .then(() => {
                 dispatch(stopLoading());
-                dispatch(sendMessage("Cancel reservation successfully!", "success"));
+                dispatch(sendMessage("Cancelled reservation successfully!", "success"));
                 setTimeout(() => {
                     window.location.reload();
                 }, 2000);
             })
             .catch((error) => {
                 console.error(error);
-                dispatch(sendMessage("Cancel reservation failed!", "error"));
+                dispatch(sendMessage("Cancelled reservation failed!", "error"));
             });
     };
 
