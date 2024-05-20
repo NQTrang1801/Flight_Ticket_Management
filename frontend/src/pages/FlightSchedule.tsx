@@ -12,6 +12,7 @@ import { startLoading, stopLoading } from "~/actions/loading";
 import { sendMessage } from "~/actions/message";
 import convertDate from "~/utils/convertDate";
 import ScheduleItem from "~/components/ScheduleItem";
+import shortenAirportName from "~/utils/shortenAirportName";
 
 const schema = yup.object().shape({
     flightNumber: yup.string().required("Flight number is required."),
@@ -72,6 +73,25 @@ function FlightSchedule() {
     } = useForm<FlightScheduleValidation>({
         resolver: yupResolver(schema)
     });
+
+    const [filteredDepartureAirport, setFilteredDepartureAirport] = useState<{
+        address: string;
+        code: string;
+        country: string;
+        name: string;
+        _id: string;
+    }>({ address: "", code: "", country: "", name: "", _id: "" });
+
+    const [filteredArrivalAirport, setFilteredArrivalAirport] = useState<{
+        address: string;
+        code: string;
+        country: string;
+        name: string;
+        _id: string;
+    }>({ address: "", code: "", country: "", name: "", _id: "" });
+
+    const [filteredDepartureAirportVisible, setFilteredDepartureAirportVisible] = useState(false);
+    const [filteredArrivalAirportVisible, setFilteredArrivalAirportVisible] = useState(false);
 
     const { fields, append, remove } = useFieldArray({
         control,
@@ -220,7 +240,171 @@ function FlightSchedule() {
 
     return (
         <>
-            <div className="flex justify-end items-center mb-6">
+            <div className="flex justify-between items-center mb-6">
+                <div className="flex gap-4">
+                    <div>
+                        <Tippy
+                            visible={filteredDepartureAirportVisible}
+                            interactive
+                            onClickOutside={() => setFilteredDepartureAirportVisible(false)}
+                            offset={[0, 0]}
+                            placement="bottom"
+                            render={(attrs) => (
+                                <ul
+                                    className={`border border-primary rounded-xl p-2 w-[250px] bg-background ${
+                                        filteredDepartureAirportVisible
+                                            ? "border-t-0 rounded-tl-none rounded-tr-none"
+                                            : ""
+                                    }`}
+                                    {...attrs}
+                                >
+                                    <li
+                                        onClick={() => {
+                                            setFilteredDepartureAirport({
+                                                address: "",
+                                                code: "",
+                                                country: "",
+                                                name: "",
+                                                _id: ""
+                                            });
+                                            setFilteredDepartureAirportVisible(false);
+                                        }}
+                                        className={`cursor-pointer py-2 px-4 hover:bg-primary text-left rounded-xl flex items-center p-2 ${
+                                            filteredDepartureAirport?._id === "" ? "text-blue pointer-events-none" : ""
+                                        }`}
+                                    >
+                                        All airports
+                                    </li>
+                                    {airportData?.map((airport) => (
+                                        <li
+                                            onClick={() => {
+                                                setFilteredDepartureAirport(airport);
+                                                setFilteredDepartureAirportVisible(false);
+                                            }}
+                                            key={airport._id}
+                                            className={`cursor-pointer py-2 px-4 hover:bg-primary text-left rounded-xl flex items-center p-2 ${
+                                                filteredDepartureAirport?._id === airport._id
+                                                    ? "text-blue pointer-events-none"
+                                                    : ""
+                                            }`}
+                                        >
+                                            {shortenAirportName(airport.name)}
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        >
+                            <div
+                                className={`hover:border-primary py-3 px-4 border-blue border bg-background cursor-pointer w-[250px] ${
+                                    filteredDepartureAirportVisible
+                                        ? "rounded-tl-xl rounded-tr-xl border-primary"
+                                        : "rounded-xl"
+                                }   flex justify-between items-center`}
+                                onClick={() => setFilteredDepartureAirportVisible(!filteredDepartureAirportVisible)}
+                            >
+                                Departure:{" "}
+                                {filteredDepartureAirport._id !== ""
+                                    ? shortenAirportName(filteredDepartureAirport.name)
+                                    : "All airports"}
+                                <i className={`${filteredDepartureAirportVisible ? "rotate-180" : ""}`}>
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="20"
+                                        height="20"
+                                        viewBox="0 0 16 16"
+                                        id="chevron-down"
+                                    >
+                                        <path
+                                            fill="#fff"
+                                            d="M4.14645,5.64645 C4.34171,5.45118 4.65829,5.45118 4.85355,5.64645 L7.9999975,8.79289 L11.1464,5.64645 C11.3417,5.45118 11.6583,5.45118 11.8536,5.64645 C12.0488,5.84171 12.0488,6.15829 11.8536,6.35355 L8.35355,9.85355 C8.15829,10.0488 7.84171,10.0488 7.64645,9.85355 L4.14645,6.35355 C3.95118,6.15829 3.95118,5.84171 4.14645,5.64645 Z"
+                                        ></path>
+                                    </svg>
+                                </i>
+                            </div>
+                        </Tippy>
+                    </div>
+                    <div>
+                        <Tippy
+                            visible={filteredArrivalAirportVisible}
+                            interactive
+                            onClickOutside={() => setFilteredArrivalAirportVisible(false)}
+                            offset={[0, 0]}
+                            placement="bottom"
+                            render={(attrs) => (
+                                <ul
+                                    className={`border border-primary rounded-xl p-2 w-[250px] bg-background ${
+                                        filteredArrivalAirportVisible
+                                            ? "border-t-0 rounded-tl-none rounded-tr-none"
+                                            : ""
+                                    }`}
+                                    {...attrs}
+                                >
+                                    <li
+                                        onClick={() => {
+                                            setFilteredArrivalAirport({
+                                                address: "",
+                                                code: "",
+                                                country: "",
+                                                name: "",
+                                                _id: ""
+                                            });
+                                            setFilteredArrivalAirportVisible(false);
+                                        }}
+                                        className={`cursor-pointer py-2 px-4 hover:bg-primary text-left rounded-xl flex items-center p-2 ${
+                                            filteredArrivalAirport?._id === "" ? "text-blue pointer-events-none" : ""
+                                        }`}
+                                    >
+                                        All airports
+                                    </li>
+                                    {airportData?.map((airport) => (
+                                        <li
+                                            onClick={() => {
+                                                setFilteredArrivalAirport(airport);
+                                                setFilteredArrivalAirportVisible(false);
+                                            }}
+                                            key={airport._id}
+                                            className={`cursor-pointer py-2 px-4 hover:bg-primary text-left rounded-xl flex items-center p-2 ${
+                                                filteredArrivalAirport?._id === airport._id
+                                                    ? "text-blue pointer-events-none"
+                                                    : ""
+                                            }`}
+                                        >
+                                            {shortenAirportName(airport.name)}
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        >
+                            <div
+                                className={`hover:border-primary py-3 px-4 border-blue border bg-background cursor-pointer w-[250px] ${
+                                    filteredArrivalAirportVisible
+                                        ? "rounded-tl-xl rounded-tr-xl border-primary"
+                                        : "rounded-xl"
+                                }   flex justify-between items-center`}
+                                onClick={() => setFilteredArrivalAirportVisible(!filteredArrivalAirportVisible)}
+                            >
+                                Arrival:{" "}
+                                {filteredArrivalAirport._id !== ""
+                                    ? shortenAirportName(filteredArrivalAirport.name)
+                                    : "All airports"}
+                                <i className={`${filteredArrivalAirportVisible ? "rotate-180" : ""}`}>
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="20"
+                                        height="20"
+                                        viewBox="0 0 16 16"
+                                        id="chevron-down"
+                                    >
+                                        <path
+                                            fill="#fff"
+                                            d="M4.14645,5.64645 C4.34171,5.45118 4.65829,5.45118 4.85355,5.64645 L7.9999975,8.79289 L11.1464,5.64645 C11.3417,5.45118 11.6583,5.45118 11.8536,5.64645 C12.0488,5.84171 12.0488,6.15829 11.8536,6.35355 L8.35355,9.85355 C8.15829,10.0488 7.84171,10.0488 7.64645,9.85355 L4.14645,6.35355 C3.95118,6.15829 3.95118,5.84171 4.14645,5.64645 Z"
+                                        ></path>
+                                    </svg>
+                                </i>
+                            </div>
+                        </Tippy>
+                    </div>
+                </div>
                 <div className="flex gap-3 items-center">
                     <button
                         onClick={() => {
@@ -261,22 +445,32 @@ function FlightSchedule() {
                 <div className="bg-block p-6 rounded-3xl shadow-xl">
                     <ul className="w-full grid grid-cols-1 gap-8">
                         {data &&
-                            data.map((schedule) => (
-                                <ScheduleItem
-                                    key={schedule._id}
-                                    _id={schedule._id}
-                                    flight_number={schedule.flight_number}
-                                    flight_code={schedule.flight_code}
-                                    departure_airport={schedule.departure_airport}
-                                    destination_airport={schedule.destination_airport}
-                                    departure_datetime={schedule.departure_datetime}
-                                    duration={schedule.duration}
-                                    seats={schedule.seats}
-                                    ticket_price={schedule.ticket_price}
-                                    transit_airports={schedule.transit_airports}
-                                    rules={schedule.rules}
-                                />
-                            ))}
+                            data
+                                .filter((flight) => {
+                                    const departureMatch = filteredDepartureAirport._id
+                                        ? flight.departure_airport._id === filteredDepartureAirport._id
+                                        : true;
+                                    const arrivalMatch = filteredArrivalAirport._id
+                                        ? flight.destination_airport._id === filteredArrivalAirport._id
+                                        : true;
+                                    return departureMatch && arrivalMatch;
+                                })
+                                .map((schedule) => (
+                                    <ScheduleItem
+                                        key={schedule._id}
+                                        _id={schedule._id}
+                                        flight_number={schedule.flight_number}
+                                        flight_code={schedule.flight_code}
+                                        departure_airport={schedule.departure_airport}
+                                        destination_airport={schedule.destination_airport}
+                                        departure_datetime={schedule.departure_datetime}
+                                        duration={schedule.duration}
+                                        seats={schedule.seats}
+                                        ticket_price={schedule.ticket_price}
+                                        transit_airports={schedule.transit_airports}
+                                        rules={schedule.rules}
+                                    />
+                                ))}
                     </ul>
                 </div>
             </div>

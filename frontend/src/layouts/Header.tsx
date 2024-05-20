@@ -111,7 +111,11 @@ function Header() {
                 </i>
                 <input
                     className="bg-[rgba(141,124,221,0.1)] text-[13px] focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white pl-[40px] py-[10px] rounded-3xl w-[360px] placeholder:text-disabled"
-                    placeholder="Search for something . . ."
+                    placeholder={`${
+                        location.pathname.split("/").splice(-1)[0] === "airports"
+                            ? "Search for airport name . . ."
+                            : "Search for something . . ."
+                    }`}
                     onChange={(e) => dispatch(search(e.target.value))}
                 />
             </form>

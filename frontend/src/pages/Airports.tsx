@@ -5,7 +5,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import IsRequired from "~/icons/IsRequired";
-import { useAppDispatch } from "~/hook";
+import { useAppDispatch, useAppSelector } from "~/hook";
 import { startLoading, stopLoading } from "~/actions/loading";
 import { sendMessage } from "~/actions/message";
 import Tippy from "@tippyjs/react/headless";
@@ -77,6 +77,8 @@ function Airports() {
 
     const [status, setStatus] = useState(true);
     const [statusVisible, setStatusVisible] = useState(false);
+
+    const { query } = useAppSelector((state) => state.searching!);
 
     const {
         register,
@@ -186,7 +188,7 @@ function Airports() {
                 <div className="grid grid-cols-2 gap-6">
                     {data &&
                         data
-                            // ?.filter((actor) => actor.fullName.toLowerCase().includes(query.toLowerCase()))
+                            ?.filter((airport) => airport.name.toLowerCase().includes(query.toLowerCase()))
                             .map((airport) => (
                                 <Airport
                                     _id={airport._id}

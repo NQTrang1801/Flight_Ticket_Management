@@ -81,7 +81,7 @@ const BookingForm: React.FC<BookingFormData> = ({
                         status === "Paid" ? "bg-green" : status === "Booked" ? "bg-primary" : "bg-mdRed"
                     } absolute top-0 left-0 right-0 p-2 text-center font-semibold text-base`}
                 >
-                    Booking Form
+                    {status === "Paid" ? "Flight Ticket" : "Booking Form"}
                 </div>
 
                 <div className="absolute top-14 right-6 flex flex-col gap-2">

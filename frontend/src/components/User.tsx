@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "~/utils/axios";
 import { useAppDispatch } from "~/hook";
 import UserUpdating from "./UserUpdating";
@@ -18,6 +18,7 @@ interface UserProps {
 
 const User: React.FC<UserProps> = ({ email, fullname, group_id, isBlocked, mobile, _id, address }) => {
     const [updatingMode, setUpdatingMode] = useState(false);
+    const [ticketData, setTicketData] = useState();
 
     const dispatch = useAppDispatch();
 
@@ -69,10 +70,31 @@ const User: React.FC<UserProps> = ({ email, fullname, group_id, isBlocked, mobil
             });
     };
 
+    useEffect(() => {
+        (async () => {
+            await axios
+                .get(`/user/${_id}/tickets`)
+                .then((response) => {
+                    setTicketData(response.data);
+                })
+                .catch((err) => console.error(err));
+        })();
+    }, [_id]);
+
+    console.log(ticketData);
+
     return (
         <>
-            <div className="p-6 rounded-xl overflow-hidden shadow-xl border border-primary bg-background relative">
-                <div className={`${"bg-blue"} absolute top-0 left-0 right-0 p-2 text-center font-semibold text-base`}>
+            <div
+                className={`p-6 rounded-xl overflow-hidden shadow-xl border ${
+                    isBlocked ? "border-mdRed" : "border-blue"
+                } bg-background relative`}
+            >
+                <div
+                    className={`${
+                        isBlocked ? "bg-mdRed" : "bg-blue"
+                    } absolute top-0 left-0 right-0 p-2 text-center font-semibold text-base`}
+                >
                     User Account
                 </div>
                 <div className="absolute top-14 right-6 flex gap-2">

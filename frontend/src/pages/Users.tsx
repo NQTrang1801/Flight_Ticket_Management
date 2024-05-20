@@ -90,7 +90,7 @@ function Users() {
         })();
     }, []);
 
-    console.log(data);
+    // console.log(data);
 
     return (
         <>

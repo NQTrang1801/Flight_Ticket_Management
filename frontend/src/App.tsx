@@ -65,8 +65,6 @@ function App() {
                 <Route path="/administrator" element={<AdministratorRoutes />}>
                     <Route index element={<Dashboard />} />
                     <Route path="/administrator/flight-schedule" element={<FlightSchedule />} />
-                    {/* <Route path="/administrator/reservation" element={<Reservation />} /> */}
-                    <Route path="/administrator/flight-booking" element={<FlightBooking />} />
                     <Route path="/administrator/flight-lookup" element={<FlightLookup />} />
                     <Route path="/administrator/airports" element={<Airports />} />
                     <Route path="/administrator/regulations" element={<Regulations />} />
@@ -75,16 +73,12 @@ function App() {
                 </Route>
                 <Route path="/admin" element={<AdminRoutes />}>
                     <Route index element={<Dashboard />} />
-                    {/* <Route path="/admin/reservation" element={<Reservation />} /> */}
-                    <Route path="/admin/flight-booking" element={<FlightBooking />} />
                     <Route path="/admin/flight-lookup" element={<FlightLookup />} />
                     <Route path="/admin/airport" element={<Airports />} />
                     <Route path="/admin/booking-forms" element={<BookingForms />} />
                 </Route>
                 <Route path="/user" element={<UserRoutes />}>
                     <Route index element={<Dashboard />} />
-                    {/* <Route path="/user/reservation" element={<Reservation />} /> */}
-                    <Route path="/user/flight-booking" element={<FlightBooking />} />
                     <Route path="/user/flight-lookup" element={<FlightLookup />} />
                     <Route path="/user/airport" element={<Airports />} />
                     <Route path="/user/booking-forms" element={<BookingForms />} />

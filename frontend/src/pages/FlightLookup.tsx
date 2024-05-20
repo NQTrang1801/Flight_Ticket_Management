@@ -15,7 +15,15 @@ function FlightLookup() {
         name: string;
         _id: string;
     }>({ address: "", code: "", country: "", name: "", _id: "" });
-    const [arrivalAirport, setArrivalAirport] = useState("All");
+
+    const [arrivalAirport, setArrivalAirport] = useState<{
+        address: string;
+        code: string;
+        country: string;
+        name: string;
+        _id: string;
+    }>({ address: "", code: "", country: "", name: "", _id: "" });
+
     const [departureAirportVisible, setDepartureAirportVisible] = useState(false);
     const [arrivalAirportVisible, setArrivalAirportVisible] = useState(false);
 
@@ -55,6 +63,17 @@ function FlightLookup() {
                                 }`}
                                 {...attrs}
                             >
+                                <li
+                                    onClick={() => {
+                                        setDepartureAirport({ address: "", code: "", country: "", name: "", _id: "" });
+                                        setDepartureAirportVisible(false);
+                                    }}
+                                    className={`cursor-pointer py-2 px-4 hover:bg-primary text-left rounded-xl flex items-center p-2 ${
+                                        departureAirport?._id === "" ? "text-blue pointer-events-none" : ""
+                                    }`}
+                                >
+                                    All airports
+                                </li>
                                 {airportData?.map((airport) => (
                                     <li
                                         onClick={() => {
@@ -78,8 +97,76 @@ function FlightLookup() {
                             }   flex justify-between items-center`}
                             onClick={() => setDepartureAirportVisible(!departureAirportVisible)}
                         >
-                            Departure: {departureAirport ? shortenAirportName(departureAirport.name) : "All"}
+                            Departure:{" "}
+                            {departureAirport._id !== "" ? shortenAirportName(departureAirport.name) : "All airports"}
                             <i className={`${departureAirportVisible ? "rotate-180" : ""}`}>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 16 16"
+                                    id="chevron-down"
+                                >
+                                    <path
+                                        fill="#fff"
+                                        d="M4.14645,5.64645 C4.34171,5.45118 4.65829,5.45118 4.85355,5.64645 L7.9999975,8.79289 L11.1464,5.64645 C11.3417,5.45118 11.6583,5.45118 11.8536,5.64645 C12.0488,5.84171 12.0488,6.15829 11.8536,6.35355 L8.35355,9.85355 C8.15829,10.0488 7.84171,10.0488 7.64645,9.85355 L4.14645,6.35355 C3.95118,6.15829 3.95118,5.84171 4.14645,5.64645 Z"
+                                    ></path>
+                                </svg>
+                            </i>
+                        </div>
+                    </Tippy>
+                </div>
+                <div>
+                    <Tippy
+                        visible={arrivalAirportVisible}
+                        interactive
+                        onClickOutside={() => setArrivalAirportVisible(false)}
+                        offset={[0, 0]}
+                        placement="bottom"
+                        render={(attrs) => (
+                            <ul
+                                className={`border border-primary rounded-xl p-2 w-[250px] bg-background ${
+                                    arrivalAirportVisible ? "border-t-0 rounded-tl-none rounded-tr-none" : ""
+                                }`}
+                                {...attrs}
+                            >
+                                <li
+                                    onClick={() => {
+                                        setArrivalAirport({ address: "", code: "", country: "", name: "", _id: "" });
+                                        setArrivalAirportVisible(false);
+                                    }}
+                                    className={`cursor-pointer py-2 px-4 hover:bg-primary text-left rounded-xl flex items-center p-2 ${
+                                        arrivalAirport?._id === "" ? "text-blue pointer-events-none" : ""
+                                    }`}
+                                >
+                                    All airports
+                                </li>
+                                {airportData?.map((airport) => (
+                                    <li
+                                        onClick={() => {
+                                            setArrivalAirport(airport);
+                                            setArrivalAirportVisible(false);
+                                        }}
+                                        key={airport._id}
+                                        className={`cursor-pointer py-2 px-4 hover:bg-primary text-left rounded-xl flex items-center p-2 ${
+                                            arrivalAirport?._id === airport._id ? "text-blue pointer-events-none" : ""
+                                        }`}
+                                    >
+                                        {shortenAirportName(airport.name)}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    >
+                        <div
+                            className={`hover:border-primary py-3 px-4 border-blue border bg-background cursor-pointer w-[250px] ${
+                                arrivalAirportVisible ? "rounded-tl-xl rounded-tr-xl border-primary" : "rounded-xl"
+                            }   flex justify-between items-center`}
+                            onClick={() => setArrivalAirportVisible(!arrivalAirportVisible)}
+                        >
+                            Arrival:{" "}
+                            {arrivalAirport._id !== "" ? shortenAirportName(arrivalAirport.name) : "All airports"}
+                            <i className={`${arrivalAirportVisible ? "rotate-180" : ""}`}>
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="20"
@@ -113,31 +200,34 @@ function FlightLookup() {
                             </tr>
                         </thead>
                         <tbody>
-                            {flightData && flightData.length > 0
-                                ? flightData
-                                      .filter((flight) => {
-                                          if (departureAirport._id !== "")
-                                              return flight.departure_airport._id === departureAirport?._id;
-                                          return flight;
-                                      })
-                                      .map((flight, index) => (
-                                          <tr key={flight._id} className="text-center">
-                                              <td>{index + 1}</td>
-                                              <td>{flight.flight_number}</td>
-                                              <td>{shortenAirportName(flight.departure_airport.name)}</td>
-                                              <td>{shortenAirportName(flight.destination_airport.name)}</td>
-                                              <td>{formatDateTime(flight.departure_datetime)}</td>
-                                              <td>{flight.duration} min</td>
-                                              <td>
-                                                  {flight.seats[0].count +
-                                                      flight.seats[1].count -
-                                                      flight.seats[0].booked_seats -
-                                                      flight.seats[1].booked_seats}
-                                              </td>
-                                              <td>{flight.seats[0].booked_seats + flight.seats[1].booked_seats}</td>
-                                          </tr>
-                                      ))
-                                : ""}
+                            {flightData &&
+                                flightData
+                                    .filter((flight) => {
+                                        const departureMatch = departureAirport._id
+                                            ? flight.departure_airport._id === departureAirport._id
+                                            : true;
+                                        const arrivalMatch = arrivalAirport._id
+                                            ? flight.destination_airport._id === arrivalAirport._id
+                                            : true;
+                                        return departureMatch && arrivalMatch;
+                                    })
+                                    .map((flight, index) => (
+                                        <tr key={flight._id} className="text-center">
+                                            <td>{index + 1}</td>
+                                            <td>{flight.flight_number}</td>
+                                            <td>{shortenAirportName(flight.departure_airport.name)}</td>
+                                            <td>{shortenAirportName(flight.destination_airport.name)}</td>
+                                            <td>{formatDateTime(flight.departure_datetime)}</td>
+                                            <td>{flight.duration} min</td>
+                                            <td>
+                                                {flight.seats[0].count +
+                                                    flight.seats[1].count -
+                                                    flight.seats[0].booked_seats -
+                                                    flight.seats[1].booked_seats}
+                                            </td>
+                                            <td>{flight.seats[0].booked_seats + flight.seats[1].booked_seats}</td>
+                                        </tr>
+                                    ))}
                         </tbody>
                     </table>
                 </div>
