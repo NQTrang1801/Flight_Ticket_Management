@@ -30,7 +30,6 @@ const RuleUpdating: React.FC<RuleProps> = ({ ruleName, detail, values, code }) =
     const {
         register,
         handleSubmit,
-
         formState: { errors }
     } = useForm({
         resolver: yupResolver(schema),

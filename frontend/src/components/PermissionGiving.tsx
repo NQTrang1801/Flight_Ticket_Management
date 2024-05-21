@@ -6,7 +6,7 @@ import Tippy from "@tippyjs/react/headless";
 import { useAppDispatch } from "~/hook";
 import { sendMessage } from "~/actions/message";
 
-const Permission: React.FC<{ group_id: string }> = ({ group_id }) => {
+const PermissionGiving: React.FC<{ _id: string }> = ({ _id }) => {
     const [functionalityData, setFunctionalityData] = useState();
 
     const [collectionCode, setCollectionCode] = useState<number>(-1);
@@ -32,8 +32,8 @@ const Permission: React.FC<{ group_id: string }> = ({ group_id }) => {
     const [groupAccount, setGroupAccount] = useState("");
     const [groupAccountVisible, setGroupAccountVisible] = useState(false);
 
-    const { Portal, show, hide } = usePortal({
-        defaultShow: false
+    const { Portal, hide } = usePortal({
+        defaultShow: true
     });
 
     const dispatch = useAppDispatch();
@@ -44,7 +44,7 @@ const Permission: React.FC<{ group_id: string }> = ({ group_id }) => {
                 await axios.post(
                     "/permission/511454990/create",
                     {
-                        group_id: group_id,
+                        group_id: _id,
                         functionality_ids: selectedFuncs
                     },
                     {
@@ -345,4 +345,4 @@ const Permission: React.FC<{ group_id: string }> = ({ group_id }) => {
     );
 };
 
-export default Permission;
+export default PermissionGiving;

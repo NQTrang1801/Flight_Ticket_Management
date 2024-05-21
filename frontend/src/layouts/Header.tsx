@@ -47,6 +47,9 @@ function Header() {
         case "flight-lookup":
             searchingPlaceholder = "flight number";
             break;
+        case "group-permissions":
+            searchingPlaceholder = "group name";
+            break;
         default:
             searchingPlaceholder = "something";
     }

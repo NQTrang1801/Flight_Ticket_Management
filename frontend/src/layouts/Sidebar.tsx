@@ -263,7 +263,7 @@ function Sidebar() {
                 )}
                 {userType === "administrator" && (
                     <NavLink
-                        to={`${userType}/permission`}
+                        to={`${userType}/group-permissions`}
                         className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
                     >
                         {({ isActive }) => (
@@ -284,7 +284,7 @@ function Sidebar() {
                                         ></path>
                                     </svg>
                                 </i>
-                                Permission
+                                Group Permissions
                             </>
                         )}
                     </NavLink>

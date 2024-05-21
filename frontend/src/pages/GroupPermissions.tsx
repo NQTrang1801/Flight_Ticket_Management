@@ -7,22 +7,15 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import IsRequired from "~/icons/IsRequired";
 import { useAppDispatch, useAppSelector } from "~/hook";
 import { sendMessage } from "~/actions/message";
-import User from "~/components/User";
+import Permission from "../components/Permission";
 
 const schema = yup.object().shape({
-    name: yup.string().required("Name is required."),
-    email: yup.string().email("Invalid email address.").required("Email is required."),
-    password: yup.string().required("Password is required."),
-    phoneNumber: yup
-        .number()
-        .required("Phone number is required.")
-        .typeError("Phone number must be a number.")
-        .min(10, "Phone number must be exactly 10 digits"),
-    address: yup.string().required("Address is required.")
+    groupCode: yup.string().required("Group code is required."),
+    groupName: yup.string().required("Group name is required.")
 });
 
 function GroupPermissions() {
-    const [data, setData] = useState<UserData[]>();
+    const [groupPermissionData, setGroupPermissionData] = useState<GroupPermissionData[]>();
     const { query } = useAppSelector((state) => state.searching!);
 
     const { Portal, hide, show } = usePortal({
@@ -35,31 +28,26 @@ function GroupPermissions() {
         register,
         handleSubmit,
         formState: { errors }
-    } = useForm<RegisterValidation>({
+    } = useForm<GroupPermissionValidation>({
         resolver: yupResolver(schema)
     });
 
-    const onSubmit: SubmitHandler<RegisterValidation> = async (formData) => {
+    const onSubmit: SubmitHandler<GroupPermissionValidation> = async (formData) => {
         (async () => {
-            const name = formData.name;
-            const phoneNumber = formData.phoneNumber;
-            const email = formData.email;
-            const password = formData.password;
-            const address = formData.address;
+            const groupName = formData.groupName;
+            const groupCode = formData.groupCode;
 
             try {
                 await axios.post(
-                    "/user/register",
+                    "/group/511454413/create",
                     {
-                        fullname: name,
-                        mobile: phoneNumber,
-                        email,
-                        password,
-                        address
+                        groupCode,
+                        groupName
                     },
                     {
                         headers: {
-                            "Content-Type": "application/json"
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).token}`
                         }
                     }
                 );
@@ -79,13 +67,13 @@ function GroupPermissions() {
     useEffect(() => {
         (async () => {
             await axios
-                .get("/user/511320447/admin/all-users", {
+                .get("/group/511320413/all", {
                     headers: {
                         Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).token}`
                     }
                 })
                 .then((response) => {
-                    setData(response.data.USER);
+                    setGroupPermissionData(response.data);
                 })
                 .catch((err) => console.error(err));
         })();
@@ -127,26 +115,31 @@ function GroupPermissions() {
                     Create
                 </button>
             </div>
-
             <div className="bg-block p-6 rounded-3xl shadow-xl">
-                <div className="grid grid-cols-1 gap-6">
-                    {data &&
-                        data
-                            ?.filter((user) => user.email.toLowerCase().includes(query.toLowerCase()))
-                            .map((user) => (
-                                <User
-                                    key={user._id}
-                                    _id={user._id}
-                                    email={user.email}
-                                    fullname={user.fullname}
-                                    group_id={user.group_id}
-                                    isBlocked={user.isBlocked}
-                                    mobile={user.mobile}
-                                    address={user.address}
-                                    // tickets={user.tickets}
-                                />
-                            ))}
-                </div>
+                <table className="w-full bg-block">
+                    <thead>
+                        <tr className="text-center bg-primary">
+                            <th className="">Index</th>
+                            <th className="">Group code</th>
+                            <th className="">Group name</th>
+                            <th className="">Functions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {groupPermissionData &&
+                            groupPermissionData
+                                ?.filter((group) => group.groupName.toLowerCase().includes(query.toLowerCase()))
+                                .map((group, index) => (
+                                    <Permission
+                                        key={group._id}
+                                        _id={group._id}
+                                        groupName={group.groupName}
+                                        groupCode={group.groupCode}
+                                        index={index + 1}
+                                    />
+                                ))}
+                    </tbody>
+                </table>
             </div>
             <Portal>
                 <div className="fixed top-0 right-0 left-0 bottom-0 bg-[rgba(0,0,0,0.4)] z-50 flex items-center justify-center">
@@ -172,92 +165,50 @@ function GroupPermissions() {
                                 </i>
                             </button>
                             <div className="flex justify-center mb-8">
-                                <div className="text-white font-semibold text-xl">Create new account</div>
+                                <div className="text-white font-semibold text-xl">Create new group</div>
                             </div>
                             <form
                                 onSubmit={handleSubmit(onSubmit)}
-                                className="flex justify-center items-center flex-col gap-6 "
+                                className="flex justify-center items-center flex-col gap-6 w-[300px]"
                             >
-                                <div className="grid grid-cols-2 gap-4 w-[420px]">
-                                    <div className="flex flex-col gap-2">
-                                        <label htmlFor="name" className="flex  items-center gap-1 mb-1">
-                                            Full name
-                                            <IsRequired />
-                                        </label>
-                                        <input
-                                            id="name"
-                                            type="text"
-                                            placeholder="Full name . . ."
-                                            {...register("name")}
-                                            className="bg-placeholder focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1  px-4 py-3 rounded-lg  placeholder:text-disabled"
-                                        />
-                                        {errors.name && <span className="text-deepRed">{errors.name.message}</span>}
-                                    </div>
-                                    <div className="flex flex-col gap-2">
-                                        <label htmlFor="phoneNumber" className="flex  items-center gap-1 mb-1">
-                                            Phone number
-                                            <IsRequired />
-                                        </label>
-                                        <input
-                                            id="phoneNumber"
-                                            type="number"
-                                            placeholder="Phone number . . ."
-                                            {...register("phoneNumber")}
-                                            className="bg-placeholder focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1  px-4 py-3 rounded-lg  placeholder:text-disabled"
-                                        />
-                                        {errors.phoneNumber && (
-                                            <span className="text-deepRed">{errors.phoneNumber.message}</span>
-                                        )}
-                                    </div>
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <label htmlFor="address" className="flex  items-center gap-1 mb-1">
-                                        Address
+                                <div className="flex flex-col gap-2 w-full">
+                                    <label htmlFor="groupCode" className="flex  items-center gap-1 mb-1">
+                                        Group code
                                         <IsRequired />
                                     </label>
                                     <input
-                                        id="address"
+                                        id="groupCode"
                                         type="text"
-                                        placeholder="Address . . ."
-                                        {...register("address")}
-                                        className="bg-placeholder focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1  px-4 py-3 rounded-lg w-[420px] placeholder:text-disabled"
+                                        placeholder="Group code . . ."
+                                        {...register("groupCode")}
+                                        className="bg-placeholder focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1  px-4 py-3 rounded-lg  placeholder:text-disabled"
                                     />
-                                    {errors.address && <span className="text-deepRed">{errors.address.message}</span>}
+                                    {errors.groupCode && (
+                                        <span className="text-deepRed">{errors.groupCode.message}</span>
+                                    )}
                                 </div>
-                                <div className="flex flex-col gap-2">
-                                    <label htmlFor="email" className="flex  items-center gap-1 mb-1">
-                                        Email
+                                <div className="flex flex-col gap-2 w-full">
+                                    <label htmlFor="groupName" className="flex items-center gap-1 mb-1">
+                                        Group name
                                         <IsRequired />
                                     </label>
                                     <input
-                                        id="email"
-                                        type="email"
-                                        placeholder="Email . . ."
-                                        {...register("email")}
-                                        className="bg-placeholder focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1  px-4 py-3 rounded-lg w-[420px] placeholder:text-disabled"
+                                        id="groupName"
+                                        type="text"
+                                        placeholder="Group name . . ."
+                                        {...register("groupName")}
+                                        className="bg-placeholder focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1  px-4 py-3 rounded-lg  placeholder:text-disabled"
                                     />
-                                    {errors.email && <span className="text-deepRed">{errors.email.message}</span>}
+                                    {errors.groupName && (
+                                        <span className="text-deepRed">{errors.groupName.message}</span>
+                                    )}
                                 </div>
-                                <div className="flex flex-col gap-2">
-                                    <label htmlFor="password" className="flex  items-center gap-1 mb-1">
-                                        Password
-                                        <IsRequired />
-                                    </label>
-                                    <input
-                                        id="password"
-                                        type="password"
-                                        placeholder="Password . . ."
-                                        autoComplete="new-password"
-                                        {...register("password")}
-                                        className="bg-placeholder focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1  px-4 py-3 rounded-lg w-[420px] placeholder:text-disabled"
-                                    />
-                                    {errors.password && <span className="text-deepRed">{errors.password.message}</span>}
-                                </div>
+
                                 <button
-                                    className="py-3 px-8 mt-3 text-base font-semibold rounded-lg border-blue border hover:border-primary hover:bg-primary"
+                                    className="py-3 w-full px-8 mt-3 text-base font-semibold rounded-lg border-blue border hover:border-primary hover:bg-primary"
                                     type="submit"
                                 >
-                                    Create account
+                                    Create group permission
                                 </button>
                             </form>
                         </div>

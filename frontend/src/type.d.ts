@@ -216,3 +216,14 @@ interface BookingFormValidation {
     phoneNumber: number;
     identificationNumber: number;
 }
+
+interface GroupPermissionValidation {
+    groupName: string;
+    groupCode: string;
+}
+
+interface GroupPermissionData {
+    groupName: string;
+    groupCode: string;
+    _id: string;
+}

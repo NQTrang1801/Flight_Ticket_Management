@@ -6,7 +6,7 @@ import UserUpdating from "./UserUpdating";
 import { sendMessage } from "~/actions/message";
 import { startLoading, stopLoading } from "~/actions/loading";
 import shortenAirportName from "~/utils/shortenAirportName";
-import Permission from "~/pages/Permission";
+import Permission from "~/components/Permission";
 
 interface UserProps {
     email: string;
