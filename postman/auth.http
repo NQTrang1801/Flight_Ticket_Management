@@ -31,7 +31,7 @@ Content-Type: application/json
 POST {{url_dev}}/login
 Content-Type: application/json
 {
-    "email": "usre@gmail.com",
+    "email": "admin1s@gmail.com",
     "password": "apipassword123"
 }
 
@@ -75,11 +75,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhiMDJkN
 
 ### update user
 PUT {{url_dev}}/edit-user
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MWY4MDljZGQ0MjFmNTkxMmUyZDJlYiIsImlhdCI6MTcxMzM0MDU4NywiZXhwIjoxNzEzNDI2OTg3fQ.YB3K3kpP6IJPihsvyG9VHLCAcw0fPfPI5ZbWHevQHes
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NGMzNDUwNzNjNGRmMmRmM2U2YTBhZCIsImlhdCI6MTcxNjI3MTI5OCwiZXhwIjoxNzE2MzU3Njk4fQ.oEPj3JbS1K-yWeAPoZXwhLggvoJbpt-2V4G045lCW0E
 Content-Type: application/json
 {
-    "fullname": "New Fullname",
-    "email": "new_email01@example.com",
+    "fullname": "ABC Fullname",
+    "email": "newsads_email01@example.com",
     "mobile": "01234566009",
     "address": "HN"
 }
@@ -94,7 +94,7 @@ Content-Type: application/json
 
 # ADMIN
 ### get user
-GET {{url_dev}}/511320447/info/6649877d578a6d778d59e17a
+GET {{url_dev}}/511320447/info/664c345073c4df2df3e6a0ad
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDk4Njk4NTc4YTZkNzc4ZDU5ZTEzZCIsImlhdCI6MTcxNjA5NjcwNCwiZXhwIjoxNzE2MTgzMTA0fQ.4NScp2ucgXWRAlgdtsTMtEUtSYn5pGShckpXpC-FmY4
 
 ### get all user

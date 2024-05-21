@@ -191,7 +191,6 @@ const updatedUser = asyncHandler(async (req, res) => {
             _id,
             {
                 fullname: req?.body?.fullname,
-                email: req?.body?.email,
                 mobile: req?.body?.mobile,
                 address: req?.body?.address
             },
