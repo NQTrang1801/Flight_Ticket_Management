@@ -41,6 +41,9 @@ function Header() {
         case "flight-schedule":
             searchingPlaceholder = "flight number";
             break;
+        case "booking-ticket":
+            searchingPlaceholder = "flight number";
+            break;
         case "users":
             searchingPlaceholder = "user email";
             break;

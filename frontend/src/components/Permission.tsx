@@ -74,23 +74,22 @@ const Permission: React.FC<{ groupCode: string; groupName: string; _id: string; 
     };
 
     const handleDeletePermission = async (_id: string) => {
-        await axios
-            .delete(`/permission/511627990/delete/${_id}`, {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).token}`
-                }
-            })
-            .then(() => {
-                dispatch(sendMessage("Deleted successfully!", "success"));
-                setTimeout(() => {
-                    window.location.reload();
-                }, 2000);
-            })
-            .catch((error) => {
-                console.error(error);
-                dispatch(sendMessage("Deleted failed!", "error"));
-            });
+        await axios.delete(`/permission/511627990/delete/${_id}`, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).token}`
+            }
+        });
+        // .then(() => {
+        //     dispatch(sendMessage("Deleted successfully!", "success"));
+        //     setTimeout(() => {
+        //         window.location.reload();
+        //     }, 2000);
+        // })
+        // .catch((error) => {
+        //     console.error(error);
+        //     dispatch(sendMessage("Deleted failed!", "error"));
+        // });
     };
 
     return (

@@ -100,68 +100,105 @@ function Sidebar() {
                         )}
                     </NavLink>
                 )}
-                <NavLink
-                    to={`${userType}/booking-forms`}
-                    className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
-                >
-                    {({ isActive }) => (
-                        <>
-                            <i className="flex flex-start mr-2 w-[26px] items-center h-[26px] justify-center">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="22"
-                                    height="22"
-                                    viewBox="0 0 32 32"
-                                    id="list"
-                                >
-                                    <path
-                                        className={`${
-                                            isActive ? "fill-white" : "fill-disabled"
-                                        } group-hover:fill-white`}
-                                        d="M30 2H4a2 2 0 0 0-2 2v26a2 2 0 0 0 2 2h26a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm0 28H4V4h26v26zM9 18h16a1 1 0 0 0 0-2H9a1 1 0 0 0 0 2zm0-6h16a1 1 0 0 0 0-2H9a1 1 0 0 0 0 2zm0 12h16a1 1 0 0 0 0-2H9a1 1 0 0 0 0 2z"
-                                    ></path>
-                                </svg>
-                            </i>
-                            Booking forms
-                        </>
-                    )}
-                </NavLink>
-                <NavLink
-                    to={`${userType}/flight-lookup`}
-                    className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
-                >
-                    {({ isActive }) => (
-                        <>
-                            <i className="flex flex-start mr-2 w-[26px] items-center h-[26px]">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fillRule="evenodd"
-                                    strokeLinejoin="round"
-                                    strokeMiterlimit="2"
-                                    clipRule="evenodd"
-                                    viewBox="0 0 32 32"
-                                    id="search"
-                                    width={24}
-                                    height={24}
-                                >
-                                    <path
-                                        className={`${
-                                            isActive ? "fill-white" : "fill-disabled"
-                                        } group-hover:fill-white`}
-                                        d="M14 0C6.275 0 0 6.272 0 14c0 7.726 6.274 14 14 14 7.727 0 14.001-6.274 14.001-14 0-7.727-6.274-14-14-14Zm0 2c6.624 0 12 5.376 12 12 0 6.623-5.376 12-12 12-6.623 0-11.999-5.377-11.999-12 0-6.624 5.376-12 12-12Z"
-                                    ></path>
-                                    <path
-                                        className={`${
-                                            isActive ? "fill-white" : "fill-disabled"
-                                        } group-hover:fill-white`}
-                                        d="m22.792 24.208 7.5 7.5a1 1 0 0 0 1.414-1.414l-7.5-7.5a1 1 0 0 0-1.414 1.414ZM9 11h5a1 1 0 0 0 0-2H9a1 1 0 0 0 0 2ZM19 17h-5a1 1 0 0 0 0 2h5a1 1 0 0 0 0-2ZM19 13H9a1 1 0 1 0 0 2h10a1 1 0 1 0 0-2ZM18 11h1a1 1 0 0 0 0-2h-1a1 1 0 0 0 0 2ZM10 17H9a1 1 0 0 0 0 2h1a1 1 0 0 0 0-2Z"
-                                    ></path>
-                                </svg>
-                            </i>
-                            Flight lookup
-                        </>
-                    )}
-                </NavLink>
+                {userType !== "user" ? (
+                    <NavLink
+                        to={`${userType}/booking-forms`}
+                        className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
+                    >
+                        {({ isActive }) => (
+                            <>
+                                <i className="flex flex-start mr-2 w-[26px] items-center h-[26px] justify-center">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="22"
+                                        height="22"
+                                        viewBox="0 0 32 32"
+                                        id="list"
+                                    >
+                                        <path
+                                            className={`${
+                                                isActive ? "fill-white" : "fill-disabled"
+                                            } group-hover:fill-white`}
+                                            d="M30 2H4a2 2 0 0 0-2 2v26a2 2 0 0 0 2 2h26a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm0 28H4V4h26v26zM9 18h16a1 1 0 0 0 0-2H9a1 1 0 0 0 0 2zm0-6h16a1 1 0 0 0 0-2H9a1 1 0 0 0 0 2zm0 12h16a1 1 0 0 0 0-2H9a1 1 0 0 0 0 2z"
+                                        ></path>
+                                    </svg>
+                                </i>
+                                Booking forms
+                            </>
+                        )}
+                    </NavLink>
+                ) : (
+                    <NavLink
+                        to={`${userType}/booking-ticket`}
+                        className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
+                    >
+                        {({ isActive }) => (
+                            <>
+                                <i className="flex flex-start mr-2 w-[26px] items-center h-[26px] justify-center">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="56"
+                                        height="56"
+                                        viewBox="0 0 64 64"
+                                        id="ticket"
+                                    >
+                                        <path
+                                            className={`${
+                                                isActive ? "fill-white" : "fill-disabled"
+                                            } group-hover:fill-white`}
+                                            d="m.586 41.414 5.344 5.343a2 2 0 0 0 2.828 0A5.959 5.959 0 0 1 13 45c3.309 0 6 2.691 6 6a5.964 5.964 0 0 1-1.758 4.243 2 2 0 0 0 0 2.828l5.344 5.343c.391.391.902.586 1.414.586s1.024-.195 1.414-.586l38-38a1.996 1.996 0 0 0 0-2.828l-5.344-5.343a2 2 0 0 0-2.828 0A5.959 5.959 0 0 1 51 19c-3.309 0-6-2.691-6-6 0-1.603.625-3.109 1.758-4.243a2 2 0 0 0 0-2.828L41.414.586a2 2 0 0 0-2.828 0l-38 38a1.996 1.996 0 0 0 0 2.828zM26 18.828l1.586 1.586c.39.391.902.586 1.414.586s1.024-.195 1.414-.586a2 2 0 0 0 0-2.828L28.828 16 40 4.828l2.656 2.655A9.935 9.935 0 0 0 41 13c0 5.514 4.486 10 10 10a9.928 9.928 0 0 0 5.516-1.655L59.171 24 48 35.172l-1.586-1.586a2 2 0 1 0-2.828 2.828L45.172 38 24 59.172l-2.656-2.655A9.935 9.935 0 0 0 23 51c0-5.514-4.486-10-10-10a9.928 9.928 0 0 0-5.516 1.655L4.829 40 26 18.828z"
+                                        ></path>
+                                        <path
+                                            className={`${
+                                                isActive ? "fill-white" : "fill-disabled"
+                                            } group-hover:fill-white`}
+                                            d="M33.586 26.414c.39.391.902.586 1.414.586s1.024-.195 1.414-.586a2 2 0 0 0 0-2.828l-2-2a2 2 0 1 0-2.828 2.828l2 2zM37.586 30.414l2 2c.39.391.902.586 1.414.586s1.024-.195 1.414-.586a2 2 0 0 0 0-2.828l-2-2a2 2 0 1 0-2.828 2.828z"
+                                        ></path>
+                                    </svg>
+                                </i>
+                                Booking ticket
+                            </>
+                        )}
+                    </NavLink>
+                )}
+                {userType !== "user" && (
+                    <NavLink
+                        to={`${userType}/flight-lookup`}
+                        className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
+                    >
+                        {({ isActive }) => (
+                            <>
+                                <i className="flex flex-start mr-2 w-[26px] items-center h-[26px]">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fillRule="evenodd"
+                                        strokeLinejoin="round"
+                                        strokeMiterlimit="2"
+                                        clipRule="evenodd"
+                                        viewBox="0 0 32 32"
+                                        id="search"
+                                        width={24}
+                                        height={24}
+                                    >
+                                        <path
+                                            className={`${
+                                                isActive ? "fill-white" : "fill-disabled"
+                                            } group-hover:fill-white`}
+                                            d="M14 0C6.275 0 0 6.272 0 14c0 7.726 6.274 14 14 14 7.727 0 14.001-6.274 14.001-14 0-7.727-6.274-14-14-14Zm0 2c6.624 0 12 5.376 12 12 0 6.623-5.376 12-12 12-6.623 0-11.999-5.377-11.999-12 0-6.624 5.376-12 12-12Z"
+                                        ></path>
+                                        <path
+                                            className={`${
+                                                isActive ? "fill-white" : "fill-disabled"
+                                            } group-hover:fill-white`}
+                                            d="m22.792 24.208 7.5 7.5a1 1 0 0 0 1.414-1.414l-7.5-7.5a1 1 0 0 0-1.414 1.414ZM9 11h5a1 1 0 0 0 0-2H9a1 1 0 0 0 0 2ZM19 17h-5a1 1 0 0 0 0 2h5a1 1 0 0 0 0-2ZM19 13H9a1 1 0 1 0 0 2h10a1 1 0 1 0 0-2ZM18 11h1a1 1 0 0 0 0-2h-1a1 1 0 0 0 0 2ZM10 17H9a1 1 0 0 0 0 2h1a1 1 0 0 0 0-2Z"
+                                        ></path>
+                                    </svg>
+                                </i>
+                                Flight lookup
+                            </>
+                        )}
+                    </NavLink>
+                )}
                 <NavLink
                     to={`${userType}/airports`}
                     className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
@@ -216,7 +253,7 @@ function Sidebar() {
                         )}
                     </NavLink>
                 )}
-                {userType !== "user" && (
+                {userType !== "user" ? (
                     <NavLink
                         to={`${userType}/users`}
                         className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
@@ -257,6 +294,51 @@ function Sidebar() {
                                     </svg>
                                 </i>
                                 Users
+                            </>
+                        )}
+                    </NavLink>
+                ) : (
+                    <NavLink
+                        to={`${userType}/user-account`}
+                        className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
+                    >
+                        {({ isActive }) => (
+                            <>
+                                <i className="flex flex-start mr-2 w-[26px] items-center h-[26px]">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 256 256"
+                                        width={26}
+                                        height={26}
+                                        id="user"
+                                    >
+                                        <rect width="26" height="26" fill="none"></rect>
+                                        <circle
+                                            className={`${
+                                                isActive ? "stroke-white" : "stroke-disabled"
+                                            } group-hover:stroke-white`}
+                                            cx="128"
+                                            cy="96"
+                                            r="64"
+                                            fill="none"
+                                            stroke="#000"
+                                            strokeMiterlimit="10"
+                                            strokeWidth="16"
+                                        ></circle>
+                                        <path
+                                            className={`${
+                                                isActive ? "stroke-white" : "stroke-disabled"
+                                            } group-hover:stroke-white`}
+                                            fill="none"
+                                            stroke="#000"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="16"
+                                            d="M30.989,215.99064a112.03731,112.03731,0,0,1,194.02311.002"
+                                        ></path>
+                                    </svg>
+                                </i>
+                                User account
                             </>
                         )}
                     </NavLink>

@@ -18,7 +18,12 @@ interface FlightDataProps {
 interface TicketData {
     CMND: string;
     booking_date: string;
-    flight_id: string;
+    flight_id: {
+        departure_airport: string;
+        departure_datetime: string;
+        destination_airport: string;
+        _id: string;
+    };
     full_name: string;
     phone_number: string;
     price: number;

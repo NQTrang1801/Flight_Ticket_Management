@@ -8,6 +8,7 @@ import { startLoading, stopLoading } from "~/actions/loading";
 import shortenAirportName from "~/utils/shortenAirportName";
 import Tippy from "@tippyjs/react/headless";
 import usePortal from "react-cool-portal";
+import formatDateTime from "~/utils/formatDateTime";
 
 interface UserProps {
     email: string;
@@ -121,7 +122,7 @@ const User: React.FC<UserProps> = ({ email, fullname, group_id, isBlocked, mobil
                 setTicketData(ticketResponse.data);
 
                 const flightPromises = ticketResponse.data.map((ticket: TicketData) =>
-                    axios.get(`/flight/${ticket.flight_id}`, {
+                    axios.get(`/flight/${ticket.flight_id._id}`, {
                         headers: {
                             Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).token}`
                         }
@@ -273,6 +274,7 @@ const User: React.FC<UserProps> = ({ email, fullname, group_id, isBlocked, mobil
                                 <th className="">Flight number</th>
                                 <th className="">Departure</th>
                                 <th className="">Arrival</th>
+                                <th className="">Departure datetime</th>
                                 <th className="">Seating type</th>
                                 <th className="">Price</th>
                                 <th className="">Status</th>
@@ -284,24 +286,34 @@ const User: React.FC<UserProps> = ({ email, fullname, group_id, isBlocked, mobil
                                     <tr key={flight._id} className="text-center">
                                         <td>{index + 1}</td>
                                         <td>
-                                            {ticketData.find((ticket) => ticket.flight_id === flight._id)?.full_name}
+                                            {
+                                                ticketData.find((ticket) => ticket.flight_id._id === flight._id)
+                                                    ?.full_name
+                                            }
                                         </td>
                                         <td>
-                                            {ticketData.find((ticket) => ticket.flight_id === flight._id)?.phone_number}
+                                            {
+                                                ticketData.find((ticket) => ticket.flight_id._id === flight._id)
+                                                    ?.phone_number
+                                            }
                                         </td>
                                         <td>{flight.flight_number}</td>
                                         <td>{shortenAirportName(flight.departure_airport.name)}</td>
                                         <td>{shortenAirportName(flight.destination_airport.name)}</td>
+                                        <td>{formatDateTime(flight.departure_datetime)}</td>
                                         <td>
-                                            {ticketData.find((ticket) => ticket.flight_id === flight._id)
+                                            {ticketData.find((ticket) => ticket.flight_id._id === flight._id)
                                                 ?.seat_class === "1"
                                                 ? "First class"
                                                 : "Second class"}
                                         </td>
                                         <td>
-                                            {ticketData.find((ticket) => ticket.flight_id === flight._id)?.price} USD
+                                            {ticketData.find((ticket) => ticket.flight_id._id === flight._id)?.price}{" "}
+                                            USD
                                         </td>
-                                        <td>{ticketData.find((ticket) => ticket.flight_id === flight._id)?.status}</td>
+                                        <td>
+                                            {ticketData.find((ticket) => ticket.flight_id._id === flight._id)?.status}
+                                        </td>
                                     </tr>
                                 ))}
                         </tbody>
