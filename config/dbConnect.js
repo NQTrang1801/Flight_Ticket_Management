@@ -21,6 +21,8 @@ const dbConnect = () => {
 
                 if (countF === 0) {
                     await Functionality.create([
+                        { functionalityCode: '511320617', functionalityName: 'GET COLLECTION FUNCTIONS', screenNameToLoad: 'USER MANAGEMENT FUNCTIONALITY' },
+
                         { functionalityCode: '511320447', functionalityName: 'GET COLLECTION USER', screenNameToLoad: 'USER MANAGEMENT' },
                         { functionalityCode: '511246447', functionalityName: 'PUT COLLECTION USER', screenNameToLoad: 'USER MANAGEMENT' },
                         { functionalityCode: '511454447', functionalityName: 'POST COLLECTION USER', screenNameToLoad: 'USER MANAGEMENT' },
@@ -53,9 +55,13 @@ const dbConnect = () => {
                         { functionalityCode: '511457884', functionalityName: 'PATCH COLLECTION RESERVATION', screenNameToLoad: 'RESERVATION MANAGEMENT' },
 
                         { functionalityCode: '580320946', functionalityName: 'GET COLLECTION REQUEST RESERVATION', screenNameToLoad: 'BOOKING' },
+                        { functionalityCode: '511320946', functionalityName: 'ADMIN GET COLLECTION REQUEST RESERVATION', screenNameToLoad: 'BOOKING' },
                         { functionalityCode: '580246946', functionalityName: 'PUT COLLECTION REQUEST RESERVATION', screenNameToLoad: 'BOOKING' },
+                        { functionalityCode: '511246946', functionalityName: 'ADMIN PUT COLLECTION REQUEST RESERVATION', screenNameToLoad: 'BOOKING' },
                         { functionalityCode: '580454946', functionalityName: 'POST COLLECTION REQUEST RESERVATION', screenNameToLoad: 'BOOKING' },
+                        { functionalityCode: '511454946', functionalityName: 'ADMIN POST COLLECTION REQUEST RESERVATION', screenNameToLoad: 'BOOKING' },
                         { functionalityCode: '580457946', functionalityName: 'PATCH COLLECTION REQUEST RESERVATION', screenNameToLoad: 'BOOKING' },
+                        { functionalityCode: '511457946', functionalityName: 'ADMIN PATCH COLLECTION REQUEST RESERVATION', screenNameToLoad: 'BOOKING' },
 
                         { functionalityCode: '511320413', functionalityName: 'GET COLLECTION GROUP', screenNameToLoad: 'GROUP MANAGEMENT' },
                         { functionalityCode: '511246413', functionalityName: 'PUT COLLECTION GROUP', screenNameToLoad: 'GROUP MANAGEMENT' },
@@ -97,6 +103,20 @@ const dbConnect = () => {
                     }));
 
                     await Permission.create(permissions);
+
+                    const grAdmin = await Group.findOne({ groupCode: "511" });
+                    const funcsAdmin = await Functionality.find({
+                        functionalityCode: { $regex: /^(511)/ }
+                    }).select('_id');
+                    
+                    const funcsAdminIds = funcsAdmin.map(func => func._id);
+                    const permissionsAdmin = funcsAdminIds.map(functionalityId => ({
+                        group_id: grAdmin._id,
+                        functionality_id: functionalityId
+                    }));
+
+                    await Permission.create(permissionsAdmin);
+
                     const grclient = await Group.findOne({ groupCode: "000" });
                     const funcsclient = await Functionality.find({
                         functionalityCode: { $regex: /^(580|000)/ }

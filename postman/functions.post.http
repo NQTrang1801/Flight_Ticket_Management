@@ -1,0 +1,4 @@
+@url_dev=http://localhost:5000/api/functionalities
+###
+GET {{url_dev}}/511320617/all
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NGMwYjk4MGMxZmNiMzVlYTZkZjQ5OCIsImlhdCI6MTcxNjI1OTc0MiwiZXhwIjoxNzE2MzQ2MTQyfQ.ssWQeHsUvpBUCOoAkiDLfVaOIREiOJd11EtCxAMQ5HM

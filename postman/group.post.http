@@ -23,9 +23,9 @@ Content-Type: application/json
 
 ### create group
 POST {{url_dev}}/511454413/create
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDdmYzNhODY0ZmNmYjA4ODMyZDgxOSIsImlhdCI6MTcxNTk5NDQ5OCwiZXhwIjoxNzE2MDgwODk4fQ.ZxebGkrkAVJZUij9ky-Z1Wx2PUlrXNr_2wkE7Gu_cHA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NGMwNjNkMmFiYTE0OTFiOWI0YmJhYyIsImlhdCI6MTcxNjI1ODQwNiwiZXhwIjoxNzE2MzQ0ODA2fQ.0JEhT1sKNx6fDaoJdsIfaduZQbrz1RDAwlsqCmrkenY
 Content-Type: application/json
 {
-    "groupCode": "001",
-    "groupName": "USER"
+    "groupCode": "551946",
+    "groupName": "ADMIN REQUEST RESERVATION"
 }

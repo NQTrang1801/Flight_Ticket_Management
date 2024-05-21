@@ -21,8 +21,8 @@ POST {{url_dev}}/register
 Content-Type: application/json
 {
     "fullname": "Nguyen Quoc Trang",
-    "email": "usr@gmail.com",
-    "mobile": "01234679",
+    "email": "usre@gmail.com",
+    "mobile": "012334679",
     "password": "apipassword123",
     "address": "TP HCM"
 }
@@ -31,7 +31,7 @@ Content-Type: application/json
 POST {{url_dev}}/login
 Content-Type: application/json
 {
-    "email": "admin@gmail.com",
+    "email": "usre@gmail.com",
     "password": "apipassword123"
 }
 
@@ -40,7 +40,7 @@ Content-Type: application/json
 POST {{url_dev}}/admin-login
 Content-Type: application/json
 {
-    "email": "admin@gmail.com",
+    "email": "usre@gmail.com",
     "password": "apipassword123"
 }
 
@@ -110,10 +110,9 @@ PUT {{url_dev}}/511246447/unblock-user/664838f6414693813afe167c
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDgzOGNjNDE0NjkzODEzYWZlMTY2YSIsImlhdCI6MTcxNjAwOTE4NywiZXhwIjoxNzE2MDk1NTg3fQ.I9lBaGhcdi2RuWAHmBf38F-V_xoxmtlJYfMvAv8ArhY
 
 ### update group user
-PATCH {{url_dev}}/999457447/update-group/664800720ca8c7db773a731a
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDdmYzNhODY0ZmNmYjA4ODMyZDgxOSIsImlhdCI6MTcxNTk5NDQ5OCwiZXhwIjoxNzE2MDgwODk4fQ.ZxebGkrkAVJZUij9ky-Z1Wx2PUlrXNr_2wkE7Gu_cHA
-
+PATCH {{url_dev}}/999457447/update-group/664c06442aba1491b9b4bbba
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NGMwNjNkMmFiYTE0OTFiOWI0YmJhYyIsImlhdCI6MTcxNjI1ODQwNiwiZXhwIjoxNzE2MzQ0ODA2fQ.0JEhT1sKNx6fDaoJdsIfaduZQbrz1RDAwlsqCmrkenY
 Content-Type: application/json
 {
-    "group_id": "664800cf0ca8c7db773a7328"
+    "group_id": "664c06832aba1491b9b4bbc3"
 }

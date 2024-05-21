@@ -4,14 +4,21 @@
 # router.get("/511320990/:id", authMiddleware, hasPermission, getPermission);
 # router.put("/511246990/update/:id", authMiddleware, hasPermission, updatePermission);
 # router.delete("/511627990/delete/:id", authMiddleware, hasPermission, deletePermission);
-### Create a permission
+### Create
 POST {{url_dev}}/511454990/create
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjkxMjU5ZTM3ZDhhYjQxZjVmYWYwNiIsImlhdCI6MTcxMzk2ODExMCwiZXhwIjoxNzE0MDU0NTEwfQ.TMxh4gZ0dO6_BaWjIvFG5MogYo8JsMmvEN3X5apQ024
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NGMwNjNkMmFiYTE0OTFiOWI0YmJhYyIsImlhdCI6MTcxNjI1ODQwNiwiZXhwIjoxNzE2MzQ0ODA2fQ.0JEhT1sKNx6fDaoJdsIfaduZQbrz1RDAwlsqCmrkenY
 Content-Type: application/json
 {
-    "group_id": "6629140ce37d8ab41f5faf2d", 
-    "functionality_id": "66291259e37d8ab41f5fae44"
+    "group_id": "664c06832aba1491b9b4bbc3", 
+    "functionality_ids": [
+        "664c063d2aba1491b9b4bab0"
+        "664c063d2aba1491b9b4ba9e",
+        "664c063d2aba1491b9b4baa0",
+        "664c063d2aba1491b9b4baa2",
+        "664c063d2aba1491b9b4baa4"
+    ]
 }
+
 ### Get all permissions
 GET {{url_dev}}/511320990/all
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjkxMjU5ZTM3ZDhhYjQxZjVmYWYwNiIsImlhdCI6MTcxMzk2ODExMCwiZXhwIjoxNzE0MDU0NTEwfQ.TMxh4gZ0dO6_BaWjIvFG5MogYo8JsMmvEN3X5apQ024
