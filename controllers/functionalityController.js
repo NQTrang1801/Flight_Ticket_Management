@@ -12,6 +12,27 @@ const getAllFunctions = asyncHandler(async (req, res) => {
     }
 });
 
+const getGroupedFunctions = asyncHandler(async (req, res) => {
+    try {
+        const functions = await Functionality.find();
+
+        // Grouping functionalities based on the last three digits of functionalityCode
+        const groupedFunctions = functions.reduce((acc, func) => {
+            const groupKey = func.functionalityCode.slice(-3); // Get last three digits
+            if (!acc[groupKey]) {
+                acc[groupKey] = [];
+            }
+            acc[groupKey].push(func);
+            return acc;
+        }, {});
+
+        res.json(groupedFunctions);
+    } catch (error) {
+        throw new Error(error);
+    }
+});
+
 module.exports = {
-    getAllFunctions
+    getAllFunctions,
+    getGroupedFunctions
 };
