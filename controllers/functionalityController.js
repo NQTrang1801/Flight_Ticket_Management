@@ -18,11 +18,16 @@ const getGroupedFunctions = asyncHandler(async (req, res) => {
 
         // Grouping functionalities based on the last three digits of functionalityCode
         const groupedFunctions = functions.reduce((acc, func) => {
-            const groupKey = func.functionalityCode.slice(-3); // Get last three digits
-            if (!acc[groupKey]) {
-                acc[groupKey] = [];
+            const lastThreeDigits = func.functionalityCode.slice(-3); // Get last three digits
+            const firstThreeDigits = func.functionalityCode.slice(0, 3); // Get first three digits
+
+            if (!acc[lastThreeDigits]) {
+                acc[lastThreeDigits] = {};
             }
-            acc[groupKey].push(func);
+            if (!acc[lastThreeDigits][firstThreeDigits]) {
+                acc[lastThreeDigits][firstThreeDigits] = [];
+            }
+            acc[lastThreeDigits][firstThreeDigits].push(func);
             return acc;
         }, {});
 
