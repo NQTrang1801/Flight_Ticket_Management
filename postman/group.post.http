@@ -7,11 +7,11 @@
 
 ### get all
 GET {{url_dev}}/511320413/all
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjkxMjU5ZTM3ZDhhYjQxZjVmYWYwNiIsImlhdCI6MTcxMzk2ODExMCwiZXhwIjoxNzE0MDU0NTEwfQ.TMxh4gZ0dO6_BaWjIvFG5MogYo8JsMmvEN3X5apQ024
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NGMwYjk4MGMxZmNiMzVlYTZkZjQ5OCIsImlhdCI6MTcxNjMwNzkyMCwiZXhwIjoxNzE2Mzk0MzIwfQ.dpmu5vxpGkJ9B89CBctetiN5R-CA9ShPwdggZhHk80s
 
 ### get by id
-GET {{url_dev}}/511320413/6628cdac982323272d5c0163
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhjZGFjOTgyMzIzMjcyZDVjMDFjZCIsImlhdCI6MTcxMzk1MDk2MiwiZXhwIjoxNzE0MDM3MzYyfQ.ph_5wLtIKbL40nBUYMjetW-Q5rBJqyF7EBbeLpi6Gd4
+GET {{url_dev}}/511320413/664c0b980c1fcb35ea6df3cf
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NGMwYjk4MGMxZmNiMzVlYTZkZjQ5OCIsImlhdCI6MTcxNjMwNzkyMCwiZXhwIjoxNzE2Mzk0MzIwfQ.dpmu5vxpGkJ9B89CBctetiN5R-CA9ShPwdggZhHk80s
 
 ### update by id
 PUT {{url_dev}}/511246413/update/6628cdac982323272d5c0162
@@ -23,9 +23,13 @@ Content-Type: application/json
 
 ### create group
 POST {{url_dev}}/511454413/create
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NGMwNjNkMmFiYTE0OTFiOWI0YmJhYyIsImlhdCI6MTcxNjI1ODQwNiwiZXhwIjoxNzE2MzQ0ODA2fQ.0JEhT1sKNx6fDaoJdsIfaduZQbrz1RDAwlsqCmrkenY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NGMwYjk4MGMxZmNiMzVlYTZkZjQ5OCIsImlhdCI6MTcxNjMwNzkyMCwiZXhwIjoxNzE2Mzk0MzIwfQ.dpmu5vxpGkJ9B89CBctetiN5R-CA9ShPwdggZhHk80s
 Content-Type: application/json
 {
-    "groupCode": "551",
+    "groupCode": "551-Write",
     "groupName": "WRITE ON USER"
 }
+
+### delete group
+DELETE {{url_dev}}/511627413/delete/664c0b980c1fcb35ea6df3cd
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NGMwYjk4MGMxZmNiMzVlYTZkZjQ5OCIsImlhdCI6MTcxNjMwMDQxMywiZXhwIjoxNzE2Mzg2ODEzfQ.OfUnYcNP7M-QAKJ7IrPUUAsg6DHTYoWEzl1NwGQMyNI

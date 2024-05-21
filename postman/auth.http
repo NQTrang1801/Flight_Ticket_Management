@@ -110,9 +110,9 @@ PUT {{url_dev}}/511246447/unblock-user/664838f6414693813afe167c
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDgzOGNjNDE0NjkzODEzYWZlMTY2YSIsImlhdCI6MTcxNjAwOTE4NywiZXhwIjoxNzE2MDk1NTg3fQ.I9lBaGhcdi2RuWAHmBf38F-V_xoxmtlJYfMvAv8ArhY
 
 ### update group user
-PATCH {{url_dev}}/999457447/update-group/664c06442aba1491b9b4bbba
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NGMwNjNkMmFiYTE0OTFiOWI0YmJhYyIsImlhdCI6MTcxNjI1ODQwNiwiZXhwIjoxNzE2MzQ0ODA2fQ.0JEhT1sKNx6fDaoJdsIfaduZQbrz1RDAwlsqCmrkenY
+PATCH {{url_dev}}/999457447/update-group/664cc8813dada9938f494015
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NGMwYjk4MGMxZmNiMzVlYTZkZjQ5OCIsImlhdCI6MTcxNjMwNzkyMCwiZXhwIjoxNzE2Mzk0MzIwfQ.dpmu5vxpGkJ9B89CBctetiN5R-CA9ShPwdggZhHk80s
 Content-Type: application/json
 {
-    "group_id": "664c06832aba1491b9b4bbc3"
+    "group_id": "664ccb77d0b03a52eb7f8b2e"
 }
