@@ -16,6 +16,7 @@ import UserRoutes from "./components/UserRoutes";
 import AdminRoutes from "./components/AdminRoutes";
 import Users from "./pages/Users";
 import BookingForms from "./pages/BookingForms";
+import GroupPermissions from "./pages/GroupPermissions";
 
 function App() {
     const root = document.querySelector("#root");
@@ -68,6 +69,7 @@ function App() {
                     <Route path="/administrator/regulations" element={<Regulations />} />
                     <Route path="/administrator/booking-forms" element={<BookingForms />} />
                     <Route path="/administrator/users" element={<Users />} />
+                    <Route path="/administrator/group-permissions" element={<GroupPermissions />} />
                 </Route>
                 <Route path="/admin" element={<AdminRoutes />}>
                     <Route index element={<Dashboard />} />

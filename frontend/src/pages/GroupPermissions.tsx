@@ -21,7 +21,7 @@ const schema = yup.object().shape({
     address: yup.string().required("Address is required.")
 });
 
-function Users() {
+function GroupPermissions() {
     const [data, setData] = useState<UserData[]>();
     const { query } = useAppSelector((state) => state.searching!);
 
@@ -268,4 +268,4 @@ function Users() {
     );
 }
 
-export default Users;
+export default GroupPermissions;

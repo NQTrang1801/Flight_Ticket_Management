@@ -19,13 +19,13 @@ const schema = yup.object().shape({
 });
 
 interface UserUpdatingProps {
-    _id: string;
     fullname: string;
     mobile: number;
     address: string;
+    email: string;
 }
 
-const UserUpdating: React.FC<UserUpdatingProps> = ({ _id, fullname, mobile, address }) => {
+const UserUpdating: React.FC<UserUpdatingProps> = ({ fullname, mobile, address, email }) => {
     const { Portal, hide } = usePortal({
         defaultShow: true
     });
@@ -50,17 +50,18 @@ const UserUpdating: React.FC<UserUpdatingProps> = ({ _id, fullname, mobile, addr
         dispatch(startLoading());
 
         const fullname = formData.fullname;
-        const mobile = formData.mobile;
+        const mobile = "0" + formData.mobile;
         const address = formData.address;
 
         (async () => {
             axios
                 .put(
-                    `/user/edit-user/${_id}`,
+                    `/user/edit-user`,
                     {
                         fullname,
                         mobile,
-                        address
+                        address,
+                        email
                     },
                     {
                         headers: {

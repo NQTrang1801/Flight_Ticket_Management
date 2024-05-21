@@ -6,6 +6,7 @@ import UserUpdating from "./UserUpdating";
 import { sendMessage } from "~/actions/message";
 import { startLoading, stopLoading } from "~/actions/loading";
 import shortenAirportName from "~/utils/shortenAirportName";
+import Permission from "~/pages/Permission";
 
 interface UserProps {
     email: string;
@@ -22,6 +23,8 @@ const User: React.FC<UserProps> = ({ email, fullname, group_id, isBlocked, mobil
     const [updatingMode, setUpdatingMode] = useState(false);
     const [ticketData, setTicketData] = useState<TicketData[]>();
     const [flightData, setFlightData] = useState<FlightScheduleData[]>();
+
+    const userType = JSON.parse(localStorage.getItem("user")!)?.userType.toLowerCase();
 
     const dispatch = useAppDispatch();
 
@@ -104,7 +107,7 @@ const User: React.FC<UserProps> = ({ email, fullname, group_id, isBlocked, mobil
         fetchData();
     }, [_id, dispatch]);
 
-    console.log(ticketData);
+    // console.log(ticketData);
 
     return (
         <>
@@ -121,53 +124,59 @@ const User: React.FC<UserProps> = ({ email, fullname, group_id, isBlocked, mobil
                     User Account
                 </div>
                 <div className="absolute top-14 right-6 flex gap-2">
-                    <button
-                        onClick={() => {
-                            setUpdatingMode(!updatingMode);
-                        }}
-                        className="hover:bg-primary hover:border-primary rounded-lg border border-blue flex items-center justify-center p-1"
-                    >
-                        <i className="">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24"
-                                width={24}
-                                height={24}
-                                id="edit"
+                    {userType !== "administrator" && (
+                        <button
+                            onClick={() => {
+                                setUpdatingMode(!updatingMode);
+                            }}
+                            className="hover:bg-primary hover:border-primary rounded-lg border border-blue flex items-center justify-center p-1"
+                        >
+                            <i className="">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24"
+                                    width={24}
+                                    height={24}
+                                    id="edit"
+                                >
+                                    <path
+                                        className="fill-white"
+                                        d="M5,18H9.24a1,1,0,0,0,.71-.29l6.92-6.93h0L19.71,8a1,1,0,0,0,0-1.42L15.47,2.29a1,1,0,0,0-1.42,0L11.23,5.12h0L4.29,12.05a1,1,0,0,0-.29.71V17A1,1,0,0,0,5,18ZM14.76,4.41l2.83,2.83L16.17,8.66,13.34,5.83ZM6,13.17l5.93-5.93,2.83,2.83L8.83,16H6ZM21,20H3a1,1,0,0,0,0,2H21a1,1,0,0,0,0-2Z"
+                                    ></path>
+                                </svg>
+                            </i>
+                        </button>
+                    )}
+                    {userType === "administrator" && (
+                        <>
+                            <button
+                                onClick={() => {
+                                    if (isBlocked) {
+                                        handleUnblockUser(_id);
+                                    } else handleBlockUser(_id);
+                                }}
+                                className={`${
+                                    isBlocked && "bg-mdRed border-mdRed hover:bg-blue hover:border-blue"
+                                } hover:bg-mdRed hover:border-mdRed rounded-lg border border-blue flex items-center justify-center p-1`}
                             >
-                                <path
-                                    className="fill-white"
-                                    d="M5,18H9.24a1,1,0,0,0,.71-.29l6.92-6.93h0L19.71,8a1,1,0,0,0,0-1.42L15.47,2.29a1,1,0,0,0-1.42,0L11.23,5.12h0L4.29,12.05a1,1,0,0,0-.29.71V17A1,1,0,0,0,5,18ZM14.76,4.41l2.83,2.83L16.17,8.66,13.34,5.83ZM6,13.17l5.93-5.93,2.83,2.83L8.83,16H6ZM21,20H3a1,1,0,0,0,0,2H21a1,1,0,0,0,0-2Z"
-                                ></path>
-                            </svg>
-                        </i>
-                    </button>
-                    <button
-                        onClick={() => {
-                            if (isBlocked) {
-                                handleUnblockUser(_id);
-                            } else handleBlockUser(_id);
-                        }}
-                        className={`${
-                            isBlocked && "bg-mdRed border-mdRed hover:bg-blue hover:border-blue"
-                        } hover:bg-mdRed hover:border-mdRed rounded-lg border border-blue flex items-center justify-center p-1`}
-                    >
-                        <i>
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 48 48"
-                                id="block"
-                            >
-                                <path fill="none" d="M0 0h48v48H0z"></path>
-                                <path
-                                    fill="white"
-                                    d="M24 4C12.95 4 4 12.95 4 24s8.95 20 20 20 20-8.95 20-20S35.05 4 24 4zM8 24c0-8.84 7.16-16 16-16 3.7 0 7.09 1.27 9.8 3.37L11.37 33.8C9.27 31.09 8 27.7 8 24zm16 16c-3.7 0-7.09-1.27-9.8-3.37L36.63 14.2C38.73 16.91 40 20.3 40 24c0 8.84-7.16 16-16 16z"
-                                ></path>
-                            </svg>
-                        </i>
-                    </button>
+                                <i>
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 48 48"
+                                        id="block"
+                                    >
+                                        <path fill="none" d="M0 0h48v48H0z"></path>
+                                        <path
+                                            fill="white"
+                                            d="M24 4C12.95 4 4 12.95 4 24s8.95 20 20 20 20-8.95 20-20S35.05 4 24 4zM8 24c0-8.84 7.16-16 16-16 3.7 0 7.09 1.27 9.8 3.37L11.37 33.8C9.27 31.09 8 27.7 8 24zm16 16c-3.7 0-7.09-1.27-9.8-3.37L36.63 14.2C38.73 16.91 40 20.3 40 24c0 8.84-7.16 16-16 16z"
+                                        ></path>
+                                    </svg>
+                                </i>
+                            </button>
+                        </>
+                    )}
                 </div>
                 <div className="grid grid-cols-2 gap-4 mt-8">
                     <div>
@@ -235,13 +244,13 @@ const User: React.FC<UserProps> = ({ email, fullname, group_id, isBlocked, mobil
                     </table>
                 </div>
             </div>
-            {updatingMode && (
+            {updatingMode && userType !== "administrator" && (
                 <UserUpdating
-                    _id={_id}
                     email={email}
                     fullname={fullname}
                     group_id={group_id}
                     isBlocked={isBlocked}
+                    address={address}
                     mobile={mobile}
                     // tickets={tickets}
                 />
