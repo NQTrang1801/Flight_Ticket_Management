@@ -39,7 +39,7 @@ const getAllPermissions = asyncHandler(async (req, res) => {
         const permissions = await Permission.aggregate([
             {
                 $lookup: {
-                    from: 'groups', // The collection name in MongoDB for Group
+                    from: 'groups', 
                     localField: 'group_id',
                     foreignField: '_id',
                     as: 'group'
@@ -47,17 +47,17 @@ const getAllPermissions = asyncHandler(async (req, res) => {
             },
             {
                 $lookup: {
-                    from: 'functionalities', // The collection name in MongoDB for Functionality
+                    from: 'functionalities', 
                     localField: 'functionality_id',
                     foreignField: '_id',
                     as: 'functionality'
                 }
             },
             {
-                $unwind: '$group' // To deconstruct the array returned by $lookup
+                $unwind: '$group'
             },
             {
-                $unwind: '$functionality' // To deconstruct the array returned by $lookup
+                $unwind: '$functionality'
             },
             {
                 $project: {
@@ -89,11 +89,19 @@ const getAllPermissions = asyncHandler(async (req, res) => {
                 }
             }
         ]);
-        res.json(permissions);
+
+        
+        const result = {};
+        permissions.forEach(permissionGroup => {
+            result[permissionGroup.groupCode] = permissionGroup.permissions;
+        });
+
+        res.json(result);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 });
+
 
 
 // Get a single permission
