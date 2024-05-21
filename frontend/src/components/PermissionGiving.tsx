@@ -49,7 +49,8 @@ const PermissionGiving: React.FC<{ _id: string }> = ({ _id }) => {
                     },
                     {
                         headers: {
-                            "Content-Type": "application/json"
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).token}`
                         }
                     }
                 );
@@ -122,14 +123,14 @@ const PermissionGiving: React.FC<{ _id: string }> = ({ _id }) => {
     }, [collection]);
 
     // console.log(functionalityData?.[collectionCode]?.[groupAccountCode]);
-    console.log(selectedFuncs);
+    // console.log(selectedFuncs);
 
     return (
         functionalityData && (
             <Portal>
                 <div className="fixed top-0 right-0 left-0 bottom-0 bg-[rgba(0,0,0,0.4)] z-50 flex items-center justify-center">
                     <div className="flex items-center justify-center">
-                        <div className="border border-blue p-8 bg-background relative rounded-xl max-h-[810px] max-w-[444px]  overflow-y-scroll no-scrollbar">
+                        <div className="border border-blue p-8 bg-background relative rounded-xl max-w-[444px]">
                             <button
                                 onClick={hide}
                                 className="absolute right-4 top-4 border border-blue rounded-full p-1 hover:border-primary hover:bg-primary"
@@ -152,7 +153,7 @@ const PermissionGiving: React.FC<{ _id: string }> = ({ _id }) => {
                             <div className="flex justify-center mb-8">
                                 <div className="text-white font-semibold text-xl">Give new permission</div>
                             </div>
-                            <form onSubmit={givePermission} className="flex justify-center flex-col gap-6">
+                            <div className="flex justify-center flex-col gap-6">
                                 <div className="text-blue text-[15px] flex items-center gap-1">
                                     Functionalities
                                     <IsRequired />
@@ -332,11 +333,11 @@ const PermissionGiving: React.FC<{ _id: string }> = ({ _id }) => {
                                 <div className="outline outline-1 outline-border w-full"></div>
                                 <button
                                     className="py-3 px-8 text-base font-semibold rounded-xl border-blue border hover:border-primary hover:bg-primary"
-                                    type="submit"
+                                    onClick={givePermission}
                                 >
                                     Give permission
                                 </button>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>

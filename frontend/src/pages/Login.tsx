@@ -154,6 +154,15 @@ const Login: React.FC = () => {
                             </>
                         )}
                     </div>
+                    <div className="text-black">
+                        {userType !== "user" && (
+                            <>
+                                <a href="/user/login" className="text-blue hover:text-primary underline text-end">
+                                    Go to user site
+                                </a>
+                            </>
+                        )}
+                    </div>
                 </form>
             </div>
         </div>

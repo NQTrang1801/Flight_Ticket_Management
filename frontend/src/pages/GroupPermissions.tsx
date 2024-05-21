@@ -122,7 +122,7 @@ function GroupPermissions() {
                             <th className="">Index</th>
                             <th className="">Group code</th>
                             <th className="">Group name</th>
-                            <th className="">Functions</th>
+                            <th className="">Function</th>
                         </tr>
                     </thead>
                     <tbody>

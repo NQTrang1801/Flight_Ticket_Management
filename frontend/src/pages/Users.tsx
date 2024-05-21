@@ -86,6 +86,7 @@ function Users() {
                 })
                 .then((response) => {
                     setData(response.data.USER);
+                    console.log(response.data);
                 })
                 .catch((err) => console.error(err));
         })();
@@ -93,7 +94,7 @@ function Users() {
 
     return (
         <>
-            <div className="flex justify-end items-center mb-6">
+            {/* <div className="flex justify-end items-center mb-6">
                 <button
                     onClick={() => {
                         show();
@@ -126,7 +127,7 @@ function Users() {
                     </i>
                     Create
                 </button>
-            </div>
+            </div> */}
 
             <div className="bg-block p-6 rounded-3xl shadow-xl">
                 <div className="grid grid-cols-1 gap-6">
