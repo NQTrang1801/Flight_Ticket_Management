@@ -4,7 +4,7 @@
 ### Create airport
 POST {{url_dev}}/511454675/create
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDlmZTNkYTUzMTgwNGU4MmMzZGYwNiIsImlhdCI6MTcxNjEyNTc2OSwiZXhwIjoxNzE2MjEyMTY5fQ.E4ZWa81EErNWvMNTjJe8CsmNYIg_0O1tGCpa3Je9f9g
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NGMwYjk4MGMxZmNiMzVlYTZkZjQ5OCIsImlhdCI6MTcxNjI3MDY2MSwiZXhwIjoxNzE2MzU3MDYxfQ.N7LRw5beVq5wcHOmp3As1QO-sT8WE6kHK72hoH9dZzo
 {
     "code": "HAN",
     "name": "Noi Bai Airport",
@@ -22,7 +22,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDlmZTNkY
 
 POST {{url_dev}}/511454675/create
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDk4Njk4NTc4YTZkNzc4ZDU5ZTEzZCIsImlhdCI6MTcxNjA5NDYyOCwiZXhwIjoxNzE2MTgxMDI4fQ.AHhZdW60hMhCQ0IkojY4q3bR8f14HJeoWwVvfACTK2c
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NGMwYjk4MGMxZmNiMzVlYTZkZjQ5OCIsImlhdCI6MTcxNjI3MDY2MSwiZXhwIjoxNzE2MzU3MDYxfQ.N7LRw5beVq5wcHOmp3As1QO-sT8WE6kHK72hoH9dZzo
 {
     "code": "SGN",
     "name": "Tân Sơn Nhất International Airport",
@@ -40,7 +40,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDk4Njk4N
 
 POST {{url_dev}}/511454675/create
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDk4Njk4NTc4YTZkNzc4ZDU5ZTEzZCIsImlhdCI6MTcxNjA5NDYyOCwiZXhwIjoxNzE2MTgxMDI4fQ.AHhZdW60hMhCQ0IkojY4q3bR8f14HJeoWwVvfACTK2c
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NGMwYjk4MGMxZmNiMzVlYTZkZjQ5OCIsImlhdCI6MTcxNjI3MDY2MSwiZXhwIjoxNzE2MzU3MDYxfQ.N7LRw5beVq5wcHOmp3As1QO-sT8WE6kHK72hoH9dZzo
 
 {
     "code": "DAD",
@@ -59,7 +59,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDk4Njk4N
 
 POST {{url_dev}}/511454675/create
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDk4Njk4NTc4YTZkNzc4ZDU5ZTEzZCIsImlhdCI6MTcxNjA5NDYyOCwiZXhwIjoxNzE2MTgxMDI4fQ.AHhZdW60hMhCQ0IkojY4q3bR8f14HJeoWwVvfACTK2c
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NGMwYjk4MGMxZmNiMzVlYTZkZjQ5OCIsImlhdCI6MTcxNjI3MDY2MSwiZXhwIjoxNzE2MzU3MDYxfQ.N7LRw5beVq5wcHOmp3As1QO-sT8WE6kHK72hoH9dZzo
 
 {
     "code": "PXU",

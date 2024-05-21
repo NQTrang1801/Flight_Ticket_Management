@@ -21,8 +21,8 @@ POST {{url_dev}}/register
 Content-Type: application/json
 {
     "fullname": "Nguyen Quoc Trang",
-    "email": "usre@gmail.com",
-    "mobile": "012334679",
+    "email": "admin1s@gmail.com",
+    "mobile": "0123s34679",
     "password": "apipassword123",
     "address": "TP HCM"
 }
@@ -63,7 +63,7 @@ GET {{url_dev}}/logout
 GET {{url_dev}}/all-users
 
 ### get all tickets
-GET {{url_dev}}/6649877d578a6d778d59e17a/tickets
+GET {{url_dev}}/664c2c2059a44400841cbddb/tickets
 
 ### patch update password
 PATCH {{url_dev}}/password

@@ -1,4 +1,8 @@
 const Permission = require("../models/permissionModel");
+const User = require("../models/userModel");
+const Group = require("../models/groupModel");
+const Functionality = require("../models/functionalityModel");
+
 const asyncHandler = require("express-async-handler");
 const validateMongoDbId = require("../utils/validateMongoDbId");
 
@@ -82,11 +86,40 @@ const deletePermission = asyncHandler(async (req, res) => {
     }
 });
 
+
+const getAllPermissionByUserId = asyncHandler(async (req, res) => {
+    const { userId } = req.params;
+    validateMongoDbId(userId);
+
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        const { group_id } = user;
+        if (!group_id) {
+            return res.status(400).json({ message: 'Group ID not found for this user' });
+        }
+
+        const permissions = await Permission.find({ group_id });
+
+        const functionalityIds = permissions.map(permission => permission.functionality_id);
+
+        const functionalities = await Functionality.find({ _id: { $in: functionalityIds } });
+
+        res.json(functionalities);
+    } catch (error) {
+        throw new Error(error);
+    }
+});
+
+
 module.exports = {
     createPermission,
     createMultiplePermissions,
     getAllPermissions,
     getPermission,
     updatePermission,
-    deletePermission
+    deletePermission,
+    getAllPermissionByUserId
 };

@@ -22,6 +22,10 @@ Content-Type: application/json
 ### Get all permissions
 GET {{url_dev}}/511320990/all
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjkxMjU5ZTM3ZDhhYjQxZjVmYWYwNiIsImlhdCI6MTcxMzk2ODExMCwiZXhwIjoxNzE0MDU0NTEwfQ.TMxh4gZ0dO6_BaWjIvFG5MogYo8JsMmvEN3X5apQ024
+
+### Get all permissions by userID
+GET {{url_dev}}/511000000/664c345073c4df2df3e6a0ad/all
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NGMwYjk4MGMxZmNiMzVlYTZkZjQ5OCIsImlhdCI6MTcxNjI3MDExNiwiZXhwIjoxNzE2MzU2NTE2fQ.fPD3Jtzuha029XbnlhwjU9L4j6X_hUqDy3shfhnejEI
 ### Get a single permission
 GET {{url_dev}}/511320990/6628a0640f03a5640fd6f68d
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjhhMDY0MGYwM2E1NjQwZmQ2ZjZkZSIsImlhdCI6MTcxMzkzOTg3MCwiZXhwIjoxNzE0MDI2MjcwfQ.0lfIxsFIUF8U3b6S3oLgvyFFdfzwkY8cXJ_Xb4Np00w

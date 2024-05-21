@@ -4,8 +4,8 @@
 POST {{url_dev}}/booking
 Content-Type: application/json
 {
-    "user_id" : "664a00a187aa319027fc6766",
-    "flight_id" : "664af88bf2b44e71288a83af",
+    "user_id" : "664c2c2059a44400841cbddb",
+    "flight_id" : "664c3799f2817eff891d2fd8",
     "seat_class" : "1",
     "full_name" : "Nguyen Van A",
     "CMND" : "6123179891287",

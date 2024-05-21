@@ -26,6 +26,6 @@ POST {{url_dev}}/511454413/create
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NGMwNjNkMmFiYTE0OTFiOWI0YmJhYyIsImlhdCI6MTcxNjI1ODQwNiwiZXhwIjoxNzE2MzQ0ODA2fQ.0JEhT1sKNx6fDaoJdsIfaduZQbrz1RDAwlsqCmrkenY
 Content-Type: application/json
 {
-    "groupCode": "551946",
-    "groupName": "ADMIN REQUEST RESERVATION"
+    "groupCode": "551",
+    "groupName": "WRITE ON USER"
 }

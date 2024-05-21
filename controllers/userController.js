@@ -373,7 +373,7 @@ const getTicketsByUserId = asyncHandler(async (req, res) => {
 
         const userTicketIds = user.tickets;
 
-        const userTickets = await RequestReservation.find({ _id: { $in: userTicketIds } });
+        const userTickets = await RequestReservation.find({ _id: { $in: userTicketIds } }).populate('flight_id', 'departure_airport destination_airport departure_datetime');;
 
         res.status(200).json(userTickets);
     } catch (error) {
