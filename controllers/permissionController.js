@@ -36,12 +36,65 @@ const createMultiplePermissions = asyncHandler(async (req, res) => {
 // Get all permissions
 const getAllPermissions = asyncHandler(async (req, res) => {
     try {
-        const permissions = await Permission.find();
+        const permissions = await Permission.aggregate([
+            {
+                $lookup: {
+                    from: 'groups', // The collection name in MongoDB for Group
+                    localField: 'group_id',
+                    foreignField: '_id',
+                    as: 'group'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'functionalities', // The collection name in MongoDB for Functionality
+                    localField: 'functionality_id',
+                    foreignField: '_id',
+                    as: 'functionality'
+                }
+            },
+            {
+                $unwind: '$group' // To deconstruct the array returned by $lookup
+            },
+            {
+                $unwind: '$functionality' // To deconstruct the array returned by $lookup
+            },
+            {
+                $project: {
+                    _id: 1,
+                    groupCode: '$group.groupCode',
+                    functionalityCode: '$functionality.functionalityCode',
+                    functionalityName: '$functionality.functionalityName',
+                    screenNameToLoad: '$functionality.screenNameToLoad'
+                }
+            },
+            {
+                $group: {
+                    _id: '$groupCode',
+                    permissions: {
+                        $push: {
+                            _id: '$_id',
+                            functionalityCode: '$functionalityCode',
+                            functionalityName: '$functionalityName',
+                            screenNameToLoad: '$screenNameToLoad'
+                        }
+                    }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    groupCode: '$_id',
+                    permissions: 1
+                }
+            }
+        ]);
         res.json(permissions);
     } catch (error) {
-        throw new Error(error);
+        res.status(500).json({ message: error.message });
     }
 });
+
 
 // Get a single permission
 const getPermission = asyncHandler(async (req, res) => {
@@ -75,16 +128,29 @@ const updatePermission = asyncHandler(async (req, res) => {
 
 // Delete a permission
 const deletePermission = asyncHandler(async (req, res) => {
-    const { id } = req.params;
-    validateMongoDbId(id);
+    const { ids } = req.body;
+    if (!Array.isArray(ids) || ids.length === 0) {
+        throw new Error("Please provide an array of IDs to delete");
+    }
+
+    ids.forEach(id => validateMongoDbId(id));
 
     try {
-        const deletedPermission = await Permission.findByIdAndDelete(id);
-        res.json(deletedPermission);
+        const deletedPermissions = await Permission.deleteMany({ _id: { $in: ids } });
+
+        if (deletedPermissions.deletedCount === 0) {
+            throw new Error("No permissions found or deleted");
+        }
+
+        res.json({
+            message: `Deleted ${deletedPermissions.deletedCount} permissions`,
+            deletedCount: deletedPermissions.deletedCount,
+        });
     } catch (error) {
-        throw new Error(error);
+        throw new Error(error.message);
     }
 });
+
 
 
 const getAllPermissionByUserId = asyncHandler(async (req, res) => {

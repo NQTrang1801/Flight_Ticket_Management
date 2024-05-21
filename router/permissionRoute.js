@@ -9,6 +9,6 @@ router.get("/511320990/all", authMiddleware, hasPermission, getAllPermissions);
 router.get("/511000000/:userId/all", authMiddleware, hasPermission, getAllPermissionByUserId);
 router.get("/511320990/:id", authMiddleware, hasPermission, getPermission);
 router.put("/511246990/update/:id", authMiddleware, hasPermission, updatePermission);
-router.delete("/511627990/delete/:id", authMiddleware, hasPermission, deletePermission);
+router.delete("/511627990/delete", authMiddleware, hasPermission, deletePermission);
 
 module.exports = router;

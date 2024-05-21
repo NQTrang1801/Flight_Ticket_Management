@@ -60,17 +60,31 @@ const deleteGroup = asyncHandler(async (req, res) => {
     validateMongoDbId(id);
 
     try {
-        const deletedGroup = await Group.findOneAndDelete(
-            { _id: id, groupCode: { $nin: ["000", "999"] } }
-        );
+        const groupToDelete = await Group.findOne({ _id: id, groupCode: { $nin: ["000", "999"] } });
+
+        if (!groupToDelete) {
+            throw new Error("Group not found or not allowed to delete");
+        }
+
+        const deletedGroup = await Group.findOneAndDelete({ _id: id });
 
         if (!deletedGroup) {
             throw new Error("Group not found or not allowed to delete");
         }
 
+        await Permission.deleteMany({ group_id: id });
+
+        const defaultGroup = await Group.findOne({ groupCode: "000" });
+
+        if (!defaultGroup) {
+            throw new Error("Default group not found");
+        }
+
+        await User.updateMany({ group_id: id }, { group_id: defaultGroup._id });
+
         res.json(deletedGroup);
     } catch (error) {
-        throw new Error(error);
+        throw new Error(error.message);
     }
 });
 

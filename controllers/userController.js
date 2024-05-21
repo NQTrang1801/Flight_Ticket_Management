@@ -56,6 +56,7 @@ const loginUSER = asyncHandler(async (req, res) => {
             fullname: account?.fullname,
             email: account?.email,
             mobile: account?.mobile,
+            address: account?.address,
             userType: "USER",
             token: generateToken(account?._id),
         });
