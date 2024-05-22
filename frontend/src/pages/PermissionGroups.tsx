@@ -5,18 +5,16 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import IsRequired from "~/icons/IsRequired";
-import { useAppDispatch, useAppSelector } from "~/hook";
+import { useAppDispatch } from "~/hook";
 import { sendMessage } from "~/actions/message";
-import Permission from "../components/Permission";
 
 const schema = yup.object().shape({
     groupCode: yup.string().required("Group code is required."),
     groupName: yup.string().required("Group name is required.")
 });
 
-function GroupPermissions() {
-    const [groupPermissionData, setGroupPermissionData] = useState<GroupPermissionData[]>();
-    const { query } = useAppSelector((state) => state.searching!);
+function PermissionGroups() {
+    const [groupPermissionData, setGroupPermissionData] = useState<GroupData[]>();
 
     const { Portal, hide, show } = usePortal({
         defaultShow: false
@@ -129,30 +127,30 @@ function GroupPermissions() {
                 </button>
             </div>
             <div className="bg-block p-6 rounded-3xl shadow-xl">
-                <table className="w-full bg-block">
-                    <thead>
-                        <tr className="text-center bg-primary">
-                            <th className="">Index</th>
-                            <th className="">Group code</th>
-                            <th className="">Group name</th>
-                            <th className="">Function</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {groupPermissionData &&
-                            groupPermissionData
-                                ?.filter((group) => group.groupName.toLowerCase().includes(query.toLowerCase()))
-                                .map((group, index) => (
-                                    <Permission
-                                        key={group._id}
-                                        _id={group._id}
-                                        groupName={group.groupName}
-                                        groupCode={group.groupCode}
-                                        index={index + 1}
-                                    />
-                                ))}
-                    </tbody>
-                </table>
+                <div className="grid grid-cols-2 gap-6">
+                    {groupPermissionData &&
+                        groupPermissionData.map((group) => (
+                            <a
+                                key={group._id}
+                                href={`/administrator/permission-groups/${group._id}`}
+                                className="p-6 rounded-xl overflow-hidden shadow-xl border border-blue group hover:border-primary bg-background relative"
+                            >
+                                <div
+                                    className={`bg-blue group-hover:bg-primary absolute top-0 left-0 right-0 p-2 text-center font-semibold text-base`}
+                                >
+                                    Permission Group
+                                </div>
+                                <div className="grid grid-cols-2 gap-4 mt-8">
+                                    <div>
+                                        <span className="font-semibold">Group code</span>: {group.groupCode}
+                                    </div>
+                                    <div>
+                                        <span className="font-semibold">Group name</span>: {group.groupName}
+                                    </div>
+                                </div>
+                            </a>
+                        ))}
+                </div>
             </div>
             <Portal>
                 <div className="fixed top-0 right-0 left-0 bottom-0 bg-[rgba(0,0,0,0.4)] z-50 flex items-center justify-center">
@@ -221,7 +219,7 @@ function GroupPermissions() {
                                     className="py-3 w-full px-8 mt-3 text-base font-semibold rounded-lg border-blue border hover:border-primary hover:bg-primary"
                                     type="submit"
                                 >
-                                    Create group permission
+                                    Create group
                                 </button>
                             </form>
                         </div>
@@ -232,4 +230,4 @@ function GroupPermissions() {
     );
 }
 
-export default GroupPermissions;
+export default PermissionGroups;

@@ -227,8 +227,15 @@ interface GroupPermissionValidation {
     groupCode: string;
 }
 
-interface GroupPermissionData {
+interface GroupData {
     groupName: string;
     groupCode: string;
+    _id: string;
+}
+
+interface PermissionData {
+    functionalityCode: string;
+    functionalityName: string;
+    screenNameToLoad: string;
     _id: string;
 }

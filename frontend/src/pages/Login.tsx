@@ -123,11 +123,6 @@ const Login: React.FC = () => {
                             </button>
                         </div>
                         {errors.password && <span className="text-deepRed">{errors.password.message}</span>}
-                        {userType === "user" && (
-                            <a href="/forgot-password" className="text-blue hover:text-primary underline text-end">
-                                Forgot password?
-                            </a>
-                        )}
                     </div>
                     <button
                         className={`py-3 w-[360px] px-8 ${

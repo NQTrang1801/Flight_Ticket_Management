@@ -19,10 +19,10 @@ const schema = yup.object().shape({
 });
 
 interface UserUpdatingProps {
-    fullname: string;
-    mobile: number;
-    address: string;
-    email: string;
+    fullname: string | undefined;
+    mobile: number | undefined;
+    address: string | undefined;
+    email: string | undefined;
 }
 
 const UserUpdating: React.FC<UserUpdatingProps> = ({ fullname, mobile, address, email }) => {

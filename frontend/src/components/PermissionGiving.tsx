@@ -6,7 +6,7 @@ import Tippy from "@tippyjs/react/headless";
 import { useAppDispatch } from "~/hook";
 import { sendMessage } from "~/actions/message";
 
-const PermissionGiving: React.FC<{ _id: string }> = ({ _id }) => {
+const PermissionGiving: React.FC<{ _id: string | undefined }> = ({ _id }) => {
     const [functionalityData, setFunctionalityData] = useState();
 
     const [collectionCode, setCollectionCode] = useState<number>(-1);

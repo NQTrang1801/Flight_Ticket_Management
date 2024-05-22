@@ -50,12 +50,23 @@ function Header() {
         case "flight-lookup":
             searchingPlaceholder = "flight number";
             break;
-        case "group-permissions":
+        case "groups":
             searchingPlaceholder = "group name";
             break;
         default:
             searchingPlaceholder = "something";
     }
+
+    const generateTitle = (str) => {
+        if (str.length === 3) {
+            return str.splice(-1)[0].replace("-", " ");
+        } else if (str.length === 4) {
+            return str.splice(-2)[0].replace("-", " ");
+        }
+        return "dashboard";
+    };
+
+    console.log(location.pathname.split("/"));
 
     return (
         <header
@@ -65,9 +76,7 @@ function Header() {
         >
             <div className="flex items-center gap-6">
                 <div className="font-medium text-[22px] mr-2 capitalize">
-                    {location.pathname.split("/").length === 3
-                        ? location.pathname.split("/").splice(-1)[0].replace("-", " ")
-                        : "dashboard"}
+                    {generateTitle(location.pathname.split("/"))}
                 </div>
                 <i className="group">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" id="calendar">
