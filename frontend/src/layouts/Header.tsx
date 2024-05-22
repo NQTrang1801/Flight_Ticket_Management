@@ -66,7 +66,7 @@ function Header() {
         return "dashboard";
     };
 
-    console.log(location.pathname.split("/"));
+    // console.log(location.pathname.split("/"));
 
     return (
         <header

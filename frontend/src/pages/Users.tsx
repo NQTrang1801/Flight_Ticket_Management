@@ -8,6 +8,7 @@ import IsRequired from "~/icons/IsRequired";
 import { useAppDispatch, useAppSelector } from "~/hook";
 import { sendMessage } from "~/actions/message";
 import User from "~/components/User";
+import { startLoading, stopLoading } from "~/actions/loading";
 
 const schema = yup.object().shape({
     name: yup.string().required("Name is required."),
@@ -22,10 +23,12 @@ const schema = yup.object().shape({
 });
 
 function Users() {
-    const [data, setData] = useState<UserData[]>();
+    const [data, setData] = useState();
+    const [groupData, setGroupData] = useState<GroupData[]>();
+
     const { query } = useAppSelector((state) => state.searching!);
 
-    const { Portal, hide, show } = usePortal({
+    const { Portal, hide } = usePortal({
         defaultShow: false
     });
 
@@ -77,78 +80,70 @@ function Users() {
     };
 
     useEffect(() => {
-        (async () => {
-            await axios
-                .get("/user/511320447/admin/all-users", {
+        const fetchData = async () => {
+            try {
+                dispatch(startLoading());
+
+                const userResponse = await axios.get("/user/511320447/admin/all-users", {
                     headers: {
                         Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).token}`
                     }
-                })
-                .then((response) => {
-                    setData(response.data.USER);
-                    console.log(response.data);
-                })
-                .catch((err) => console.error(err));
-        })();
-    }, []);
+                });
+
+                setData(userResponse.data);
+
+                console.log(userResponse.data);
+
+                const groupResponse = await axios.get("/group/511320413/all", {
+                    headers: {
+                        Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).token}`
+                    }
+                });
+
+                setGroupData(groupResponse.data);
+
+                dispatch(stopLoading());
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchData();
+    }, [dispatch]);
 
     return (
         <>
-            {/* <div className="flex justify-end items-center mb-6">
-                <button
-                    onClick={() => {
-                        show();
-                    }}
-                    className="bg-block rounded-xl border-blue border hover:border-primary hover:bg-primary flex items-center justify-center p-3 w-[112px]"
-                >
-                    <i className="mr-[3px]">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            id="add"
-                            x="0"
-                            y="0"
-                            version="1.1"
-                            viewBox="0 0 29 29"
-                            xmlSpace="preserve"
-                            width={20}
-                            height={20}
-                            className="translate-x-[-3px]"
-                        >
-                            <path
-                                fill="none"
-                                stroke="#fff"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeMiterlimit="10"
-                                strokeWidth="2"
-                                d="M14.5 22V7M7 14.5h15"
-                            ></path>
-                        </svg>
-                    </i>
-                    Create
-                </button>
-            </div> */}
+            {data &&
+                Object.entries(data).map(([group, data]) => (
+                    <div key={group}>
+                        <div className="text-lg font-semibold my-6 capitalize">
+                            {group.toLowerCase()} {data.length > 1 ? "Accounts" : "Account"}
+                        </div>
+                        <div className="bg-block p-6 rounded-3xl shadow-xl">
+                            <div className="grid grid-cols-1 gap-8">
+                                {data &&
+                                    data
+                                        ?.filter((data) => data.email.toLowerCase().includes(query.toLowerCase()))
+                                        .map((data) => (
+                                            <User
+                                                key={data._id}
+                                                _id={data._id}
+                                                email={data.email}
+                                                fullname={data.fullname}
+                                                group_name={
+                                                    groupData?.find((group) => group._id === data.group_id)?.groupName
+                                                }
+                                                isBlocked={data.isBlocked}
+                                                mobile={data.mobile}
+                                                address={data.address}
+                                                type={group}
+                                            />
+                                        ))}
+                            </div>
+                        </div>
+                    </div>
+                ))}
 
-            <div className="bg-block p-6 rounded-3xl shadow-xl">
-                <div className="grid grid-cols-1 gap-6">
-                    {data &&
-                        data
-                            ?.filter((user) => user.email.toLowerCase().includes(query.toLowerCase()))
-                            .map((user) => (
-                                <User
-                                    key={user._id}
-                                    _id={user._id}
-                                    email={user.email}
-                                    fullname={user.fullname}
-                                    group_id={user.group_id}
-                                    isBlocked={user.isBlocked}
-                                    mobile={user.mobile}
-                                    address={user.address}
-                                    // tickets={user.tickets}
-                                />
-                            ))}
-                </div>
-            </div>
             <Portal>
                 <div className="fixed top-0 right-0 left-0 bottom-0 bg-[rgba(0,0,0,0.4)] z-50 flex items-center justify-center">
                     <div className="flex items-center justify-center">

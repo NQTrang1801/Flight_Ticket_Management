@@ -13,26 +13,27 @@ import formatDateTime from "~/utils/formatDateTime";
 interface UserProps {
     email: string;
     fullname: string;
-    group_id: string;
+    group_name: string | undefined;
     isBlocked: boolean;
     mobile: string;
     // tickets: [];
     address: string;
     _id: string;
+    type: string;
 }
 
-const User: React.FC<UserProps> = ({ email, fullname, group_id, isBlocked, mobile, _id, address }) => {
+const User: React.FC<UserProps> = ({ email, fullname, group_name, isBlocked, mobile, _id, address, type }) => {
     const [updatingMode, setUpdatingMode] = useState(false);
 
     const [ticketData, setTicketData] = useState<TicketData[]>();
     const [flightData, setFlightData] = useState<FlightScheduleData[]>();
-    const [groupPermissionData, setGroupPermissionData] = useState<GroupPermissionData[]>();
+    const [groupPermissionData, setGroupPermissionData] = useState<GroupData[]>();
 
     const { Portal, show, hide } = usePortal({
         defaultShow: false
     });
 
-    const [selectedGroup, setSelectedGroup] = useState<GroupPermissionData>({ groupName: "", groupCode: "", _id: "" });
+    const [selectedGroup, setSelectedGroup] = useState<GroupData>({ groupName: "", groupCode: "", _id: "" });
     const [groupVisible, setGroupVisible] = useState(false);
 
     const userType = JSON.parse(localStorage.getItem("user")!)?.userType.toLowerCase();
@@ -151,21 +152,21 @@ const User: React.FC<UserProps> = ({ email, fullname, group_id, isBlocked, mobil
         fetchData();
     }, [_id, dispatch]);
 
-    console.log(groupPermissionData);
+    // console.log(groupPermissionData);
 
     return (
         <>
             <div
                 className={`p-6 rounded-xl overflow-hidden shadow-xl border ${
-                    isBlocked ? "border-mdRed" : "border-blue"
+                    isBlocked ? "border-mdRed" : "border-primary"
                 } bg-background relative`}
             >
                 <div
                     className={`${
-                        isBlocked ? "bg-mdRed" : "bg-blue"
+                        isBlocked ? "bg-mdRed" : "bg-primary"
                     } absolute top-0 left-0 right-0 p-2 text-center font-semibold text-base`}
                 >
-                    User Account
+                    {type === "USER" ? "User Account" : "Admin Account"}
                 </div>
                 <div className="absolute top-14 right-6 flex gap-2">
                     {userType !== "administrator" && (
@@ -257,7 +258,7 @@ const User: React.FC<UserProps> = ({ email, fullname, group_id, isBlocked, mobil
                         <span className="font-semibold">Address</span>: {address}
                     </div>
                     <div>
-                        <span className="font-semibold">Group id</span>: {group_id}
+                        <span className="font-semibold">Group name</span>: {group_name}
                     </div>
                     <div>
                         <span className="font-semibold">Blocked</span>: {isBlocked === false ? "False" : "True"}
@@ -267,7 +268,7 @@ const User: React.FC<UserProps> = ({ email, fullname, group_id, isBlocked, mobil
                     <span className="font-semibold">Purchase:</span>
                     <table className="w-full bg-block mt-4">
                         <thead>
-                            <tr className="text-center bg-primary">
+                            <tr className={`text-center ${isBlocked ? "bg-mdRed" : "bg-primary"}`}>
                                 <th className="">Index</th>
                                 <th className="">Passenger name</th>
                                 <th className="">Phone number</th>
