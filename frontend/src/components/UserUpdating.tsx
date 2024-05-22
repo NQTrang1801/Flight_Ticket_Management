@@ -45,7 +45,7 @@ const UserUpdating: React.FC<UserUpdatingProps> = ({ fullname, mobile, address, 
 
     const dispatch = useAppDispatch();
 
-    const onSubmit: SubmitHandler<UserUpdatingProps> = async (formData) => {
+    const onSubmit: SubmitHandler<{ fullname: string; mobile: number; address: string }> = async (formData) => {
         hide();
         dispatch(startLoading());
 

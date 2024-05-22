@@ -81,10 +81,8 @@ function App() {
                     <Route path="/admin/booking-forms" element={<BookingForms />} />
                 </Route>
                 <Route path="/user" element={<UserRoutes />}>
-                    <Route index element={<Dashboard />} />
-                    <Route path="/user/flight-lookup" element={<FlightLookup />} />
+                    <Route index element={<BookingTicket />} />
                     <Route path="/user/airports" element={<UserAirports />} />
-                    <Route path="/user/booking-ticket" element={<BookingTicket />} />
                     <Route path="/user/user-account" element={<UserAccount />} />
                 </Route>
             </Route>
