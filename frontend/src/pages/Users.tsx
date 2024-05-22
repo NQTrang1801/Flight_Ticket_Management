@@ -92,8 +92,6 @@ function Users() {
 
                 setData(userResponse.data);
 
-                console.log(userResponse.data);
-
                 const groupResponse = await axios.get("/group/511320413/all", {
                     headers: {
                         Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).token}`

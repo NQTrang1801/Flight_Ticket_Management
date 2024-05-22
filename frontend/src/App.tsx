@@ -3,8 +3,8 @@ import "./index.css";
 import Layout from "./layouts/Layout";
 import Login from "./pages/Login";
 import AdministratorRoutes from "./components/AdministratorRoutes";
-import { useEffect } from "react";
-import { useAppSelector } from "./hook";
+import { useEffect, useRef } from "react";
+import { useAppDispatch, useAppSelector } from "./hook";
 import { toast } from "react-toastify";
 import FlightSchedule from "./pages/FlightSchedule";
 import Dashboard from "./pages/Dashboard";
@@ -21,11 +21,17 @@ import UserAirports from "./pages/UserAirports";
 import UserAccount from "./pages/UserAccount";
 import PermissionGroups from "./pages/PermissionGroups";
 import PermissionGroup from "./pages/PermissionGroup";
+import axios from "./utils/axios";
+import { updatePermissions } from "./actions/permissions";
 
 function App() {
     const root = document.querySelector("#root");
     const { isLoading } = useAppSelector((state) => state.loading!);
     const { message, type } = useAppSelector((state) => state.message!);
+    const permissionsRef = useRef(null);
+
+    const dispatch = useAppDispatch();
+    const { isLoggedIn } = useAppSelector((state) => state.auth!);
 
     useEffect(() => {
         if (isLoading) {
@@ -56,6 +62,38 @@ function App() {
             }
         }
     }, [message, type]);
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            const userId = JSON.parse(localStorage.getItem("user")!)._id;
+
+            const prevPermissions = permissionsRef.current;
+            const isPermissionsUpdated = prevPermissions !== null;
+
+            const fetchData = async () => {
+                try {
+                    const permissionResponse = await axios.get(`/permission/511000000/${userId}/all/`, {
+                        headers: {
+                            Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).token}`
+                        }
+                    });
+
+                    if (
+                        !isPermissionsUpdated ||
+                        JSON.stringify(permissionResponse.data) !== JSON.stringify(prevPermissions)
+                    ) {
+                        dispatch(updatePermissions(permissionResponse.data));
+                    }
+
+                    permissionsRef.current = permissionResponse.data;
+                } catch (error) {
+                    console.error(error);
+                }
+            };
+
+            fetchData();
+        }
+    }, [dispatch, isLoggedIn]);
 
     return (
         <Routes>

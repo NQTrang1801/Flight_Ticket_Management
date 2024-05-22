@@ -15,6 +15,7 @@ const PermissionGiving: React.FC<{ _id: string | undefined }> = ({ _id }) => {
     const [selectedFuncs, setSelectedFuncs] = useState([]);
 
     const collectionNames = [
+        "Normal",
         "Rule",
         "User",
         "Groups",
@@ -77,6 +78,7 @@ const PermissionGiving: React.FC<{ _id: string | undefined }> = ({ _id }) => {
                 })
                 .then((response) => {
                     setFunctionalityData(response.data);
+                    console.log(response.data);
                 })
                 .catch((err) => console.error(err));
         })();
@@ -115,6 +117,9 @@ const PermissionGiving: React.FC<{ _id: string | undefined }> = ({ _id }) => {
                     break;
                 case "Flight":
                     setCollectionCode(641);
+                    break;
+                case "Website":
+                    setCollectionCode("000");
                     break;
                 default:
                     setCollectionCode(-1);

@@ -39,6 +39,7 @@ const Login: React.FC = () => {
         dispatch(login(email, password, userType))
             .then((response) => {
                 dispatch(sendMessage("Logged in successfully!", "success"));
+
                 const timer = setTimeout(() => {
                     navigate(`/${userType}`);
                     window.location.reload();
@@ -150,12 +151,26 @@ const Login: React.FC = () => {
                         )}
                     </div>
                     <div className="text-black">
-                        {userType !== "user" && (
-                            <>
+                        {userType === "administrator" && (
+                            <div className="">
+                                Go to{" "}
                                 <a href="/user/login" className="text-blue hover:text-primary underline text-end">
-                                    Go to user site.
+                                    user site
+                                </a>{" "}
+                                or
+                                <a href="/admin/login" className="text-blue hover:text-primary underline text-end">
+                                    {" "}
+                                    admin site.
                                 </a>
-                            </>
+                            </div>
+                        )}
+                        {userType === "admin" && (
+                            <div className="">
+                                Go to{" "}
+                                <a href="/user/login" className="text-blue hover:text-primary underline text-end">
+                                    user site.
+                                </a>{" "}
+                            </div>
                         )}
                     </div>
                 </form>
