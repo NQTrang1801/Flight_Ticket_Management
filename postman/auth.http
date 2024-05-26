@@ -31,8 +31,8 @@ Content-Type: application/json
 POST {{url_dev}}/login
 Content-Type: application/json
 {
-    "email": "admin1s@gmail.com",
-    "password": "apipassword123"
+    "email": "ADMINISTRATOR@gmail.com",
+    "password": "ADMINISTRATOR999"
 }
 
 

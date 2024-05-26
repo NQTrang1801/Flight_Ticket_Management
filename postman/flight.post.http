@@ -3,7 +3,7 @@
 ### Tạo một chuyến bay mới
 POST {{url_dev}}/511454641/create
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NGMwYjk4MGMxZmNiMzVlYTZkZjQ5OCIsImlhdCI6MTcxNjI3MDY2MSwiZXhwIjoxNzE2MzU3MDYxfQ.N7LRw5beVq5wcHOmp3As1QO-sT8WE6kHK72hoH9dZzo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NTE3NGFiNTkyOTI5MDhlOTgxNTA3NCIsImlhdCI6MTcxNjcxOTI3NCwiZXhwIjoxNzE2ODA1Njc0fQ.gzhgg10Vv98KbkcJFnI07MLa176EAj2GxCVHpVZqzW4
 {
     "flight_number": "MH370-BOEING777889",
     "flight_code": "HAN-SGN",
@@ -17,21 +17,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NGMwYjk4M
         {"class": "2", "count": 80}
     ],
     "transit_airports": [
-        {"airport_id": "664c3673f2817eff891d2fbc", "stop_duration": 10, "note": ""},
-        {"airport_id": "664c3673f2817eff891d2fbc", "stop_duration": 15, "note": "delay 2 minutes"}
-    ],
-    "rules": {
-        "regulation_1": {
-            "flight_time": "664c0b980c1fcb35ea6df49b",
-            "intermediate": "664c0b980c1fcb35ea6df49c"
-        },
-        "regulation_2": {
-            "tickets": "664c0b980c1fcb35ea6df49d"
-        },
-        "regulation_3": {
-            "booking": "664c0b980c1fcb35ea6df49e"
-        }
-    }
+        {"airport_id": "664c3673f2817eff891d2fbc", "stop_duration": 14, "note": ""},
+        {"airport_id": "664c3673f2817eff891d2fbc", "stop_duration": 16, "note": "delay 2 minutes"}
+    ]
 }
 
 

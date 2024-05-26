@@ -5,27 +5,46 @@ const Reservation = require('../models/reservationModel');
 const asyncHandler = require("express-async-handler");
 
 const createFlight = asyncHandler(async (req, res) => {
-    const flightData = req.body;
-    // Kiểm tra thời gian bay tối thiểu là 30 phút
-    const ruleFlightTime = await Rule.findOne({ _id: flightData?.rules?.regulation_1?.flight_time });
-    const ruleIntermediary = await Rule.findOne({ _id: flightData?.rules?.regulation_1?.intermediate });
+    let flightData = req.body;
+
+    const ruleFlightTime = await Rule.findOne({ code: 'R1-2' });
+    const ruleIntermediary = await Rule.findOne({ code: 'R1-3' });
+    const ruleTickets = await Rule.findOne({ code: 'R2' });
+    const ruleBooking = await Rule.findOne({ code: 'R3' });
+
+    flightData.rules = {
+        regulation_1: {
+            flight_time: ruleFlightTime?._id,
+            intermediate: ruleIntermediary?._id,
+        },
+        regulation_2: {
+            tickets: ruleTickets?._id,
+        },
+        regulation_3: {
+            booking: ruleBooking?._id,
+        },
+    };
+
     const min_flight_time = ruleFlightTime?.values?.min_flight_time;
 
     if (flightData.duration < min_flight_time) {
         return res.status(400).json({ message: `The minimum flight time must be ${min_flight_time} minutes` });
     }
-    // Kiểm tra số lượng sân bay trung gian và thời gian dừng
+
+    
     if (flightData?.transit_airports?.length > ruleIntermediary?.values?.max_transit_airports) {
         return res.status(400).json({ message: `Only a maximum of ${ruleIntermediary?.values?.max_transit_airports} intermediary airports` });
     }
+
     if (flightData?.transit_airports) {
         for (const airport of flightData.transit_airports) {
             if (airport.stop_duration < ruleIntermediary?.values?.min || airport.stop_duration > ruleIntermediary?.values?.max) {
                 const transit_airport = await Airport.findOne({ _id: airport?.airport_id });
-                return res.status(400).json({ message: `The stop time at ${transit_airport.name} must be from ${ruleIntermediary?.values?.min} to ${ruleIntermediary?.values?.max} minutes` });
+                return res.status(400).json({ message: `The stop time at ${transit_airport?.name} must be from ${ruleIntermediary?.values?.min} to ${ruleIntermediary?.values?.max} minutes` });
             }
         }
     }
+
     try {
         const flight = await Flight.create(flightData);
         res.status(201).json(flight);
