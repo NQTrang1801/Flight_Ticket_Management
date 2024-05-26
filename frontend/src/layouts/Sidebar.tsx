@@ -51,7 +51,7 @@ function Sidebar() {
                 )}
                 {userType !== "user" && (
                     <NavLink
-                        to={`${userType}/flight-schedule`}
+                        to={`${userType}/flight-schedules`}
                         className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
                     >
                         {({ isActive }) => (
@@ -97,7 +97,7 @@ function Sidebar() {
                                         ></path>
                                     </svg>
                                 </i>
-                                Flight schedule
+                                Flight schedules
                             </>
                         )}
                     </NavLink>

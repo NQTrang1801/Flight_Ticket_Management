@@ -6,7 +6,7 @@ import AdministratorRoutes from "./components/AdministratorRoutes";
 import { useEffect, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "./hook";
 import { toast } from "react-toastify";
-import FlightSchedule from "./pages/FlightSchedule";
+import FlightSchedules from "./pages/FlightSchedules";
 import Dashboard from "./pages/Dashboard";
 import FlightLookup from "./pages/FlightLookup";
 import Regulations from "./pages/Regulations";
@@ -23,6 +23,11 @@ import PermissionGroups from "./pages/PermissionGroups";
 import PermissionGroup from "./pages/PermissionGroup";
 import axios from "./utils/axios";
 import { updatePermissions } from "./actions/permissions";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminFlightSchedules from "./pages/admin/AdminFlightSchedules";
+import AdminBookingForms from "./pages/admin/AdminBookingForms";
+import AdminAirports from "./pages/admin/AdminAirports";
+import AdminRegulations from "./pages/admin/AdminRegulations";
 
 function App() {
     const root = document.querySelector("#root");
@@ -105,7 +110,7 @@ function App() {
             <Route path="/" element={<Layout />}>
                 <Route path="/administrator" element={<AdministratorRoutes />}>
                     <Route index element={<Dashboard />} />
-                    <Route path="/administrator/flight-schedule" element={<FlightSchedule />} />
+                    <Route path="/administrator/flight-schedules" element={<FlightSchedules />} />
                     <Route path="/administrator/flight-lookup" element={<FlightLookup />} />
                     <Route path="/administrator/airports" element={<Airports />} />
                     <Route path="/administrator/regulations" element={<Regulations />} />
@@ -115,10 +120,12 @@ function App() {
                     <Route path="/administrator/permission-groups/:id" element={<PermissionGroup />} />
                 </Route>
                 <Route path="/admin" element={<AdminRoutes />}>
-                    <Route index element={<Dashboard />} />
+                    <Route index element={<AdminDashboard />} />
+                    <Route path="/admin/flight-schedules" element={<AdminFlightSchedules />} />
                     <Route path="/admin/flight-lookup" element={<FlightLookup />} />
-                    <Route path="/admin/airports" element={<Airports />} />
-                    <Route path="/admin/booking-forms" element={<BookingForms />} />
+                    <Route path="/admin/airports" element={<AdminAirports />} />
+                    <Route path="/admin/booking-forms" element={<AdminBookingForms />} />
+                    <Route path="/admin/regulations" element={<AdminRegulations />} />
                 </Route>
                 <Route path="/user" element={<UserRoutes />}>
                     <Route index element={<BookingTicket />} />
