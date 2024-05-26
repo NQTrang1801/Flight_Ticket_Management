@@ -75,7 +75,7 @@ const AdminUserUpdating: React.FC<UserUpdatingProps> = ({ fullname, mobile, addr
                     dispatch(sendMessage("Updated sucessfully!", "success"));
                     setTimeout(() => {
                         window.location.reload();
-                    }, 2000);
+                    }, 1000);
                 })
                 .catch((error) => {
                     dispatch(stopLoading());

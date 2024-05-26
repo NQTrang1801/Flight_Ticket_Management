@@ -67,7 +67,7 @@ function PermissionGroup() {
                     dispatch(sendMessage("Updated sucessfully!", "success"));
                     setTimeout(() => {
                         window.location.reload();
-                    }, 2000);
+                    }, 1000);
                 })
                 .catch((error) => {
                     dispatch(stopLoading());
@@ -95,7 +95,7 @@ function PermissionGroup() {
                 dispatch(sendMessage("Deleted successfully!", "success"));
                 setTimeout(() => {
                     window.location.reload();
-                }, 2000);
+                }, 1000);
             })
             .catch((error) => {
                 console.error(error);

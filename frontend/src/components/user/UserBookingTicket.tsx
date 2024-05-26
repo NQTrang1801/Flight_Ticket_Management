@@ -25,7 +25,7 @@ const schema = yup.object().shape({
         .min(10, "Phone number must be exactly 10 digits")
 });
 
-function BookingTicket() {
+function UserBookingTicket() {
     const [flightData, setFlightData] = useState<FlightScheduleData[]>();
     const [airportData, setAirportData] = useState<AirportData[]>();
 
@@ -97,7 +97,7 @@ function BookingTicket() {
                     );
                     dispatch(stopLoading());
                     dispatch(sendMessage("Booked a ticket successfully!", "success"));
-                    setTimeout(() => window.location.reload(), 2000);
+                    setTimeout(() => window.location.reload(), 1000);
                 } catch (error) {
                     dispatch(stopLoading());
                     dispatch(sendMessage(`Booked a ticket failed! ${error.response.data.message}`, "error"));
@@ -580,4 +580,4 @@ function BookingTicket() {
     );
 }
 
-export default BookingTicket;
+export default UserBookingTicket;

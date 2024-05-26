@@ -59,7 +59,7 @@ const PermissionGiving: React.FC<{ _id: string | undefined }> = ({ _id }) => {
                 dispatch(sendMessage("Gave permission successfully!", "success"));
                 const timer = setTimeout(() => {
                     window.location.reload();
-                }, 2000);
+                }, 1000);
                 return () => clearTimeout(timer);
             } catch (error) {
                 dispatch(sendMessage("Gave permission failed!", "error"));

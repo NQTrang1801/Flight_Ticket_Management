@@ -43,7 +43,7 @@ const ScheduleItem: React.FC<FlightScheduleData> = ({
             .then(() => {
                 dispatch(stopLoading());
                 dispatch(sendMessage("Deleted successfully!", "success"));
-                setTimeout(() => window.location.reload(), 2000);
+                setTimeout(() => window.location.reload(), 1000);
             })
             .catch((error) => {
                 dispatch(stopLoading());

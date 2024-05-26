@@ -56,7 +56,7 @@ function UserAccount() {
                 dispatch(sendMessage("Changed password successfully!", "success"));
                 const timer = setTimeout(() => {
                     window.location.reload();
-                }, 2000);
+                }, 1000);
                 return () => clearTimeout(timer);
             } catch (error) {
                 dispatch(sendMessage("Changed password failed!", "error"));

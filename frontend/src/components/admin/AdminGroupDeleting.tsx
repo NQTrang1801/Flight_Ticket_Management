@@ -32,7 +32,7 @@ const AdminGroupDeleting: React.FC<{ _id: string | undefined; groupName: string 
                 dispatch(sendMessage("Deleted group successfully!", "success"));
                 setTimeout(() => {
                     navigate("/administrator/user-groups");
-                }, 2000);
+                }, 1000);
             })
             .catch((error) => {
                 console.error(error);

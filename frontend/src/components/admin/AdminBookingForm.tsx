@@ -38,7 +38,7 @@ const AdminBookingForm: React.FC<BookingFormData> = ({
                 dispatch(sendMessage("Confirmed reservation successfully!", "success"));
                 setTimeout(() => {
                     window.location.reload();
-                }, 2000);
+                }, 1000);
             })
             .catch((error) => {
                 console.error(error);
@@ -63,7 +63,7 @@ const AdminBookingForm: React.FC<BookingFormData> = ({
                 dispatch(sendMessage("Cancelled reservation successfully!", "success"));
                 setTimeout(() => {
                     window.location.reload();
-                }, 2000);
+                }, 1000);
             })
             .catch((error) => {
                 console.error(error);

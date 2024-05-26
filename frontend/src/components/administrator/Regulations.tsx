@@ -88,7 +88,7 @@ function Regulations() {
                     dispatch(sendMessage("Created sucessfully!", "success"));
                     setTimeout(() => {
                         window.location.reload();
-                    }, 2000);
+                    }, 1000);
                 })
                 .catch((error) => {
                     dispatch(stopLoading());

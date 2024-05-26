@@ -130,7 +130,7 @@ function AdminAirports() {
                     );
                     dispatch(stopLoading());
                     dispatch(sendMessage("Created successfully!", "success"));
-                    setTimeout(() => window.location.reload(), 2000);
+                    setTimeout(() => window.location.reload(), 1000);
                 } catch (error) {
                     dispatch(stopLoading());
                     dispatch(sendMessage(`Created failed! ${error.response.data.message}`, "error"));

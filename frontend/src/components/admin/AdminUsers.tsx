@@ -10,6 +10,7 @@ import { sendMessage } from "~/actions/message";
 import { startLoading, stopLoading } from "~/actions/loading";
 import checkPermission from "~/utils/checkPermission";
 import AdminUser from "./AdminUser";
+import PermissionNotFound from "../common/PermissionNotFound";
 
 const schema = yup.object().shape({
     name: yup.string().required("Name is required."),
@@ -73,7 +74,7 @@ function AdminUsers() {
                 dispatch(sendMessage("Created successfully!", "success"));
                 const timer = setTimeout(() => {
                     window.location.reload();
-                }, 2000);
+                }, 1000);
                 return () => clearTimeout(timer);
             } catch (error) {
                 dispatch(sendMessage("Created failed!", "error"));
@@ -262,7 +263,7 @@ function AdminUsers() {
             </Portal>
         </>
     ) : (
-        "You don't have permission to access this page."
+        <PermissionNotFound />
     );
 }
 

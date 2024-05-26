@@ -70,7 +70,7 @@ function Users() {
                 dispatch(sendMessage("Created successfully!", "success"));
                 const timer = setTimeout(() => {
                     window.location.reload();
-                }, 2000);
+                }, 1000);
                 return () => clearTimeout(timer);
             } catch (error) {
                 dispatch(sendMessage("Created failed!", "error"));

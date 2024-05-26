@@ -10,6 +10,7 @@ import { startLoading, stopLoading } from "~/actions/loading";
 import { sendMessage } from "~/actions/message";
 import AdminRegulation from "./AdminRegulation";
 import checkPermission from "~/utils/checkPermission";
+import PermissionNotFound from "../common/PermissionNotFound";
 
 const schema = yup.object().shape({
     ruleName: yup.string().required("Rule name is required."),
@@ -91,7 +92,7 @@ function AdminRegulations() {
                     dispatch(sendMessage("Created sucessfully!", "success"));
                     setTimeout(() => {
                         window.location.reload();
-                    }, 2000);
+                    }, 1000);
                 })
                 .catch((error) => {
                     dispatch(stopLoading());
@@ -289,7 +290,7 @@ function AdminRegulations() {
             </Portal>
         </>
     ) : (
-        "You don't have permission to access this page."
+        <PermissionNotFound />
     );
 }
 

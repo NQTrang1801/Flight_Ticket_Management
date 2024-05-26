@@ -41,7 +41,6 @@ const schema = yup.object().shape({
 function FlightSchedule() {
     const [data, setData] = useState<FlightScheduleData[]>();
     const [airportData, setAirportData] = useState<AirportData[]>();
-    const [ruleData, setRuleData] = useState<RuleData[]>();
     const { query } = useAppSelector((state) => state.searching!);
 
     const [formSubmitted, setFormSubmitted] = useState(false);
@@ -175,19 +174,7 @@ function FlightSchedule() {
                                 status: secondClassCapacity === 0 ? false : true
                             }
                         ],
-                        transit_airports,
-                        rules: {
-                            regulation_1: {
-                                flight_time: ruleData?.find((rule) => rule.values.min_flight_time),
-                                intermediate: ruleData?.find((rule) => rule.values.max_transit_airports)
-                            },
-                            regulation_2: {
-                                tickets: ruleData?.find((rule) => rule.code === "R2")
-                            },
-                            regulation_3: {
-                                booking: ruleData?.find((rule) => rule.code === "R3")
-                            }
-                        }
+                        transit_airports
                     },
                     {
                         headers: {
@@ -198,7 +185,7 @@ function FlightSchedule() {
                 );
                 dispatch(stopLoading());
                 dispatch(sendMessage("Created successfully!", "success"));
-                setTimeout(() => window.location.reload(), 2000);
+                setTimeout(() => window.location.reload(), 1000);
             } catch (error) {
                 dispatch(stopLoading());
                 dispatch(sendMessage(`Created failed! ${error.response.data.message}`, "error"));
@@ -217,13 +204,6 @@ function FlightSchedule() {
                 });
 
                 setData(flightResponse.data);
-
-                const ruleResponse = await axios.get("rule/511320340/all", {
-                    headers: {
-                        Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).token}`
-                    }
-                });
-                setRuleData(ruleResponse.data);
 
                 const airportResponse = await axios.get("airport/all", {
                     headers: {

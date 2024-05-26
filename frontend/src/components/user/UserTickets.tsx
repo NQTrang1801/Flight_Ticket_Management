@@ -9,13 +9,12 @@ import formatDateTime from "~/utils/formatDateTime";
 function UserTickets() {
     const [ticketData, setTicketData] = useState<TicketData[]>();
     const [flightData, setFlightData] = useState<FlightScheduleData[]>();
-    const [selectedId, setSelectedId] = useState("");
 
-    const handleCancelTicket = async () => {
+    const handleCancelTicket = async (id: string) => {
         dispatch(startLoading());
         await axios
             .patch(
-                `/request-reservations/${selectedId}/cancel`,
+                `/request-reservations/${id}/cancel`,
                 {},
                 {
                     headers: {
@@ -29,7 +28,7 @@ function UserTickets() {
                 dispatch(sendMessage("Canceled successfully!", "success"));
                 setTimeout(() => {
                     window.location.reload();
-                }, 2000);
+                }, 1000);
             })
             .catch((error) => {
                 console.error(error);
@@ -70,127 +69,137 @@ function UserTickets() {
 
     return (
         <>
-            <div className="flex justify-end items-center mb-6">
-                {selectedId !== "" && (
-                    <button
-                        onClick={() => {
-                            handleCancelTicket();
-                        }}
-                        className="hover:bg-mdRed hover:border-mdRed bg-block rounded-xl border border-blue flex items-center justify-center p-3"
-                    >
-                        <i className="mr-[3px]">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24"
-                                width={24}
-                                height={24}
-                                id="cancel"
-                            >
-                                <path
-                                    fill="white"
-                                    d="M13.41,12l4.3-4.29a1,1,0,1,0-1.42-1.42L12,10.59,7.71,6.29A1,1,0,0,0,6.29,7.71L10.59,12l-4.3,4.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L12,13.41l4.29,4.3a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.42Z"
-                                ></path>
-                            </svg>
-                        </i>
-                        Cancel ticket
-                    </button>
-                )}
-            </div>
             <div className="bg-block p-6 rounded-3xl shadow-xl">
-                {ticketData && (
-                    <table className="w-full bg-block">
-                        <thead>
-                            <tr className="text-center bg-primary">
-                                <th className="">Index</th>
-                                <th className="">Passenger name</th>
-                                <th className="">Phone number</th>
-                                <th className="">Flight number</th>
-                                <th className="">Departure</th>
-                                <th className="">Arrival</th>
-                                <th className="">Departure datetime</th>
-                                <th className="">Seating type</th>
-                                <th className="">Price</th>
-                                <th className="">Status</th>
-                                <th className="">Cancel</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {flightData?.map((flight, index) => (
-                                <tr key={ticketData[index]._id} className="text-center">
-                                    <td>{index + 1}</td>
-                                    <td>
+                <div className="grid grid-cols-1 gap-6">
+                    {ticketData &&
+                        flightData?.map((flight, index) => (
+                            <div
+                                key={ticketData[index]._id}
+                                className={`p-6 rounded-xl overflow-hidden shadow-xl border ${
+                                    ticketData
+                                        .filter((ticket) => ticket.flight_id._id === flight._id)
+                                        .find((ticket) => ticket._id === ticketData[index]._id)?.status === "Paid"
+                                        ? "border-green"
+                                        : ticketData
+                                                .filter((ticket) => ticket.flight_id._id === flight._id)
+                                                .find((ticket) => ticket._id === ticketData[index]._id)?.status ===
+                                            "Booked"
+                                          ? "border-primary"
+                                          : "border-mdRed"
+                                } bg-background relative`}
+                            >
+                                <div
+                                    className={`${
+                                        ticketData
+                                            .filter((ticket) => ticket.flight_id._id === flight._id)
+                                            .find((ticket) => ticket._id === ticketData[index]._id)?.status === "Paid"
+                                            ? "bg-green"
+                                            : ticketData
+                                                    .filter((ticket) => ticket.flight_id._id === flight._id)
+                                                    .find((ticket) => ticket._id === ticketData[index]._id)?.status ===
+                                                "Booked"
+                                              ? "bg-primary"
+                                              : "bg-mdRed"
+                                    } absolute top-0 left-0 right-0 p-2 text-center font-semibold text-base`}
+                                >
+                                    Flight Ticket
+                                </div>
+                                {ticketData
+                                    .filter((ticket) => ticket.flight_id._id === flight._id)
+                                    .find((ticket) => ticket._id === ticketData[index]._id)?.status === "Booked" && (
+                                    <div className="absolute top-14 right-6 flex gap-2">
+                                        <button
+                                            onClick={() => {
+                                                handleCancelTicket(ticketData[index]._id);
+                                            }}
+                                            className="hover:bg-primary hover:border-primary rounded-lg border border-blue flex items-center justify-center p-1"
+                                        >
+                                            <i className="">
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 24 24"
+                                                    width={24}
+                                                    height={24}
+                                                    id="cancel"
+                                                >
+                                                    <path
+                                                        fill="white"
+                                                        d="M13.41,12l4.3-4.29a1,1,0,1,0-1.42-1.42L12,10.59,7.71,6.29A1,1,0,0,0,6.29,7.71L10.59,12l-4.3,4.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L12,13.41l4.29,4.3a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.42Z"
+                                                    ></path>
+                                                </svg>
+                                            </i>
+                                        </button>
+                                    </div>
+                                )}
+                                <div className="grid grid-cols-2 gap-4 mt-8">
+                                    <div>
+                                        <span className="font-semibold">Passenger name</span>:{" "}
                                         {
                                             ticketData
                                                 .filter((ticket) => ticket.flight_id._id === flight._id)
                                                 .find((ticket) => ticket._id === ticketData[index]._id)?.full_name
                                         }
-                                    </td>
-                                    <td>
+                                    </div>
+                                    <div>
+                                        <span className="font-semibold">Identification number</span>:{" "}
+                                        {
+                                            ticketData
+                                                .filter((ticket) => ticket.flight_id._id === flight._id)
+                                                .find((ticket) => ticket._id === ticketData[index]._id)?.CMND
+                                        }
+                                    </div>
+                                    <div>
+                                        <span className="font-semibold">Phone number</span>:{" "}
                                         {
                                             ticketData
                                                 .filter((ticket) => ticket.flight_id._id === flight._id)
                                                 .find((ticket) => ticket._id === ticketData[index]._id)?.phone_number
                                         }
-                                    </td>
-                                    <td>{flight.flight_number}</td>
-                                    <td>{shortenAirportName(flight.departure_airport.name)}</td>
-                                    <td>{shortenAirportName(flight.destination_airport.name)}</td>
-                                    <td>{formatDateTime(flight.departure_datetime)}</td>
-                                    <td>
+                                    </div>
+                                    <div>
+                                        <span className="font-semibold">Flight number</span>: {flight.flight_number}
+                                    </div>
+                                    <div>
+                                        <span className="font-semibold">Departure airport</span>:{" "}
+                                        {shortenAirportName(flight.departure_airport.name)}
+                                    </div>
+                                    <div>
+                                        <span className="font-semibold">Arrival airport</span>:{" "}
+                                        {shortenAirportName(flight.destination_airport.name)}
+                                    </div>
+                                    <div>
+                                        <span className="font-semibold">Departure date & time</span>:{" "}
+                                        {formatDateTime(flight.departure_datetime)}
+                                    </div>
+                                    <div>
+                                        <span className="font-semibold">Seating type</span>:{" "}
                                         {ticketData
                                             .filter((ticket) => ticket.flight_id._id === flight._id)
                                             .find((ticket) => ticket._id === ticketData[index]._id)?.seat_class === "1"
                                             ? "First class"
                                             : "Second class"}
-                                    </td>
-                                    <td>
+                                    </div>
+                                    <div>
+                                        <span className="font-semibold">Price</span>:{" "}
                                         {
                                             ticketData
                                                 .filter((ticket) => ticket.flight_id._id === flight._id)
                                                 .find((ticket) => ticket._id === ticketData[index]._id)?.price
                                         }{" "}
                                         USD
-                                    </td>
-                                    <td>
+                                    </div>
+                                    <div>
+                                        <span className="font-semibold">Status</span>:{" "}
                                         {
                                             ticketData
                                                 .filter((ticket) => ticket.flight_id._id === flight._id)
                                                 .find((ticket) => ticket._id === ticketData[index]._id)?.status
                                         }
-                                    </td>
-                                    <td className="text-center">
-                                        <button
-                                            onClick={() => {
-                                                if (selectedId === ticketData[index]._id) {
-                                                    setSelectedId("");
-                                                } else setSelectedId(ticketData[index]._id);
-                                            }}
-                                            className="hover:border-primary inline-block bg-block rounded-full border border-blue items-center justify-center"
-                                        >
-                                            <i>
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
-                                                    width={20}
-                                                    height={20}
-                                                    id="dot"
-                                                    className="scale-150"
-                                                >
-                                                    {selectedId === ticketData[index]._id && (
-                                                        <path
-                                                            className="fill-blue"
-                                                            d="M7.8 10a2.2 2.2 0 0 0 4.4 0 2.2 2.2 0 0 0-4.4 0z"
-                                                        ></path>
-                                                    )}
-                                                </svg>
-                                            </i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                )}
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                </div>
             </div>
         </>
     );

@@ -8,6 +8,7 @@ import IsRequired from "~/icons/IsRequired";
 import { useAppDispatch, useAppSelector } from "~/hook";
 import { sendMessage } from "~/actions/message";
 import checkPermission from "~/utils/checkPermission";
+import PermissionNotFound from "../common/PermissionNotFound";
 
 const schema = yup.object().shape({
     groupCode: yup.string().required("Group code is required."),
@@ -55,7 +56,7 @@ function AdminPermissionGroups() {
                 dispatch(sendMessage("Created successfully!", "success"));
                 const timer = setTimeout(() => {
                     window.location.reload();
-                }, 2000);
+                }, 1000);
                 return () => clearTimeout(timer);
             } catch (error) {
                 dispatch(sendMessage("Created failed!", "error"));
@@ -219,7 +220,7 @@ function AdminPermissionGroups() {
             </Portal>
         </>
     ) : (
-        "You don't have permission to access this page."
+        <PermissionNotFound />
     );
 }
 

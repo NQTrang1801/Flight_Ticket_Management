@@ -188,7 +188,7 @@ const ScheduleUpdating: React.FC<FlightScheduleData> = ({
                 );
                 dispatch(stopLoading());
                 dispatch(sendMessage("Updated successfully!", "success"));
-                setTimeout(() => window.location.reload(), 2000);
+                setTimeout(() => window.location.reload(), 1000);
             } catch (error) {
                 dispatch(stopLoading());
                 dispatch(sendMessage(`Updated failed!`, "error"));

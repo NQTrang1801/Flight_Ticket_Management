@@ -58,7 +58,7 @@ const AdminUser: React.FC<UserProps> = ({ email, fullname, group_name, isBlocked
                 dispatch(sendMessage("Blocked successfully!", "success"));
                 setTimeout(() => {
                     window.location.reload();
-                }, 2000);
+                }, 1000);
             })
             .catch((error) => {
                 console.error(error);
@@ -82,7 +82,7 @@ const AdminUser: React.FC<UserProps> = ({ email, fullname, group_name, isBlocked
                 dispatch(sendMessage("Unblocked successfully!", "success"));
                 setTimeout(() => {
                     window.location.reload();
-                }, 2000);
+                }, 1000);
             })
             .catch((error) => {
                 console.error(error);
@@ -108,7 +108,7 @@ const AdminUser: React.FC<UserProps> = ({ email, fullname, group_name, isBlocked
                 dispatch(sendMessage("Updated successfully!", "success"));
                 setTimeout(() => {
                     window.location.reload();
-                }, 2000);
+                }, 1000);
             })
             .catch((error) => {
                 console.error(error);

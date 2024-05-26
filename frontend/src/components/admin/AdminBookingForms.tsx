@@ -12,6 +12,7 @@ import Tippy from "@tippyjs/react/headless";
 import formatDateTime from "~/utils/formatDateTime";
 import AdminBookingForm from "./AdminBookingForm";
 import checkPermission from "~/utils/checkPermission";
+import PermissionNotFound from "../common/PermissionNotFound";
 
 const schema = yup.object().shape({
     fullName: yup.string().required("Full name is required."),
@@ -89,7 +90,7 @@ function AdminBookingForms() {
                     );
                     dispatch(stopLoading());
                     dispatch(sendMessage("Created successfully!", "success"));
-                    setTimeout(() => window.location.reload(), 2000);
+                    setTimeout(() => window.location.reload(), 1000);
                 } catch (error) {
                     dispatch(stopLoading());
                     dispatch(sendMessage(`Created failed! ${error.response.data.message}`, "error"));
@@ -147,7 +148,7 @@ function AdminBookingForms() {
         if (Object.keys(selectedFlight).length > 0 && Object.keys(selectedUser).length > 0) setFormSubmitted(false);
     }, [selectedFlight, selectedUser]);
 
-    return (
+    return checkPermission(permissions, "580320946") ? (
         <>
             <div className="flex justify-between items-center mb-6">
                 <div>
@@ -236,38 +237,40 @@ function AdminBookingForms() {
                         </div>
                     </Tippy>
                 </div>
-                <button
-                    onClick={() => {
-                        show();
-                    }}
-                    className="bg-block rounded-xl border-blue border hover:border-primary hover:bg-primary flex items-center justify-center p-3 w-[112px]"
-                >
-                    <i className="mr-[3px]">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            id="add"
-                            x="0"
-                            y="0"
-                            version="1.1"
-                            viewBox="0 0 29 29"
-                            xmlSpace="preserve"
-                            width={20}
-                            height={20}
-                            className="translate-x-[-3px]"
-                        >
-                            <path
-                                fill="none"
-                                stroke="#fff"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeMiterlimit="10"
-                                strokeWidth="2"
-                                d="M14.5 22V7M7 14.5h15"
-                            ></path>
-                        </svg>
-                    </i>
-                    Create
-                </button>
+                {checkPermission(permissions, "511320447") && (
+                    <button
+                        onClick={() => {
+                            show();
+                        }}
+                        className="bg-block rounded-xl border-blue border hover:border-primary hover:bg-primary flex items-center justify-center p-3 w-[112px]"
+                    >
+                        <i className="mr-[3px]">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                id="add"
+                                x="0"
+                                y="0"
+                                version="1.1"
+                                viewBox="0 0 29 29"
+                                xmlSpace="preserve"
+                                width={20}
+                                height={20}
+                                className="translate-x-[-3px]"
+                            >
+                                <path
+                                    fill="none"
+                                    stroke="#fff"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeMiterlimit="10"
+                                    strokeWidth="2"
+                                    d="M14.5 22V7M7 14.5h15"
+                                ></path>
+                            </svg>
+                        </i>
+                        Create
+                    </button>
+                )}
             </div>
 
             <div className="bg-block p-6 rounded-3xl shadow-xl">
@@ -570,6 +573,8 @@ function AdminBookingForms() {
                 </div>
             </Portal>
         </>
+    ) : (
+        <PermissionNotFound />
     );
 }
 

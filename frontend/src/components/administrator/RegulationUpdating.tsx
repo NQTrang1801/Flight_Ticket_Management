@@ -76,7 +76,7 @@ const RegulationUpdating: React.FC<RuleProps> = ({ ruleName, detail, values, cod
                     dispatch(sendMessage("Updated sucessfully!", "success"));
                     setTimeout(() => {
                         window.location.reload();
-                    }, 2000);
+                    }, 1000);
                 })
                 .catch((error) => {
                     dispatch(stopLoading());

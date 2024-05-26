@@ -38,7 +38,7 @@ function Header() {
         case "booking-forms":
             searchingPlaceholder = "identification number";
             break;
-        case "flight-schedule":
+        case "flight-schedules":
             searchingPlaceholder = "flight number";
             break;
         case "booking-ticket":

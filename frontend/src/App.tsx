@@ -16,7 +16,6 @@ import UserRoutes from "./components/common/UserRoutes";
 import AdminRoutes from "./components/common/AdminRoutes";
 import Users from "./components/administrator/Users";
 import BookingForms from "./components/administrator/BookingForms";
-import BookingTicket from "./components/administrator/BookingTicket";
 import UserAirports from "./components/user/UserAirports";
 import UserAccount from "./components/user/UserAccount";
 import AdminPermissionGroups from "./components/admin/AdminPermissionGroups";
@@ -32,6 +31,7 @@ import AdminUsers from "./components/admin/AdminUsers";
 import AdminPermissionGroup from "./components/admin/AdminPermissionGroup";
 import PermissionGroups from "./components/administrator/PermissionGroups";
 import UserTickets from "./components/user/UserTickets";
+import UserBookingTicket from "./components/user/UserBookingTicket";
 
 function App() {
     const root = document.querySelector("#root");
@@ -75,6 +75,7 @@ function App() {
     useEffect(() => {
         if (isLoggedIn) {
             const userId = JSON.parse(localStorage.getItem("user")!)._id;
+            const userType = JSON.parse(localStorage.getItem("user")!).userType;
 
             const prevPermissions = permissionsRef.current;
             const isPermissionsUpdated = prevPermissions !== null;
@@ -99,8 +100,7 @@ function App() {
                     console.error(error);
                 }
             };
-
-            fetchData();
+            if (userType !== "USER") fetchData();
         }
     }, [dispatch, isLoggedIn]);
 
@@ -135,7 +135,7 @@ function App() {
                     <Route path="/admin/permission-groups/:id" element={<AdminPermissionGroup />} />
                 </Route>
                 <Route path="/user" element={<UserRoutes />}>
-                    <Route index element={<BookingTicket />} />
+                    <Route index element={<UserBookingTicket />} />
                     <Route path="/user/airports" element={<UserAirports />} />
                     <Route path="/user/user-account" element={<UserAccount />} />
                     <Route path="/user/tickets" element={<UserTickets />} />

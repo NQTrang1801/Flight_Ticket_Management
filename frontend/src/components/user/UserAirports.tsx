@@ -26,7 +26,10 @@ function UserAirports() {
                         data
                             ?.filter((airport) => airport.name.toLowerCase().includes(query.toLowerCase()))
                             .map((airport) => (
-                                <div className="p-6 rounded-xl overflow-hidden shadow-xl border border-primary bg-background relative">
+                                <div
+                                    key={airport._id}
+                                    className="p-6 rounded-xl overflow-hidden shadow-xl border border-primary bg-background relative"
+                                >
                                     <div
                                         className={`${
                                             airport.isInternational ? "bg-primary" : "bg-blue"
