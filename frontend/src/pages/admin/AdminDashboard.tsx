@@ -4,6 +4,7 @@ import Tippy from "@tippyjs/react/headless";
 import getMonthName from "~/utils/getMonthName";
 import { useAppSelector } from "~/hook";
 import checkPermission from "~/utils/checkPermission";
+import PermissionNotFound from "~/components/PermissionNotFound";
 
 function AdminDashboard() {
     const [yearlyRevenueData, setYearlyRevenueData] = useState<YearlyRevenueProps>();
@@ -310,7 +311,7 @@ function AdminDashboard() {
                     )}
                 </div>
             ) : (
-                "You don't have permission to access this page."
+                <PermissionNotFound />
             )}
         </>
     );

@@ -19,7 +19,7 @@ import BookingForms from "./pages/BookingForms";
 import BookingTicket from "./pages/BookingTicket";
 import UserAirports from "./pages/UserAirports";
 import UserAccount from "./pages/UserAccount";
-import PermissionGroups from "./pages/PermissionGroups";
+import AdminPermissionGroups from "./pages/admin/AdminPermissionGroups";
 import PermissionGroup from "./pages/PermissionGroup";
 import axios from "./utils/axios";
 import { updatePermissions } from "./actions/permissions";
@@ -28,6 +28,9 @@ import AdminFlightSchedules from "./pages/admin/AdminFlightSchedules";
 import AdminBookingForms from "./pages/admin/AdminBookingForms";
 import AdminAirports from "./pages/admin/AdminAirports";
 import AdminRegulations from "./pages/admin/AdminRegulations";
+import AdminUsers from "./pages/admin/AdminUsers";
+import AdminPermissionGroup from "./pages/admin/AdminPermissionGroup";
+import PermissionGroups from "./pages/PermissionGroups";
 
 function App() {
     const root = document.querySelector("#root");
@@ -126,6 +129,9 @@ function App() {
                     <Route path="/admin/airports" element={<AdminAirports />} />
                     <Route path="/admin/booking-forms" element={<AdminBookingForms />} />
                     <Route path="/admin/regulations" element={<AdminRegulations />} />
+                    <Route path="/admin/users" element={<AdminUsers />} />
+                    <Route path="/admin/permission-groups" element={<AdminPermissionGroups />} />
+                    <Route path="/admin/permission-groups/:id" element={<AdminPermissionGroup />} />
                 </Route>
                 <Route path="/user" element={<UserRoutes />}>
                     <Route index element={<BookingTicket />} />

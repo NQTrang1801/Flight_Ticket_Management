@@ -1,6 +1,8 @@
 import React from "react";
 import { useState } from "react";
 import AdminRegulationUpdating from "./AdminRegulationUpdating";
+import { useAppSelector } from "~/hook";
+import checkPermission from "~/utils/checkPermission";
 
 interface RuleProps {
     code: string;
@@ -12,6 +14,7 @@ interface RuleProps {
 
 const AdminRegulation: React.FC<RuleProps> = ({ code, ruleName, ruleDetail, value }) => {
     const [updatingMode, setUpdatingMode] = useState(false);
+    const { permissions } = useAppSelector((state) => state.permissions!);
 
     return (
         <>
@@ -19,7 +22,7 @@ const AdminRegulation: React.FC<RuleProps> = ({ code, ruleName, ruleDetail, valu
                 <div className="absolute top-0 left-0 right-0 p-2 text-center font-semibold text-base bg-primary">
                     Regulation
                 </div>
-                {code !== "R2" && (
+                {checkPermission(permissions, "511454340") && code !== "R2" && (
                     <div className="absolute top-14 right-6 flex gap-2">
                         <button
                             onClick={() => {

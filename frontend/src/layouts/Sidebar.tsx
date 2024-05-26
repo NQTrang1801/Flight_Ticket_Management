@@ -259,7 +259,7 @@ function Sidebar() {
                         )}
                     </NavLink>
                 )}
-                {userType === "administrator" && (
+                {userType !== "user" && (
                     <NavLink
                         to={`${userType}/permission-groups`}
                         className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
