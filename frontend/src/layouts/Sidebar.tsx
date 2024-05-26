@@ -7,7 +7,7 @@ function Sidebar() {
     return (
         <div className="w-[240px] bg-background z-20 fixed top-0 bottom-0 flex flex-col pb-10 pt-6 border-r-[1px] border-r-solid border-r-border px-5">
             <div className="flex items-center justify-center">
-                <img src={logo} className="w-64 mb-8" alt="logo" />
+                <img src={logo} className="w-40 mb-6 rounded-full overflow-hidden" alt="logo" />
             </div>
             {userType !== "user" && <p className="pl-4 pb-3 text-blue capitalize">{userType} site</p>}
             <div className="flex flex-col pb-[32px] gap-2">

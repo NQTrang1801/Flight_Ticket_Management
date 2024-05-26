@@ -66,8 +66,6 @@ function Header() {
         return "dashboard";
     };
 
-    // console.log(location.pathname.split("/"));
-
     return (
         <header
             className={`bg-background_80 ${

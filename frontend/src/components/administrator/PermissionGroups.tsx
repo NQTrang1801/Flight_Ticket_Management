@@ -75,19 +75,6 @@ function PermissionGroups() {
                 })
                 .catch((err) => console.error(err));
         })();
-
-        (async () => {
-            await axios
-                .get("/permission/511320990/all", {
-                    headers: {
-                        Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")!).token}`
-                    }
-                })
-                .then((response) => {
-                    console.log(response.data);
-                })
-                .catch((err) => console.error(err));
-        })();
     }, []);
 
     return (

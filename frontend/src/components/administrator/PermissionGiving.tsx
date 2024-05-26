@@ -15,7 +15,7 @@ const PermissionGiving: React.FC<{ _id: string | undefined }> = ({ _id }) => {
     const [selectedFuncs, setSelectedFuncs] = useState([]);
 
     const collectionNames = [
-        "Normal",
+        "Website",
         "Rule",
         "User",
         "Groups",

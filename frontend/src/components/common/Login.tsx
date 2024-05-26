@@ -65,7 +65,7 @@ const Login: React.FC = () => {
             </div>
             <div className="flex flex-col gap-8 items-center justify-center col-span-2">
                 <div className="flex flex-col justify-center items-center text-black">
-                    <img src={logo} width={256} height={256} />
+                    <img src={logo} width={184} height={184} />
                     <div className="text-primary font-semibold text-3xl mt-8 mb-4">Flight Ticket Management</div>
                     <div className="capitalize text-xl font-medium text-blue">
                         {userType !== "user" ? userType + " site" : "Welcome back"}

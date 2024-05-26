@@ -21,7 +21,7 @@ interface RuleProps {
     code: string;
 }
 
-const RuleUpdating: React.FC<RuleProps> = ({ ruleName, detail, values, code }) => {
+const RegulationUpdating: React.FC<RuleProps> = ({ ruleName, detail, values, code }) => {
     const [stateValues, setStateValues] = useState(values);
     const { Portal, hide } = usePortal({
         defaultShow: true
@@ -194,4 +194,4 @@ const RuleUpdating: React.FC<RuleProps> = ({ ruleName, detail, values, code }) =
     );
 };
 
-export default RuleUpdating;
+export default RegulationUpdating;

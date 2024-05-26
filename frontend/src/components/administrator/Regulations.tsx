@@ -8,7 +8,7 @@ import IsRequired from "~/icons/IsRequired";
 import { useAppDispatch } from "~/hook";
 import { startLoading, stopLoading } from "~/actions/loading";
 import { sendMessage } from "~/actions/message";
-import Rule from "~/components/administrator/Rule";
+import Regulation from "~/components/administrator/Regulation";
 
 const schema = yup.object().shape({
     ruleName: yup.string().required("Rule name is required."),
@@ -123,7 +123,7 @@ function Regulations() {
                         data
                             // ?.filter((actor) => actor.fullName.toLowerCase().includes(query.toLowerCase()))
                             .map((rule) => (
-                                <Rule
+                                <Regulation
                                     key={rule.code}
                                     _id={rule._id}
                                     code={rule.code}

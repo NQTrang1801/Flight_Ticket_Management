@@ -268,37 +268,40 @@ const AdminUser: React.FC<UserProps> = ({ email, fullname, group_name, isBlocked
                         <span className="font-semibold">Blocked</span>: {isBlocked === false ? "False" : "True"}
                     </div>
                 </div>
-                <div className="mt-4">
-                    <span className="font-semibold">Purchase:</span>
-                    <table className="w-full bg-block mt-4">
-                        <thead>
-                            <tr className={`text-center ${isBlocked ? "bg-mdRed" : "bg-primary"}`}>
-                                <th className="">Index</th>
-                                <th className="">Passenger name</th>
-                                <th className="">Phone number</th>
-                                <th className="">Flight number</th>
-                                <th className="">Departure</th>
-                                <th className="">Arrival</th>
-                                <th className="">Departure datetime</th>
-                                <th className="">Seating type</th>
-                                <th className="">Price</th>
-                                <th className="">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {ticketData &&
-                                flightData?.map((flight, index) => (
-                                    <tr key={flight._id} className="text-center">
+                {ticketData && (
+                    <div className="mt-4">
+                        <span className="font-semibold">Purchase:</span>
+                        <table className="w-full bg-block mt-4">
+                            <thead>
+                                <tr className={`text-center ${isBlocked ? "bg-mdRed" : "bg-primary"}`}>
+                                    <th className="">Index</th>
+                                    <th className="">Passenger name</th>
+                                    <th className="">Phone number</th>
+                                    <th className="">Flight number</th>
+                                    <th className="">Departure</th>
+                                    <th className="">Arrival</th>
+                                    <th className="">Departure datetime</th>
+                                    <th className="">Seating type</th>
+                                    <th className="">Price</th>
+                                    <th className="">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {flightData?.map((flight, index) => (
+                                    <tr key={ticketData[index]._id} className="text-center">
                                         <td>{index + 1}</td>
                                         <td>
                                             {
-                                                ticketData.find((ticket) => ticket.flight_id._id === flight._id)
-                                                    ?.full_name
+                                                ticketData
+                                                    .filter((ticket) => ticket.flight_id._id === flight._id)
+                                                    .find((ticket) => ticket._id === ticketData[index]._id)?.full_name
                                             }
                                         </td>
                                         <td>
                                             {
-                                                ticketData.find((ticket) => ticket.flight_id._id === flight._id)
+                                                ticketData
+                                                    .filter((ticket) => ticket.flight_id._id === flight._id)
+                                                    .find((ticket) => ticket._id === ticketData[index]._id)
                                                     ?.phone_number
                                             }
                                         </td>
@@ -307,23 +310,34 @@ const AdminUser: React.FC<UserProps> = ({ email, fullname, group_name, isBlocked
                                         <td>{shortenAirportName(flight.destination_airport.name)}</td>
                                         <td>{formatDateTime(flight.departure_datetime)}</td>
                                         <td>
-                                            {ticketData.find((ticket) => ticket.flight_id._id === flight._id)
-                                                ?.seat_class === "1"
+                                            {ticketData
+                                                .filter((ticket) => ticket.flight_id._id === flight._id)
+                                                .find((ticket) => ticket._id === ticketData[index]._id)?.seat_class ===
+                                            "1"
                                                 ? "First class"
                                                 : "Second class"}
                                         </td>
                                         <td>
-                                            {ticketData.find((ticket) => ticket.flight_id._id === flight._id)?.price}{" "}
+                                            {
+                                                ticketData
+                                                    .filter((ticket) => ticket.flight_id._id === flight._id)
+                                                    .find((ticket) => ticket._id === ticketData[index]._id)?.price
+                                            }{" "}
                                             USD
                                         </td>
                                         <td>
-                                            {ticketData.find((ticket) => ticket.flight_id._id === flight._id)?.status}
+                                            {
+                                                ticketData
+                                                    .filter((ticket) => ticket.flight_id._id === flight._id)
+                                                    .find((ticket) => ticket._id === ticketData[index]._id)?.status
+                                            }
                                         </td>
                                     </tr>
                                 ))}
-                        </tbody>
-                    </table>
-                </div>
+                            </tbody>
+                        </table>
+                    </div>
+                )}
             </div>
             {updatingMode && userType === "user" && (
                 <UserUpdating

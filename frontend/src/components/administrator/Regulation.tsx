@@ -1,7 +1,6 @@
 import React from "react";
 import { useState } from "react";
-
-import RuleUpdating from "./RuleUpdating";
+import RegulationUpdating from "./RegulationUpdating";
 
 interface RuleProps {
     code: string;
@@ -11,7 +10,7 @@ interface RuleProps {
     _id: string;
 }
 
-const Rule: React.FC<RuleProps> = ({ code, ruleName, ruleDetail, value }) => {
+const Regulation: React.FC<RuleProps> = ({ code, ruleName, ruleDetail, value }) => {
     const [updatingMode, setUpdatingMode] = useState(false);
 
     return (
@@ -113,9 +112,9 @@ const Rule: React.FC<RuleProps> = ({ code, ruleName, ruleDetail, value }) => {
                     )}
                 </div>
             </div>
-            {updatingMode && <RuleUpdating ruleName={ruleName} detail={ruleDetail} values={value} code={code} />}
+            {updatingMode && <RegulationUpdating ruleName={ruleName} detail={ruleDetail} values={value} code={code} />}
         </>
     );
 };
 
-export default Rule;
+export default Regulation;

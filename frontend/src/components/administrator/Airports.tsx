@@ -72,7 +72,7 @@ function Airports() {
     };
 
     const dispatch = useAppDispatch();
-    const [international, setInternational] = useState(false);
+    const [international, setInternational] = useState(true);
     const [internationalVisible, setInternationalVisible] = useState(false);
 
     const [status, setStatus] = useState(true);
