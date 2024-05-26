@@ -318,6 +318,40 @@ function Sidebar() {
                         )}
                     </NavLink>
                 )}
+                {userType === "user" && (
+                    <NavLink
+                        to={`${userType}/tickets`}
+                        className="flex items-center group text-disabled hover:text-white rounded-xl py-3 px-4"
+                    >
+                        {({ isActive }) => (
+                            <>
+                                <i className="flex flex-start mr-2 w-[26px] items-center h-[26px]">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="26"
+                                        height="26"
+                                        viewBox="0 0 64 64"
+                                        id="ticket"
+                                    >
+                                        <path
+                                            className={`${
+                                                isActive ? "fill-white" : "fill-disabled"
+                                            } group-hover:fill-white`}
+                                            d="m.586 41.414 5.344 5.343a2 2 0 0 0 2.828 0A5.959 5.959 0 0 1 13 45c3.309 0 6 2.691 6 6a5.964 5.964 0 0 1-1.758 4.243 2 2 0 0 0 0 2.828l5.344 5.343c.391.391.902.586 1.414.586s1.024-.195 1.414-.586l38-38a1.996 1.996 0 0 0 0-2.828l-5.344-5.343a2 2 0 0 0-2.828 0A5.959 5.959 0 0 1 51 19c-3.309 0-6-2.691-6-6 0-1.603.625-3.109 1.758-4.243a2 2 0 0 0 0-2.828L41.414.586a2 2 0 0 0-2.828 0l-38 38a1.996 1.996 0 0 0 0 2.828zM26 18.828l1.586 1.586c.39.391.902.586 1.414.586s1.024-.195 1.414-.586a2 2 0 0 0 0-2.828L28.828 16 40 4.828l2.656 2.655A9.935 9.935 0 0 0 41 13c0 5.514 4.486 10 10 10a9.928 9.928 0 0 0 5.516-1.655L59.171 24 48 35.172l-1.586-1.586a2 2 0 1 0-2.828 2.828L45.172 38 24 59.172l-2.656-2.655A9.935 9.935 0 0 0 23 51c0-5.514-4.486-10-10-10a9.928 9.928 0 0 0-5.516 1.655L4.829 40 26 18.828z"
+                                        ></path>
+                                        <path
+                                            className={`${
+                                                isActive ? "fill-white" : "fill-disabled"
+                                            } group-hover:fill-white`}
+                                            d="M33.586 26.414c.39.391.902.586 1.414.586s1.024-.195 1.414-.586a2 2 0 0 0 0-2.828l-2-2a2 2 0 1 0-2.828 2.828l2 2zM37.586 30.414l2 2c.39.391.902.586 1.414.586s1.024-.195 1.414-.586a2 2 0 0 0 0-2.828l-2-2a2 2 0 1 0-2.828 2.828z"
+                                        ></path>
+                                    </svg>
+                                </i>
+                                Tickets
+                            </>
+                        )}
+                    </NavLink>
+                )}
                 {userType !== "user" ? (
                     <NavLink
                         to={`${userType}/users`}

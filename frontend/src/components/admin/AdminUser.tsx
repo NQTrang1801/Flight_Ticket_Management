@@ -270,7 +270,7 @@ const AdminUser: React.FC<UserProps> = ({ email, fullname, group_name, isBlocked
                 </div>
                 {ticketData && (
                     <div className="mt-4">
-                        <span className="font-semibold">Purchase:</span>
+                        <span className="font-semibold">Purchased:</span>
                         <table className="w-full bg-block mt-4">
                             <thead>
                                 <tr className={`text-center ${isBlocked ? "bg-mdRed" : "bg-primary"}`}>

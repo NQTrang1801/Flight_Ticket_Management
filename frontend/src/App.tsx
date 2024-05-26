@@ -31,6 +31,7 @@ import AdminRegulations from "./components/admin/AdminRegulations";
 import AdminUsers from "./components/admin/AdminUsers";
 import AdminPermissionGroup from "./components/admin/AdminPermissionGroup";
 import PermissionGroups from "./components/administrator/PermissionGroups";
+import UserTickets from "./components/user/UserTickets";
 
 function App() {
     const root = document.querySelector("#root");
@@ -137,6 +138,7 @@ function App() {
                     <Route index element={<BookingTicket />} />
                     <Route path="/user/airports" element={<UserAirports />} />
                     <Route path="/user/user-account" element={<UserAccount />} />
+                    <Route path="/user/tickets" element={<UserTickets />} />
                 </Route>
             </Route>
         </Routes>

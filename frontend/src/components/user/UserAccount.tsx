@@ -7,8 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useAppDispatch } from "~/hook";
 import { sendMessage } from "~/actions/message";
 import { startLoading, stopLoading } from "~/actions/loading";
-import shortenAirportName from "~/utils/shortenAirportName";
-import formatDateTime from "~/utils/formatDateTime";
+
 import UserUpdating from "~/components/administrator/UserUpdating";
 import IsRequired from "~/icons/IsRequired";
 
@@ -18,8 +17,7 @@ const schema = yup.object().shape({
 
 function UserAccount() {
     const [userData, setUserData] = useState<UserData>();
-    const [ticketData, setTicketData] = useState<TicketData[]>();
-    const [flightData, setFlightData] = useState<FlightScheduleData[]>();
+
     const [updatingMode, setUpdatingMode] = useState(false);
     const [visible, setVisible] = useState(false);
 
@@ -78,21 +76,6 @@ function UserAccount() {
                         (user: UserData) => user._id === JSON.parse(localStorage.getItem("user")!)._id
                     )
                 );
-
-                const ticketResponse = await axios.get(
-                    `/user/${JSON.parse(localStorage.getItem("user")!)._id}/tickets`
-                );
-                setTicketData(ticketResponse.data);
-
-                const flightPromises = ticketResponse.data.map((ticket: TicketData) =>
-                    axios.get(`/flight/${ticket.flight_id._id}`)
-                );
-
-                const flightResponses = await Promise.all(flightPromises);
-
-                const allFlightData = flightResponses.map((response) => response.data);
-
-                setFlightData(allFlightData);
 
                 dispatch(stopLoading());
             } catch (error) {
@@ -175,9 +158,9 @@ function UserAccount() {
                                 <span className="font-semibold">Address</span>: {userData?.address}
                             </div>
                         </div>
-                        {ticketData && (
+                        {/* {ticketData && (
                             <div className="mt-4">
-                                <span className="font-semibold">Purchase:</span>
+                                <span className="font-semibold">Purchased:</span>
                                 <table className="w-full bg-block mt-4">
                                     <thead>
                                         <tr className="text-center bg-primary">
@@ -247,7 +230,7 @@ function UserAccount() {
                                     </tbody>
                                 </table>
                             </div>
-                        )}
+                        )} */}
                     </div>
                 </div>
             </div>
