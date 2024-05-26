@@ -3,7 +3,7 @@ import Sidebar from "./Sidebar";
 import Header from "./Header";
 import HashLoader from "react-spinners/HashLoader";
 import { useAppSelector } from "~/hook";
-import LoaderPortal from "~/components/LoaderPortal";
+import LoaderPortal from "~/components/common/LoaderPortal";
 
 function Layout() {
     const { isLoading } = useAppSelector((state) => state.loading!);

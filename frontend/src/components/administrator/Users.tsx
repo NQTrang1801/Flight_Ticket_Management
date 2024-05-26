@@ -7,7 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import IsRequired from "~/icons/IsRequired";
 import { useAppDispatch, useAppSelector } from "~/hook";
 import { sendMessage } from "~/actions/message";
-import User from "~/components/User";
+import User from "~/components/administrator/User";
 import { startLoading, stopLoading } from "~/actions/loading";
 
 const schema = yup.object().shape({

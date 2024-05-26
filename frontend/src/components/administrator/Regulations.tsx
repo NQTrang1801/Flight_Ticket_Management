@@ -8,7 +8,7 @@ import IsRequired from "~/icons/IsRequired";
 import { useAppDispatch } from "~/hook";
 import { startLoading, stopLoading } from "~/actions/loading";
 import { sendMessage } from "~/actions/message";
-import Rule from "~/components/Rule";
+import Rule from "~/components/administrator/Rule";
 
 const schema = yup.object().shape({
     ruleName: yup.string().required("Rule name is required."),

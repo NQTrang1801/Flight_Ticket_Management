@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from "~/hook";
 import { startLoading, stopLoading } from "~/actions/loading";
 import { sendMessage } from "~/actions/message";
 import Tippy from "@tippyjs/react/headless";
-import BookingForm from "~/components/BookingForm";
+import BookingForm from "~/components/administrator/BookingForm";
 import formatDateTime from "~/utils/formatDateTime";
 
 const schema = yup.object().shape({

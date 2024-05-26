@@ -171,7 +171,7 @@ const AdminUser: React.FC<UserProps> = ({ email, fullname, group_name, isBlocked
                     {type === "USER" ? "User Account" : "Admin Account"}
                 </div>
                 <div className="absolute top-14 right-6 flex gap-2">
-                    {userType !== "administrator" && (
+                    {userType === "user" && (
                         <button
                             onClick={() => {
                                 setUpdatingMode(!updatingMode);
@@ -325,11 +325,10 @@ const AdminUser: React.FC<UserProps> = ({ email, fullname, group_name, isBlocked
                     </table>
                 </div>
             </div>
-            {updatingMode && userType !== "administrator" && (
+            {updatingMode && userType === "user" && (
                 <UserUpdating
                     email={email}
                     fullname={fullname}
-                    group_id={group_id}
                     isBlocked={isBlocked}
                     address={address}
                     mobile={mobile}

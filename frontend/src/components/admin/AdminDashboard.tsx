@@ -4,7 +4,7 @@ import Tippy from "@tippyjs/react/headless";
 import getMonthName from "~/utils/getMonthName";
 import { useAppSelector } from "~/hook";
 import checkPermission from "~/utils/checkPermission";
-import PermissionNotFound from "~/components/PermissionNotFound";
+import PermissionNotFound from "~/components/common/PermissionNotFound";
 
 function AdminDashboard() {
     const [yearlyRevenueData, setYearlyRevenueData] = useState<YearlyRevenueProps>();

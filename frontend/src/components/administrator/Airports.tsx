@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from "~/hook";
 import { startLoading, stopLoading } from "~/actions/loading";
 import { sendMessage } from "~/actions/message";
 import Tippy from "@tippyjs/react/headless";
-import Airport from "~/components/Airport";
+import Airport from "~/components/administrator/Airport";
 
 const schema = yup.object().shape({
     name: yup.string().required("Name is required."),

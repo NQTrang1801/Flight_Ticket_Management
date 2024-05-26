@@ -11,7 +11,7 @@ import { useAppDispatch, useAppSelector } from "~/hook";
 import { startLoading, stopLoading } from "~/actions/loading";
 import { sendMessage } from "~/actions/message";
 import convertDate from "~/utils/convertDate";
-import ScheduleItem from "~/components/ScheduleItem";
+import ScheduleItem from "~/components/administrator/ScheduleItem";
 import shortenAirportName from "~/utils/shortenAirportName";
 
 const schema = yup.object().shape({

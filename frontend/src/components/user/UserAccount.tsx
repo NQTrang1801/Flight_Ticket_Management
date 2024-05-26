@@ -9,7 +9,7 @@ import { sendMessage } from "~/actions/message";
 import { startLoading, stopLoading } from "~/actions/loading";
 import shortenAirportName from "~/utils/shortenAirportName";
 import formatDateTime from "~/utils/formatDateTime";
-import UserUpdating from "~/components/UserUpdating";
+import UserUpdating from "~/components/administrator/UserUpdating";
 import IsRequired from "~/icons/IsRequired";
 
 const schema = yup.object().shape({

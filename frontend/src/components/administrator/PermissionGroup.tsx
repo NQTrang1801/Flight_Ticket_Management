@@ -5,25 +5,23 @@ import axios from "~/utils/axios";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import IsRequired from "~/icons/IsRequired";
-import { useAppDispatch, useAppSelector } from "~/hook";
+import { useAppDispatch } from "~/hook";
 import { startLoading, stopLoading } from "~/actions/loading";
 import { sendMessage } from "~/actions/message";
 import { useParams } from "react-router-dom";
-import GroupDeleting from "~/components/GroupDeleting";
-import PermissionGiving from "~/components/PermissionGiving";
-import checkPermission from "~/utils/checkPermission";
+import GroupDeleting from "~/components/administrator/GroupDeleting";
+import PermissionGiving from "~/components/administrator/PermissionGiving";
 
 const schema = yup.object().shape({
     groupCode: yup.string().required("Group code is required.")
 });
 
-function AdminPermissionGroup() {
+function PermissionGroup() {
     const [groupData, setGroupData] = useState<GroupData>();
     const [permissionData, setPermissionData] = useState<PermissionData[]>();
     const [deletingMode, setDeletingMode] = useState(false);
     const [givingPermissionMode, setGivingPermissionMode] = useState(false);
     const [selectedIds, setSelectedIds] = useState(Array<string>);
-    const { permissions } = useAppSelector((state) => state.permissions!);
 
     const { id } = useParams();
 
@@ -126,13 +124,16 @@ function AdminPermissionGroup() {
                 });
                 setPermissionData(permissionResponse.data[groupResponse.data.groupCode]);
 
+                console.log(permissionResponse.data[groupResponse.data.groupCode]);
+
                 dispatch(stopLoading());
             } catch (error) {
                 console.error(error);
             }
         };
-        if (checkPermission(permissions, "511320413") && checkPermission(permissions, "511320990")) fetchData();
-    }, [dispatch, id, setValue, permissions]);
+
+        fetchData();
+    }, [dispatch, id, setValue]);
 
     return (
         <>
@@ -143,91 +144,85 @@ function AdminPermissionGroup() {
                         groupData.groupCode !== "511" && (
                             <div className="flex justify-between items-center mb-6">
                                 <div className="flex gap-4">
-                                    {checkPermission(permissions, "511246413") && (
-                                        <button
-                                            onClick={() => {
-                                                show();
-                                            }}
-                                            className="rounded-xl bg-block border-blue border hover:border-primary hover:bg-primary flex items-center justify-center p-3 "
-                                        >
-                                            <i className="mr-[3px]">
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 24 24"
-                                                    width={24}
-                                                    height={24}
-                                                    id="edit"
-                                                >
-                                                    <path
-                                                        className="fill-white"
-                                                        d="M5,18H9.24a1,1,0,0,0,.71-.29l6.92-6.93h0L19.71,8a1,1,0,0,0,0-1.42L15.47,2.29a1,1,0,0,0-1.42,0L11.23,5.12h0L4.29,12.05a1,1,0,0,0-.29.71V17A1,1,0,0,0,5,18ZM14.76,4.41l2.83,2.83L16.17,8.66,13.34,5.83ZM6,13.17l5.93-5.93,2.83,2.83L8.83,16H6ZM21,20H3a1,1,0,0,0,0,2H21a1,1,0,0,0,0-2Z"
-                                                    ></path>
-                                                </svg>
-                                            </i>
-                                            Update group
-                                        </button>
-                                    )}
-                                    {checkPermission(permissions, "511627413") && (
-                                        <button
-                                            onClick={() => {
-                                                setDeletingMode(!deletingMode);
-                                            }}
-                                            className="hover:bg-mdRed hover:border-mdRed bg-block rounded-xl border border-blue flex items-center justify-center p-3"
-                                        >
-                                            <i className="mr-[3px]">
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 32 32"
-                                                    width={24}
-                                                    height={24}
-                                                    id="delete"
-                                                >
-                                                    <path
-                                                        className="fill-white"
-                                                        d="M24.2,12.193,23.8,24.3a3.988,3.988,0,0,1-4,3.857H12.2a3.988,3.988,0,0,1-4-3.853L7.8,12.193a1,1,0,0,1,2-.066l.4,12.11a2,2,0,0,0,2,1.923h7.6a2,2,0,0,0,2-1.927l.4-12.106a1,1,0,0,1,2,.066Zm1.323-4.029a1,1,0,0,1-1,1H7.478a1,1,0,0,1,0-2h3.1a1.276,1.276,0,0,0,1.273-1.148,2.991,2.991,0,0,1,2.984-2.694h2.33a2.991,2.991,0,0,1,2.984,2.694,1.276,1.276,0,0,0,1.273,1.148h3.1A1,1,0,0,1,25.522,8.164Zm-11.936-1h4.828a3.3,3.3,0,0,1-.255-.944,1,1,0,0,0-.994-.9h-2.33a1,1,0,0,0-.994.9A3.3,3.3,0,0,1,13.586,7.164Zm1.007,15.151V13.8a1,1,0,0,0-2,0v8.519a1,1,0,0,0,2,0Zm4.814,0V13.8a1,1,0,0,0-2,0v8.519a1,1,0,0,0,2,0Z"
-                                                    ></path>
-                                                </svg>
-                                            </i>
-                                            Delete group
-                                        </button>
-                                    )}
+                                    <button
+                                        onClick={() => {
+                                            show();
+                                        }}
+                                        className="rounded-xl bg-block border-blue border hover:border-primary hover:bg-primary flex items-center justify-center p-3 "
+                                    >
+                                        <i className="mr-[3px]">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24"
+                                                width={24}
+                                                height={24}
+                                                id="edit"
+                                            >
+                                                <path
+                                                    className="fill-white"
+                                                    d="M5,18H9.24a1,1,0,0,0,.71-.29l6.92-6.93h0L19.71,8a1,1,0,0,0,0-1.42L15.47,2.29a1,1,0,0,0-1.42,0L11.23,5.12h0L4.29,12.05a1,1,0,0,0-.29.71V17A1,1,0,0,0,5,18ZM14.76,4.41l2.83,2.83L16.17,8.66,13.34,5.83ZM6,13.17l5.93-5.93,2.83,2.83L8.83,16H6ZM21,20H3a1,1,0,0,0,0,2H21a1,1,0,0,0,0-2Z"
+                                                ></path>
+                                            </svg>
+                                        </i>
+                                        Update group
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            setDeletingMode(!deletingMode);
+                                        }}
+                                        className="hover:bg-mdRed hover:border-mdRed bg-block rounded-xl border border-blue flex items-center justify-center p-3"
+                                    >
+                                        <i className="mr-[3px]">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 32 32"
+                                                width={24}
+                                                height={24}
+                                                id="delete"
+                                            >
+                                                <path
+                                                    className="fill-white"
+                                                    d="M24.2,12.193,23.8,24.3a3.988,3.988,0,0,1-4,3.857H12.2a3.988,3.988,0,0,1-4-3.853L7.8,12.193a1,1,0,0,1,2-.066l.4,12.11a2,2,0,0,0,2,1.923h7.6a2,2,0,0,0,2-1.927l.4-12.106a1,1,0,0,1,2,.066Zm1.323-4.029a1,1,0,0,1-1,1H7.478a1,1,0,0,1,0-2h3.1a1.276,1.276,0,0,0,1.273-1.148,2.991,2.991,0,0,1,2.984-2.694h2.33a2.991,2.991,0,0,1,2.984,2.694,1.276,1.276,0,0,0,1.273,1.148h3.1A1,1,0,0,1,25.522,8.164Zm-11.936-1h4.828a3.3,3.3,0,0,1-.255-.944,1,1,0,0,0-.994-.9h-2.33a1,1,0,0,0-.994.9A3.3,3.3,0,0,1,13.586,7.164Zm1.007,15.151V13.8a1,1,0,0,0-2,0v8.519a1,1,0,0,0,2,0Zm4.814,0V13.8a1,1,0,0,0-2,0v8.519a1,1,0,0,0,2,0Z"
+                                                ></path>
+                                            </svg>
+                                        </i>
+                                        Delete group
+                                    </button>
                                 </div>
                                 <div className="flex gap-4">
-                                    {checkPermission(permissions, "511454990") && (
-                                        <button
-                                            onClick={() => {
-                                                setGivingPermissionMode(!givingPermissionMode);
-                                            }}
-                                            className="rounded-xl bg-block border-blue border hover:border-primary hover:bg-primary flex items-center justify-center p-3 "
-                                        >
-                                            <i className="mr-[3px]">
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    id="add"
-                                                    x="0"
-                                                    y="0"
-                                                    version="1.1"
-                                                    viewBox="0 0 29 29"
-                                                    xmlSpace="preserve"
-                                                    width={24}
-                                                    height={24}
-                                                    className="translate-x-[-3px]"
-                                                >
-                                                    <path
-                                                        fill="none"
-                                                        stroke="#fff"
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                        strokeMiterlimit="10"
-                                                        strokeWidth="2"
-                                                        d="M14.5 22V7M7 14.5h15"
-                                                    ></path>
-                                                </svg>
-                                            </i>
-                                            Give permission
-                                        </button>
-                                    )}
-                                    {checkPermission(permissions, "511627990") && selectedIds.length > 0 && (
+                                    <button
+                                        onClick={() => {
+                                            setGivingPermissionMode(!givingPermissionMode);
+                                        }}
+                                        className="rounded-xl bg-block border-blue border hover:border-primary hover:bg-primary flex items-center justify-center p-3 "
+                                    >
+                                        <i className="mr-[3px]">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                id="add"
+                                                x="0"
+                                                y="0"
+                                                version="1.1"
+                                                viewBox="0 0 29 29"
+                                                xmlSpace="preserve"
+                                                width={24}
+                                                height={24}
+                                                className="translate-x-[-3px]"
+                                            >
+                                                <path
+                                                    fill="none"
+                                                    stroke="#fff"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeMiterlimit="10"
+                                                    strokeWidth="2"
+                                                    d="M14.5 22V7M7 14.5h15"
+                                                ></path>
+                                            </svg>
+                                        </i>
+                                        Give permission
+                                    </button>
+                                    {selectedIds.length > 0 && (
                                         <button
                                             onClick={() => {
                                                 handleDeletePermissions();
@@ -400,4 +395,4 @@ function AdminPermissionGroup() {
     );
 }
 
-export default AdminPermissionGroup;
+export default PermissionGroup;
