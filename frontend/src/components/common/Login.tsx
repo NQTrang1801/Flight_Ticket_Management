@@ -47,7 +47,7 @@ const Login: React.FC = () => {
                 return () => clearTimeout(timer);
             })
             .catch((error) => {
-                dispatch(sendMessage("The email address or password is incorrect!", "error"));
+                dispatch(sendMessage(`Login fail! ${error.response.data.message}`, "error"));
                 console.error(error);
             });
     };

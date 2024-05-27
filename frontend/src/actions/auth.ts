@@ -13,12 +13,12 @@ export const login = (email: string, password: string, userType: string) => (dis
 
             return Promise.resolve();
         },
-        () => {
+        (error) => {
             dispatch({
                 type: LOGIN_FAIL
             });
 
-            return Promise.reject();
+            return Promise.reject(error);
         }
     );
 };
