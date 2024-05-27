@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const airportSchema = new mongoose.Schema({
     code: { type: String, required: true, unique: true }, // Mã sân bay, bắt buộc
-    name: { type: String, required: true }, // Tên sân bay, bắt buộc
+    name: { type: String, required: true, unique: true }, // Tên sân bay, bắt buộc
     country: { type: String, required: true }, // Quốc gia của sân bay, bắt buộc
     address: { type: String, required: false }, // Thành phố của sân bay
     timezone: { type: String, required: true }, // Múi giờ của sân bay, bắt buộc

@@ -227,6 +227,7 @@ const cancelRequestReservations = async () => {
             const cancelDate = new Date(flight.departure_datetime);
             cancelDate.setDate(cancelDate.getDate() + cancelDays);
             const cancelDateWithoutTime = new Date(cancelDate.getFullYear(), cancelDate.getMonth(), cancelDate.getDate());
+
             if (todayWithoutTime.getTime() == cancelDateWithoutTime.getTime()) {
                 await RequestReservation.updateMany({ flight_id: flight._id }, { status: 'Cancelled' });
                 await Reservation.updateMany({ flight_id: flight._id }, { status: 'Cancelled' });
