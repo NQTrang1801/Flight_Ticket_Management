@@ -2,6 +2,8 @@ const Airport = require("../models/airportModel");
 const Flight = require("../models/flightModel");
 const Rule = require('../models/ruleModel');
 const Reservation = require('../models/reservationModel');
+const RequestReservation = require('../models/requestReservationModel');
+
 const asyncHandler = require("express-async-handler");
 
 const createFlight = asyncHandler(async (req, res) => {
@@ -206,6 +208,18 @@ const deleteFlight = asyncHandler(async (req, res) => {
     const { id } = req.params;
     try {
         const flight = await Flight.findByIdAndDelete(id);
+
+        const requestReservationExists = await RequestReservation.exists({ flight_id: id });
+
+        if (requestReservationExists) {
+            return res.status(400).json({ message: "Cannot delete flight, related request reservations exist" });
+        }
+
+        const reservationExists = await Reservation.exists({ flight_id: id });
+        if (reservationExists) {
+            return res.status(400).json({ message: "Cannot delete flight, related reservations exist" });
+        }
+
         if (!flight) {
             return res.status(404).json({ message: "Flight not found" });
         }

@@ -1,4 +1,5 @@
 const Airport = require('../models/airportModel');
+const Flight = require('../models/flightModel');
 const Rule = require('../models/ruleModel');
 const asyncHandler = require('express-async-handler');
 
@@ -56,6 +57,20 @@ const getAllAirports = asyncHandler(async (req, res) => {
 const deleteAirport = asyncHandler(async (req, res) => {
     const { id } = req.params;
     try {
+        // Check if the airport exists in any flights
+        const isAirportInUse = await Flight.exists({
+            $or: [
+                { departure_airport: id },
+                { destination_airport: id },
+                { "transit_airports.airport_id": id }
+            ]
+        });
+
+        if (isAirportInUse) {
+            return res.status(400).json({ message: "Airport cannot be deleted as it is referenced in existing flights" });
+        }
+
+        // Delete the airport if not in use
         const airport = await Airport.findByIdAndDelete(id);
         if (!airport) {
             res.status(404).json({ message: "Airport not found" });
