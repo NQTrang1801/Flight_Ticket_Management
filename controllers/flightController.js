@@ -6,6 +6,11 @@ const asyncHandler = require("express-async-handler");
 
 const createFlight = asyncHandler(async (req, res) => {
     let flightData = req.body;
+    console.log(flightData)
+
+    if (flightData.ticket_price < 0 || flightData.seats[0].count < 0 || flightData.seats[1].count < 0) {
+        return res.status(400).json({ message: `invalid value!` });
+    }
 
     const ruleFlightTime = await Rule.findOne({ code: 'R1-2' });
     const ruleIntermediary = await Rule.findOne({ code: 'R1-3' });
