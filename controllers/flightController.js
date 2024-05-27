@@ -11,6 +11,13 @@ const createFlight = asyncHandler(async (req, res) => {
         return res.status(400).json({ message: `invalid value!` });
     }
 
+    const c_date = new Date();
+    const checkDate = new Date(flightData.departure_datetime);
+    checkDate.setDate(checkDate.getDate() + 1);
+    if (checkDate < c_date) {
+        return res.status(400).json({ message: `invalid departure datetime!` });
+    }
+
     const ruleFlightTime = await Rule.findOne({ code: 'R1-2' });
     const ruleIntermediary = await Rule.findOne({ code: 'R1-3' });
     const ruleTickets = await Rule.findOne({ code: 'R2' });
