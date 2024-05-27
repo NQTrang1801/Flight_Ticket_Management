@@ -1,4 +1,5 @@
 import { SEND_MESSAGE } from "./types";
+import { DISMISS_MESSAGE } from "./types";
 
 export const sendMessage = (message: string, type: string) => ({
     type: SEND_MESSAGE,
@@ -6,3 +7,7 @@ export const sendMessage = (message: string, type: string) => ({
 });
 
 export type sendMessageAction = ReturnType<typeof sendMessage>;
+
+export const dismissMessage = () => ({
+    type: DISMISS_MESSAGE
+});

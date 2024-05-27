@@ -32,11 +32,12 @@ import AdminPermissionGroup from "./components/admin/AdminPermissionGroup";
 import PermissionGroups from "./components/administrator/PermissionGroups";
 import UserTickets from "./components/user/UserTickets";
 import UserBookingTicket from "./components/user/UserBookingTicket";
+import { dismissMessage } from "./actions/message";
 
 function App() {
     const root = document.querySelector("#root");
     const { isLoading } = useAppSelector((state) => state.loading!);
-    const { message, type } = useAppSelector((state) => state.message!);
+    const { message, type, showToast } = useAppSelector((state) => state.message!);
     const permissionsRef = useRef(null);
 
     const dispatch = useAppDispatch();
@@ -51,7 +52,7 @@ function App() {
     }, [isLoading, root?.classList]);
 
     useEffect(() => {
-        if (message !== "") {
+        if (showToast) {
             switch (type) {
                 case "info":
                     toast.info(message);
@@ -70,7 +71,9 @@ function App() {
                     break;
             }
         }
-    }, [message, type]);
+
+        dispatch(dismissMessage());
+    }, [message, type, showToast, dispatch]);
 
     useEffect(() => {
         if (isLoggedIn) {

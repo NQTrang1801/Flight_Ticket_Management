@@ -405,51 +405,6 @@ function UserBookingTicket() {
                             </div>
                             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
                                 <div className="flex gap-2 flex-col">
-                                    <label htmlFor="fullName" className="flex gap-1 mb-1 items-center">
-                                        Full name
-                                        <IsRequired />
-                                    </label>
-                                    <input
-                                        type="text"
-                                        id="fullName"
-                                        placeholder="Full name . . ."
-                                        {...register("fullName")}
-                                        className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
-                                    />
-                                    {<span className="text-deepRed">{errors.fullName?.message}</span>}
-                                </div>
-
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="flex gap-2 flex-col">
-                                        <label htmlFor="identificationNumber" className="flex gap-1 mb-1 items-center">
-                                            Identification number
-                                            <IsRequired />
-                                        </label>
-                                        <input
-                                            type="text"
-                                            id="identificationNumber"
-                                            placeholder="Identification number . . ."
-                                            {...register("identificationNumber")}
-                                            className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
-                                        />
-                                        {<span className="text-deepRed">{errors.identificationNumber?.message}</span>}
-                                    </div>
-                                    <div className="flex gap-2 flex-col">
-                                        <label htmlFor="phoneNumber" className="flex gap-1 mb-1 items-center">
-                                            Phone number
-                                            <IsRequired />
-                                        </label>
-                                        <input
-                                            type="text"
-                                            id="phoneNumber"
-                                            placeholder="Phone number . . ."
-                                            {...register("phoneNumber")}
-                                            className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
-                                        />
-                                        {<span className="text-deepRed">{errors.phoneNumber?.message}</span>}
-                                    </div>
-                                </div>
-                                <div className="flex gap-2 flex-col">
                                     <label htmlFor="flight" className="flex gap-1 mb-1 items-center">
                                         Flight
                                         <IsRequired />
@@ -525,6 +480,51 @@ function UserBookingTicket() {
                                                 "Flight is required."}
                                         </span>
                                     }
+                                </div>
+                                <div className="flex gap-2 flex-col">
+                                    <label htmlFor="fullName" className="flex gap-1 mb-1 items-center">
+                                        Full name
+                                        <IsRequired />
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="fullName"
+                                        placeholder="Full name . . ."
+                                        {...register("fullName")}
+                                        className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
+                                    />
+                                    {<span className="text-deepRed">{errors.fullName?.message}</span>}
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="flex gap-2 flex-col">
+                                        <label htmlFor="identificationNumber" className="flex gap-1 mb-1 items-center">
+                                            Identification number
+                                            <IsRequired />
+                                        </label>
+                                        <input
+                                            type="text"
+                                            id="identificationNumber"
+                                            placeholder="Identification number . . ."
+                                            {...register("identificationNumber")}
+                                            className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
+                                        />
+                                        {<span className="text-deepRed">{errors.identificationNumber?.message}</span>}
+                                    </div>
+                                    <div className="flex gap-2 flex-col">
+                                        <label htmlFor="phoneNumber" className="flex gap-1 mb-1 items-center">
+                                            Phone number
+                                            <IsRequired />
+                                        </label>
+                                        <input
+                                            type="text"
+                                            id="phoneNumber"
+                                            placeholder="Phone number . . ."
+                                            {...register("phoneNumber")}
+                                            className="bg-[rgba(141,124,221,0.1)] text-sm focus:outline-primary focus:outline focus:outline-1 outline outline-blue outline-1 text-white px-4 py-3 rounded-lg placeholder:text-disabled"
+                                        />
+                                        {<span className="text-deepRed">{errors.phoneNumber?.message}</span>}
+                                    </div>
                                 </div>
 
                                 {Object.keys(selectedFlight).length > 0 && (

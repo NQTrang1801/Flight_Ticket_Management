@@ -112,7 +112,7 @@ const AdminRegulationUpdating: React.FC<RuleProps> = ({ ruleName, detail, values
                                 </i>
                             </button>
                             <div className="flex justify-center mb-8">
-                                <div className="text-white font-semibold text-xl">Update rule</div>
+                                <div className="text-white font-semibold text-xl">Update regulation</div>
                             </div>
                             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
                                 <div className="text-blue text-[15px]">Rule information</div>
@@ -183,7 +183,7 @@ const AdminRegulationUpdating: React.FC<RuleProps> = ({ ruleName, detail, values
                                     className="py-3 px-8 mt-3 text-base font-semibold rounded-lg border-blue border hover:border-primary hover:bg-primary"
                                     type="submit"
                                 >
-                                    Update rule
+                                    Update regulation
                                 </button>
                             </form>
                         </div>
