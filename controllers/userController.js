@@ -38,7 +38,11 @@ const createUser = asyncHandler(async (req, res) => {
 const loginUSER = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
     const account = await User.findOne({ email });
-    if (account && (await account.isPasswordMatched(password)) && !account.isBlocked) {
+    if (account && (await account.isPasswordMatched(password))) {
+        if (account.isBlocked) {
+            throw new Error("The account has been locked!");
+        }
+
         const refreshToken = await generateRefreshToken(account?._id);
         const updateuser = await User.findByIdAndUpdate(
             account.id,
@@ -116,7 +120,11 @@ const loginADMIN = asyncHandler(async (req, res) => {
         throw new Error("Not Authorised");
     }
 
-    if (account && (await account.isPasswordMatched(password)) && !account.isBlocked) {
+    if (account && (await account.isPasswordMatched(password))) {
+        if (account.isBlocked) {
+            throw new Error("The account has been locked!");
+        }
+
         const refreshToken = await generateRefreshToken(account?._id);
         const updateuser = await User.findByIdAndUpdate(
             account.id,
