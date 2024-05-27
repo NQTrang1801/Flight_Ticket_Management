@@ -52,9 +52,6 @@ function AdminRegulations() {
     const dispatch = useAppDispatch();
 
     const onSubmit: SubmitHandler<RuleValidation> = async (formData) => {
-        hide();
-        dispatch(startLoading());
-
         const ruleName = formData.ruleName;
         const detail = formData.detail;
         const code = formData.code;
@@ -88,15 +85,13 @@ function AdminRegulations() {
                     }
                 )
                 .then(() => {
-                    dispatch(stopLoading());
                     dispatch(sendMessage("Created sucessfully!", "success"));
                     setTimeout(() => {
                         window.location.reload();
                     }, 1000);
                 })
                 .catch((error) => {
-                    dispatch(stopLoading());
-                    dispatch(sendMessage("Created failed!", "error"));
+                    dispatch(sendMessage(`Created failed! ${error.response.data.message}`, "error"));
                     console.error(error);
                 });
         })();

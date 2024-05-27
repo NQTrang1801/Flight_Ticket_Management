@@ -11,7 +11,6 @@ function UserTickets() {
     const [flightData, setFlightData] = useState<FlightScheduleData[]>();
 
     const handleCancelTicket = async (id: string) => {
-        dispatch(startLoading());
         await axios
             .patch(
                 `/request-reservations/${id}/cancel`,
@@ -24,7 +23,6 @@ function UserTickets() {
                 }
             )
             .then(() => {
-                dispatch(stopLoading());
                 dispatch(sendMessage("Canceled successfully!", "success"));
                 setTimeout(() => {
                     window.location.reload();
@@ -32,7 +30,7 @@ function UserTickets() {
             })
             .catch((error) => {
                 console.error(error);
-                dispatch(sendMessage("Canceled failed!", "error"));
+                dispatch(sendMessage(`Canceled failed! ${error.response.data.message}`, "error"));
             });
     };
 

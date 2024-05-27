@@ -32,8 +32,6 @@ const AdminFlightSchedule: React.FC<FlightScheduleData> = ({
     const dispatch = useAppDispatch();
 
     const handleDelete = async () => {
-        hide();
-        dispatch(startLoading());
         await axios
             .delete(`/flight/511627641/${selectedId}`, {
                 headers: {
@@ -42,13 +40,11 @@ const AdminFlightSchedule: React.FC<FlightScheduleData> = ({
                 }
             })
             .then(() => {
-                dispatch(stopLoading());
                 dispatch(sendMessage("Deleted successfully!", "success"));
                 setTimeout(() => window.location.reload(), 1000);
             })
             .catch((error) => {
-                dispatch(stopLoading());
-                dispatch(sendMessage("Deleted failed!", "error"));
+                dispatch(sendMessage(`Deleted failed! ${error.response.data.message}`, "error"));
                 console.error(error);
             });
     };

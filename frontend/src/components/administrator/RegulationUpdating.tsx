@@ -49,8 +49,6 @@ const RegulationUpdating: React.FC<RuleProps> = ({ ruleName, detail, values, cod
     const dispatch = useAppDispatch();
 
     const onSubmit: SubmitHandler<RuleValidation> = async (formData) => {
-        dispatch(startLoading());
-
         const ruleName = formData.ruleName;
         const detail = formData.detail;
 
@@ -72,15 +70,13 @@ const RegulationUpdating: React.FC<RuleProps> = ({ ruleName, detail, values, cod
                     }
                 )
                 .then(() => {
-                    dispatch(stopLoading());
                     dispatch(sendMessage("Updated sucessfully!", "success"));
                     setTimeout(() => {
                         window.location.reload();
                     }, 1000);
                 })
                 .catch((error) => {
-                    dispatch(stopLoading());
-                    dispatch(sendMessage("Updated failed!", "error"));
+                    dispatch(sendMessage(`Updated failed! ${error.response.data.message}`, "error"));
                     console.error(error);
                 });
         })();

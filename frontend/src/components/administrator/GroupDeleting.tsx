@@ -16,7 +16,6 @@ const GroupDeleting: React.FC<{ _id: string | undefined; groupName: string | und
     const navigate = useNavigate();
 
     const handleDelete = async () => {
-        dispatch(startLoading());
         await axios
             .delete(`/group/511627413/delete/${_id}`, {
                 headers: {
@@ -25,7 +24,6 @@ const GroupDeleting: React.FC<{ _id: string | undefined; groupName: string | und
                 }
             })
             .then(() => {
-                dispatch(stopLoading());
                 dispatch(sendMessage("Deleted group successfully!", "success"));
                 setTimeout(() => {
                     navigate("/administrator/user-groups");
@@ -33,7 +31,7 @@ const GroupDeleting: React.FC<{ _id: string | undefined; groupName: string | und
             })
             .catch((error) => {
                 console.error(error);
-                dispatch(sendMessage("Deleted group failed!", "error"));
+                dispatch(sendMessage(`Deleted group failed! ${error.response.data.message}`, "error"));
             });
     };
 

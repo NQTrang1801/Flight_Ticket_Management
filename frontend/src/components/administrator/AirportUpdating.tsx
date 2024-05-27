@@ -124,9 +124,6 @@ const AirportUpdating: React.FC<AirportUpdatingProps> = ({
     const dispatch = useAppDispatch();
 
     const onSubmit: SubmitHandler<AirportValidation> = async (formData) => {
-        hide();
-        dispatch(startLoading());
-
         const name = formData.name;
         const country = formData.country;
         const code = formData.code;
@@ -162,15 +159,13 @@ const AirportUpdating: React.FC<AirportUpdatingProps> = ({
                     }
                 )
                 .then(() => {
-                    dispatch(stopLoading());
                     dispatch(sendMessage("Updated sucessfully!", "success"));
                     setTimeout(() => {
                         window.location.reload();
                     }, 1000);
                 })
                 .catch((error) => {
-                    dispatch(stopLoading());
-                    dispatch(sendMessage("Updated failed!", "error"));
+                    dispatch(sendMessage(`Updated failed! ${error.response.data.message}`, "error"));
                     console.error(error);
                 });
         })();

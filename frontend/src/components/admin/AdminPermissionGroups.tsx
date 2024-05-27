@@ -59,7 +59,7 @@ function AdminPermissionGroups() {
                 }, 1000);
                 return () => clearTimeout(timer);
             } catch (error) {
-                dispatch(sendMessage("Created failed!", "error"));
+                dispatch(sendMessage(`Created failed! ${error.response.data.message}`, "error"));
                 console.error(error);
             }
         })();

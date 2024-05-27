@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { useAppDispatch } from "~/hook";
 import { startLoading, stopLoading } from "~/actions/loading";
 import AirportUpdating from "./AirportUpdating";
+import { sendMessage } from "~/actions/message";
 
 interface AirportProps {
     _id: string;
@@ -46,8 +47,6 @@ const Airport: React.FC<AirportProps> = ({
     const dispatch = useAppDispatch();
 
     const handleDelete = async () => {
-        hide();
-        dispatch(startLoading());
         await axios
             .delete(`/airport/511627675/${selectedId}`, {
                 headers: {
@@ -56,16 +55,14 @@ const Airport: React.FC<AirportProps> = ({
                 }
             })
             .then(() => {
-                dispatch(stopLoading());
-                toast("Deleted successfully!");
+                dispatch(sendMessage("Deleted successfully!", "success"));
                 setTimeout(() => {
                     window.location.reload();
                 }, 1000);
             })
             .catch((error) => {
                 console.error(error);
-                toast("Deleted failed!");
-                hide();
+                dispatch(sendMessage(`Deleted failed! ${error.response.data.message}`, "error"));
             });
     };
 

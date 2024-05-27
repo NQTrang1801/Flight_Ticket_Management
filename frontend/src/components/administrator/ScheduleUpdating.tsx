@@ -127,9 +127,6 @@ const ScheduleUpdating: React.FC<FlightScheduleData> = ({
     };
 
     const onSubmit: SubmitHandler<FlightScheduleValidation> = async (data) => {
-        hide();
-        dispatch(startLoading());
-
         const flight_number = data.flightNumber;
         const ticket_price = data.ticketPrice;
         const departure_airport = departureAirport.id;
@@ -186,12 +183,11 @@ const ScheduleUpdating: React.FC<FlightScheduleData> = ({
                         }
                     }
                 );
-                dispatch(stopLoading());
+
                 dispatch(sendMessage("Updated successfully!", "success"));
                 setTimeout(() => window.location.reload(), 1000);
             } catch (error) {
-                dispatch(stopLoading());
-                dispatch(sendMessage(`Updated failed!`, "error"));
+                dispatch(sendMessage(`Updated failed! ${error.response.data.message}`, "error"));
                 console.error(error);
             }
         })();

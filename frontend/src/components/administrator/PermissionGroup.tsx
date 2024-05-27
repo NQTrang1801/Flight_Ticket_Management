@@ -44,8 +44,6 @@ function PermissionGroup() {
     });
 
     const onSubmit: SubmitHandler<{ groupCode: string }> = async (formData) => {
-        dispatch(startLoading());
-
         const groupCode = formData.groupCode;
 
         (async () => {
@@ -63,14 +61,12 @@ function PermissionGroup() {
                     }
                 )
                 .then(() => {
-                    dispatch(stopLoading());
                     dispatch(sendMessage("Updated sucessfully!", "success"));
                     setTimeout(() => {
                         window.location.reload();
                     }, 1000);
                 })
                 .catch((error) => {
-                    dispatch(stopLoading());
                     dispatch(sendMessage("Updated failed!", "error"));
                     console.error(error);
                 });
@@ -99,7 +95,7 @@ function PermissionGroup() {
             })
             .catch((error) => {
                 console.error(error);
-                dispatch(sendMessage("Deleted failed!", "error"));
+                dispatch(sendMessage(`Deleted failed! ${error.response.data.message}`, "error"));
             });
     };
 

@@ -46,8 +46,6 @@ function AdminPermissionGroup() {
     });
 
     const onSubmit: SubmitHandler<{ groupCode: string }> = async (formData) => {
-        dispatch(startLoading());
-
         const groupCode = formData.groupCode;
 
         (async () => {
@@ -65,23 +63,19 @@ function AdminPermissionGroup() {
                     }
                 )
                 .then(() => {
-                    dispatch(stopLoading());
                     dispatch(sendMessage("Updated sucessfully!", "success"));
                     setTimeout(() => {
                         window.location.reload();
                     }, 1000);
                 })
                 .catch((error) => {
-                    dispatch(stopLoading());
-                    dispatch(sendMessage("Updated failed!", "error"));
+                    dispatch(sendMessage(`Updated failed! ${error.response.data.message}`, "error"));
                     console.error(error);
                 });
         })();
     };
 
     const handleDeletePermissions = async () => {
-        hide();
-        dispatch(startLoading());
         await axios
             .delete(`/permission/511627990/delete`, {
                 headers: {
@@ -93,7 +87,6 @@ function AdminPermissionGroup() {
                 }
             })
             .then(() => {
-                dispatch(stopLoading());
                 dispatch(sendMessage("Deleted successfully!", "success"));
                 setTimeout(() => {
                     window.location.reload();

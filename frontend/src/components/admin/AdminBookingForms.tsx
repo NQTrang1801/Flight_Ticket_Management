@@ -63,7 +63,6 @@ function AdminBookingForms() {
     });
 
     const onSubmit: SubmitHandler<BookingFormValidation> = async (formData) => {
-        dispatch(startLoading());
         const full_name = formData.fullName;
         const CMND = formData.identificationNumber;
         const phone_number = "0" + formData.phoneNumber;
@@ -88,12 +87,11 @@ function AdminBookingForms() {
                             }
                         }
                     );
-                    dispatch(stopLoading());
-                    dispatch(sendMessage("Created successfully!", "success"));
+
+                    dispatch(sendMessage("Booked successfully!", "success"));
                     setTimeout(() => window.location.reload(), 1000);
                 } catch (error) {
-                    dispatch(stopLoading());
-                    dispatch(sendMessage(`Created failed! ${error.response.data.message}`, "error"));
+                    dispatch(sendMessage(`Booked failed! ${error.response.data.message}`, "error"));
                     console.error(error);
                 }
             })();

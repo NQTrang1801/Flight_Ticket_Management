@@ -22,7 +22,6 @@ const AdminBookingForm: React.FC<BookingFormData> = ({
     const { permissions } = useAppSelector((state) => state.permissions!);
 
     const confirmReservation = async (_id: string) => {
-        dispatch(startLoading());
         await axios
             .patch(
                 `/request-reservations/580457946/${_id}/success`,
@@ -34,7 +33,6 @@ const AdminBookingForm: React.FC<BookingFormData> = ({
                 }
             )
             .then(() => {
-                dispatch(stopLoading());
                 dispatch(sendMessage("Confirmed reservation successfully!", "success"));
                 setTimeout(() => {
                     window.location.reload();
@@ -47,7 +45,6 @@ const AdminBookingForm: React.FC<BookingFormData> = ({
     };
 
     const cancelReservation = async (_id: string) => {
-        dispatch(startLoading());
         await axios
             .patch(
                 `/request-reservations/${_id}/cancel`,
@@ -59,7 +56,6 @@ const AdminBookingForm: React.FC<BookingFormData> = ({
                 }
             )
             .then(() => {
-                dispatch(stopLoading());
                 dispatch(sendMessage("Cancelled reservation successfully!", "success"));
                 setTimeout(() => {
                     window.location.reload();
@@ -67,7 +63,7 @@ const AdminBookingForm: React.FC<BookingFormData> = ({
             })
             .catch((error) => {
                 console.error(error);
-                dispatch(sendMessage("Cancelled reservation failed!", "error"));
+                dispatch(sendMessage(`Cancelled reservation failed! ${error.response.data.message}`, "error"));
             });
     };
 

@@ -46,9 +46,6 @@ const UserUpdating: React.FC<UserUpdatingProps> = ({ fullname, mobile, address, 
     const dispatch = useAppDispatch();
 
     const onSubmit: SubmitHandler<{ fullname: string; mobile: number; address: string }> = async (formData) => {
-        hide();
-        dispatch(startLoading());
-
         const fullname = formData.fullname;
         const mobile = "0" + formData.mobile;
         const address = formData.address;
@@ -71,15 +68,13 @@ const UserUpdating: React.FC<UserUpdatingProps> = ({ fullname, mobile, address, 
                     }
                 )
                 .then(() => {
-                    dispatch(stopLoading());
                     dispatch(sendMessage("Updated sucessfully!", "success"));
                     setTimeout(() => {
                         window.location.reload();
                     }, 1000);
                 })
                 .catch((error) => {
-                    dispatch(stopLoading());
-                    dispatch(sendMessage("Updated failed!", "error"));
+                    dispatch(sendMessage(`Updated failed! ${error.response.data.message}`, "error"));
                     console.error(error);
                 });
         })();

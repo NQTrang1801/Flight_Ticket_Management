@@ -62,7 +62,7 @@ const PermissionGiving: React.FC<{ _id: string | undefined }> = ({ _id }) => {
                 }, 1000);
                 return () => clearTimeout(timer);
             } catch (error) {
-                dispatch(sendMessage("Gave permission failed!", "error"));
+                dispatch(sendMessage(`Gave permission failed! ${error.response.data.message}`, "error"));
                 console.error(error);
             }
         })();
@@ -78,7 +78,6 @@ const PermissionGiving: React.FC<{ _id: string | undefined }> = ({ _id }) => {
                 })
                 .then((response) => {
                     setFunctionalityData(response.data);
-                    console.log(response.data);
                 })
                 .catch((err) => console.error(err));
         })();

@@ -20,7 +20,6 @@ const BookingForm: React.FC<BookingFormData> = ({
     const dispatch = useAppDispatch();
 
     const confirmReservation = async (_id: string) => {
-        dispatch(startLoading());
         await axios
             .patch(
                 `/request-reservations/580457946/${_id}/success`,
@@ -32,7 +31,6 @@ const BookingForm: React.FC<BookingFormData> = ({
                 }
             )
             .then(() => {
-                dispatch(stopLoading());
                 dispatch(sendMessage("Confirmed reservation successfully!", "success"));
                 setTimeout(() => {
                     window.location.reload();
@@ -40,12 +38,11 @@ const BookingForm: React.FC<BookingFormData> = ({
             })
             .catch((error) => {
                 console.error(error);
-                dispatch(sendMessage("Confirmed reservation failed!", "error"));
+                dispatch(sendMessage(`Confirmed reservation failed! ${error.response.data.message}`, "error"));
             });
     };
 
     const cancelReservation = async (_id: string) => {
-        dispatch(startLoading());
         await axios
             .patch(
                 `/request-reservations/${_id}/cancel`,
@@ -57,7 +54,6 @@ const BookingForm: React.FC<BookingFormData> = ({
                 }
             )
             .then(() => {
-                dispatch(stopLoading());
                 dispatch(sendMessage("Cancelled reservation successfully!", "success"));
                 setTimeout(() => {
                     window.location.reload();
@@ -65,7 +61,7 @@ const BookingForm: React.FC<BookingFormData> = ({
             })
             .catch((error) => {
                 console.error(error);
-                dispatch(sendMessage("Cancelled reservation failed!", "error"));
+                dispatch(sendMessage(`Cancelled reservation failed! ${error.response.data.message}`, "error"));
             });
     };
 

@@ -60,7 +60,7 @@ const User: React.FC<UserProps> = ({ email, fullname, group_name, isBlocked, mob
             })
             .catch((error) => {
                 console.error(error);
-                dispatch(sendMessage("Blocked failed!", "error"));
+                dispatch(sendMessage(`Blocked failed! ${error.response.data.message}`, "error"));
             });
     };
 
@@ -84,7 +84,7 @@ const User: React.FC<UserProps> = ({ email, fullname, group_name, isBlocked, mob
             })
             .catch((error) => {
                 console.error(error);
-                dispatch(sendMessage("Unblocked failed!", "error"));
+                dispatch(sendMessage(`Unblocked failed! ${error.response.data.message}`, "error"));
             });
     };
 
@@ -110,7 +110,7 @@ const User: React.FC<UserProps> = ({ email, fullname, group_name, isBlocked, mob
             })
             .catch((error) => {
                 console.error(error);
-                dispatch(sendMessage("Updated failed!", "error"));
+                dispatch(sendMessage(`Updated failed! ${error.response.data.message}`, "error"));
             });
     };
 

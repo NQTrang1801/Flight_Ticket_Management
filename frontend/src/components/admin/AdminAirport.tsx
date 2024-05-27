@@ -2,11 +2,11 @@ import React from "react";
 import { useState, useRef, useEffect } from "react";
 import axios from "~/utils/axios";
 import usePortal from "react-cool-portal";
-import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "~/hook";
 import { startLoading, stopLoading } from "~/actions/loading";
 import AirportUpdating from "./AdminAirportUpdating";
 import checkPermission from "~/utils/checkPermission";
+import { sendMessage } from "~/actions/message";
 
 interface AirportProps {
     _id: string;
@@ -48,8 +48,6 @@ const AdminAirport: React.FC<AirportProps> = ({
     const { permissions } = useAppSelector((state) => state.permissions!);
 
     const handleDelete = async () => {
-        hide();
-        dispatch(startLoading());
         await axios
             .delete(`/airport/511627675/${selectedId}`, {
                 headers: {
@@ -58,16 +56,14 @@ const AdminAirport: React.FC<AirportProps> = ({
                 }
             })
             .then(() => {
-                dispatch(stopLoading());
-                toast("Deleted successfully!");
+                dispatch(sendMessage("Deleted airport successfully!", "success"));
                 setTimeout(() => {
                     window.location.reload();
                 }, 1000);
             })
             .catch((error) => {
+                dispatch(sendMessage(`Deleted airport failed! ${error.response.data.message}`, "error"));
                 console.error(error);
-                toast("Deleted failed!");
-                hide();
             });
     };
 

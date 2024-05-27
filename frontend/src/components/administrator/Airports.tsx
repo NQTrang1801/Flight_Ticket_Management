@@ -89,8 +89,6 @@ function Airports() {
     });
 
     const onSubmit: SubmitHandler<AirportData> = async (data) => {
-        hide();
-        dispatch(startLoading());
         const name = data.name;
         const country = data.country;
         const code = data.code;
@@ -125,11 +123,10 @@ function Airports() {
                         }
                     }
                 );
-                dispatch(stopLoading());
+
                 dispatch(sendMessage("Created successfully!", "success"));
                 setTimeout(() => window.location.reload(), 1000);
             } catch (error) {
-                dispatch(stopLoading());
                 dispatch(sendMessage(`Created failed! ${error.response.data.message}`, "error"));
                 console.error(error);
             }

@@ -67,7 +67,7 @@ const Register: React.FC = () => {
                 }, 1000);
                 return () => clearTimeout(timer);
             } catch (error) {
-                dispatch(sendMessage("Signed up failed!", "error"));
+                dispatch(sendMessage(`Signed up failed! ${error.response.data.message}`, "error"));
                 console.error(error);
             }
         })();

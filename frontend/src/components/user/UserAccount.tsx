@@ -59,7 +59,7 @@ function UserAccount() {
                 }, 1000);
                 return () => clearTimeout(timer);
             } catch (error) {
-                dispatch(sendMessage("Changed password failed!", "error"));
+                dispatch(sendMessage(`Changed password failed! ${error.response.data.message}`, "error"));
                 console.error(error);
             }
         })();
