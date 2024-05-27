@@ -21,8 +21,9 @@ const createRequestReservation = asyncHandler(async (req, res) => {
         const booking_date = new Date();
         const checkDate = new Date();
         const departureDate = new Date(flight.departure_datetime);
-        const maxBookingDays = flight.rules?.regulation_3?.booking?.values?.max_booking_days_before_departure || 0; // Default value is 0 if max_booking_days_before_departure is not defined
-        departureDate.setDate(departureDate.getDate() - maxBookingDays);
+        let maxBookingDays = flight.rules?.regulation_3?.booking?.values?.max_booking_days_before_departure || 0; // Default value is 0 if max_booking_days_before_departure is not defined
+        maxBookingDays = parseInt(maxBookingDays);
+        departureDate.setDate(departureDate.getDate() + maxBookingDays);
 
         if (booking_date >= departureDate) {
             return res.status(404).json({ message: 'Ticket booking deadline has expired' });

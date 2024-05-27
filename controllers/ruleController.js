@@ -8,7 +8,7 @@ const addOrUpdateRule = asyncHandler(async (req, res) => {
     const { ruleName, code, detail, values } = req.body;
     try {
         let rule = await Rule.findOne({ ruleName, code });
-
+    
         if (!rule) {
             rule = new Rule({ ruleName, code, detail, values });
         } else {
