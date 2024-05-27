@@ -222,7 +222,8 @@ const cancelRequestReservations = async () => {
         const todayWithoutTime = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 
         for (const flight of flights) {
-            const cancelDays = flight.rules?.regulation_3?.booking?.values?.cancel_bookings_days_before_departure || 0;
+            let cancelDays = flight.rules?.regulation_3?.booking?.values?.cancel_bookings_days_before_departure || 0;
+            cancelDays = parseInt(cancelDays);
             const cancelDate = new Date(flight.departure_datetime);
             cancelDate.setDate(cancelDate.getDate() + cancelDays);
             const cancelDateWithoutTime = new Date(cancelDate.getFullYear(), cancelDate.getMonth(), cancelDate.getDate());
