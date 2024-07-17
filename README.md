@@ -31,8 +31,7 @@
 7. [User Interface Design](#user-interface-design)
 8. [Implementation and Testing](#implementation-and-testing)
 9. [Conclusion](#conclusion)
-10. [References](#references)
-11. [Team Work Distribution](#team-work-distribution)
+10. [Team Work Distribution](#team-work-distribution)
 
 ## Introduction
 Information technology has become increasingly important in modern life, playing a crucial role in various sectors such as manufacturing and management. The application of IT in these areas has brought about significant benefits, leading to a digital revolution. However, the implementation of technology is not always straightforward, especially in developing countries with a shortage of skilled IT professionals like Vietnam.
@@ -79,7 +78,41 @@ Our project, "Flight Ticket Management System," aims to address these challenges
 
 ## Data Design
 ### Database Schema
-- **Tables**: Users, Flights, Tickets, Bookings, Reports.
+- **Authorization System**: Functionalities, Permissions, Groups, Users
+- **Flight tickets system**: Rules, Airports, Flights, RequestReservations, Reservations
 - **Relationships**: Defined between tables to ensure data integrity and consistency.
 
 ## User Interface Design
+### Screens
+1. **Login and Registration**: User authentication.
+2. **Dashboard**: Overview of key metrics and functions.
+3. **Flight Management**: Create, update, and manage flight schedules.
+4. **Ticket Booking**: Interface for booking and purchasing tickets.
+5. **Reports**: Generate and view sales and performance reports.
+
+## Implementation and Testing
+### Implementation
+- **Backend**: Server-side logic and database interactions.
+- **Frontend**: User interface development.
+
+### Testing
+- **Unit Testing**: Test individual components.
+- **Integration Testing**: Ensure components work together seamlessly.
+- **System Testing**: Validate the entire system's functionality.
+- **User Acceptance Testing**: Ensure the system meets user requirements and expectations.
+
+## Conclusion
+### Achievements
+- **Strengths**: Efficient management of flight tickets, user-friendly interface, and comprehensive reporting.
+- **Weaknesses**: Potential areas for improvement include performance optimization and scalability.
+
+### Future Development
+- **Enhancements**: Additional features such as dynamic pricing and real-time flight updates.
+- **Expansion**: Scalability for larger user bases and integration with other airline services.
+
+## Team Work Distribution
+- **Huỳnh Lê Phong**: Requirement analysis, backend development.
+- **Nguyễn Quốc Trạng**: System design, backend development and database schema.
+- **Trần Nhật Anh**: User interface design and frontend development.
+- **Nguyễn Triệu Vy**: User interface design, frontend development and documentation.
+
